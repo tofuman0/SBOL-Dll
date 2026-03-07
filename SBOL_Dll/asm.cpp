@@ -727,5 +727,5 @@ void insertFunction(int addrPtr, void* function, int nopCount, functionType ft)
 }
 void setFunction(int addrPtr, void* function)
 {
-	*(int*)(addrPtr) = ((int)function - addrPtr) - 4;
+	*(int*)(addrPtr) = ((int)function);
 }

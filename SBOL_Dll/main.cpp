@@ -8,9 +8,8 @@
 #include "resource.h"
 #include "globals.h"
 #include "DXFont.h"
-#include <clocale>
 
-char clientVer[] = { 2, 3, 1, 'b' };
+char clientVer[4] = { 2, 3, 1, 'b' };
 char logItBuf[0x400];
 
 int resW = 1280;
@@ -27,6 +26,22 @@ int itemUseDialogX = 56;
 int itemUseDialogY = 80;
 
 // DirectX 8 Stuff
+HFONT bgmHFont = CreateFont(
+	-10,
+	0,
+	0,
+	0,
+	FW_NORMAL,
+	0,
+	0,
+	0,
+	SHIFTJIS_CHARSET,
+	OUT_CHARACTER_PRECIS,
+	CLIP_CHARACTER_PRECIS,
+	NONANTIALIASED_QUALITY,
+	MONO_FONT,
+	TEXT("ＭＳ ゴシック")
+);
 LPDIRECT3DDEVICE8 dx = NULL;
 DXFont* BGMTrackFont = new DXFont(bgmHFont);
 
@@ -58,12 +73,20 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 {
 	// Load Item data from DLL
 	HRSRC hResInfo = FindResource(hModule, MAKEINTRESOURCE(IDR_ITEM), L"ITEMFILE");
-	itemFile = (unsigned char*)LoadResource(hModule, hResInfo);
-	itemFileSize = SizeofResource(hModule, hResInfo);
-	// If not found use data in EXE
-	if (itemFile == nullptr) itemFile = (unsigned char*)0x696538;
-	if (itemFileSize == 0) itemFileSize = 0xA30E;
-
+	if (hResInfo != NULL)
+	{
+		itemFile = (unsigned char*)LoadResource(hModule, hResInfo);
+		itemFileSize = SizeofResource(hModule, hResInfo);
+		// If not found use data in EXE
+		if (itemFile == nullptr) itemFile = (unsigned char*)0x696538;
+		if (itemFileSize == 0) itemFileSize = 0xA30E;
+	}
+	else
+	{
+		itemFile = (unsigned char*)0x696538;
+		itemFileSize = 0xA30E;
+	}
+	
 	BGMVol = (char*)0x6F4E50;
 	
 	switch (ul_reason_for_call)
@@ -79,6 +102,14 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		fixResolutionChoice();
 		setResolution();
 		patchClient();
+		
+		// Load offline DLL
+		HINSTANCE hOfflineDLL = LoadLibraryEx(L"offline.dll", NULL, LOAD_LIBRARY_SEARCH_APPLICATION_DIR);
+		if (hOfflineDLL == NULL)
+		{
+			// If offline isn't found load Peer 2 Peer DLL (Future)
+			HINSTANCE hP2PDLL = LoadLibraryEx(L"p2p.dll", NULL, LOAD_LIBRARY_SEARCH_APPLICATION_DIR);
+		}
 	}
 	break;
 	case DLL_THREAD_ATTACH:

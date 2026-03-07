@@ -2,7 +2,7 @@
 #include "resolution.h"
 #include "strings.h"
 
-extern char clientVer[3];
+extern char clientVer[4];
 extern char logItBuf[0x400];
 extern int resW;
 extern int resH;
@@ -43,6 +43,52 @@ void patchClient()
 	// Car Detail
 	//*(char*)0x00503C1C = 0x03;
 
+	// Force Shift-JIS
+	ForceShiftJIS();
+	setFunction(0x00555027, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x00554FC2, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x00554F67, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x00554C43, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x0055312F, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x005530D9, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x0054FEB3, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x0054FE73, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x0054D320, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x0054D2C8, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x0054445B, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x00544434, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x005443D8, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x0054113A, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	setFunction(0x005408AF, (void*)&MultiByteToWideCharShiftJIS_Ptr);
+	
+	setFunction(0x00552343, (void*)&GetUserDefaultLCIDShiftJIS_Ptr);
+
+	setFunction(0x00551d1f, (void*)&GetLocaleInfoAShiftJIS_Ptr);
+	setFunction(0x005524b2, (void*)&GetLocaleInfoAShiftJIS_Ptr);
+	setFunction(0x00554b95, (void*)&GetLocaleInfoAShiftJIS_Ptr);
+	setFunction(0x00554be1, (void*)&GetLocaleInfoAShiftJIS_Ptr);
+	setFunction(0x00554c22, (void*)&GetLocaleInfoAShiftJIS_Ptr);
+	setFunction(0x00554ca8, (void*)&GetLocaleInfoAShiftJIS_Ptr);
+	setFunction(0x00554ccf, (void*)&GetLocaleInfoAShiftJIS_Ptr);
+
+	setFunction(0x00554b82, (void*)&GetLocaleInfoWShiftJIS_Ptr);
+	setFunction(0x00554bbc, (void*)&GetLocaleInfoWShiftJIS_Ptr);
+	setFunction(0x00554c95, (void*)&GetLocaleInfoWShiftJIS_Ptr);
+	setFunction(0x00554cf8, (void*)&GetLocaleInfoWShiftJIS_Ptr);
+	setFunction(0x00554d3b, (void*)&GetLocaleInfoWShiftJIS_Ptr);
+
+	setFunction(0x0054c927, (void*)&GetACPShiftJIS_Ptr);
+	
+	setFunction(0x0054c79c, (void*)&GetCPInfoShiftJIS_Ptr);
+	setFunction(0x0054c9b2, (void*)&GetCPInfoShiftJIS_Ptr);
+	setFunction(0x00551b45, (void*)&GetCPInfoShiftJIS_Ptr);
+	setFunction(0x00554ee8, (void*)&GetCPInfoShiftJIS_Ptr);
+	
+	setFunction(0x004c466f, (void*)&CreateFontAShiftJIS_Ptr);
+	*(byte*)0x00408850 = SHIFTJIS_CHARSET;
+	*(byte*)0x0051D4C0 = SHIFTJIS_CHARSET;
+
+	
 	// Window Style
 	*(int*)0x0041C512 = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
 	*(int*)0x0041C49D = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
@@ -255,11 +301,6 @@ void patchClient()
 	// Direct Input SetCooperativeLevel
 	*(char*)0x0040AEEE = DISCL_BACKGROUND | DISCL_NONEXCLUSIVE;
 
-	// Anti Cheat
-#ifdef NDEBUGs
-	// Detect cheating
-	enableAntiCheat();
-#endif
 
 #pragma region Custom Packets and alterations
 
@@ -515,6 +556,11 @@ void setResolution()
 }
 void fixResolutionChoice()
 {
+	// If windowed mode we'll assume we'll create the window at that resolution only fullscreen could break things
+	if (fullScreenMode())
+	{
+		return;
+	}
 	// If an unsupported resolution is set use the closest supported resolution
 	int supportedResolutions[2][30] = { 0 };
 	int lastResolution[2] = { 0 };
@@ -717,7 +763,7 @@ int debugLog(char *buffer, size_t count, const char *format, va_list argptr)
 	{
 		compare = (char*)calloc(1, strlen(buffer) + 1);
 		if (compare == nullptr) return 0;
-		strncpy(compare, buffer, strlen(buffer) + 1);
+		strncpy(compare, buffer, strlen(buffer));
 	}
 	int res = vsnprintf(buffer, count, format, argptr);
 	if (compare != nullptr)
@@ -742,4 +788,55 @@ int debugIt(const char *format, ...)
 int VerString(char* str, const char* format, ...)
 {
 	return sprintf(str, versionStr, clientVer[0], clientVer[1], clientVer[2], clientVer[3]);
+}
+
+void ForceShiftJIS()
+{
+	SetThreadLocale(0x0411);
+	setlocale(LC_ALL, ".932");
+	_setmbcp(932);
+	std::locale loc(".932");
+	std::locale::global(loc);
+	SetConsoleOutputCP(932);
+	SetConsoleCP(932);
+}
+
+int __stdcall MultiByteToWideCharShiftJIS(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar)
+{
+	int res = MultiByteToWideChar(932, dwFlags, lpMultiByteStr, cbMultiByte, lpWideCharStr, cchWideChar);
+	return res;
+}
+
+LCID GetUserDefaultLCIDShiftJIS()
+{
+	return 0x0411;
+}
+
+int GetLocaleInfoAShiftJIS(LCID Locale, LCTYPE LCType, LPSTR lpLCData, int cchData)
+{
+	int res = GetLocaleInfoA(0x0411, LCType, lpLCData, cchData);
+	return res;
+}
+
+int GetLocaleInfoWShiftJIS(LCID Locale, LCTYPE LCType, LPWSTR lpLCData, int cchData)
+{
+	int res = GetLocaleInfoW(0x0411, LCType, lpLCData, cchData);
+	return res;
+}
+
+UINT GetACPShiftJIS()
+{
+	return 932;
+}
+
+BOOL GetCPInfoShiftJIS(UINT CodePage, LPCPINFO lpCPInfo)
+{
+	BOOL res = GetCPInfo(932, lpCPInfo);
+	return res;
+}
+
+HFONT CreateFontAShiftJIS(int cHeight, int cWidth, int cEscapement, int cOrientation, int cWeight, DWORD bItalic, DWORD bUnderline, DWORD bStrikeOut, DWORD iCharSet, DWORD iOutPrecision, DWORD iClipPrecision, DWORD iQuality, DWORD iPitchAndFamily, LPCSTR pszFaceName)
+{
+	HFONT res = CreateFontA(cHeight, cWidth, cEscapement, cOrientation, cWeight, bItalic, bUnderline, bStrikeOut, SHIFTJIS_CHARSET, iOutPrecision, iClipPrecision, iQuality, iPitchAndFamily, pszFaceName);
+	return res;
 }
