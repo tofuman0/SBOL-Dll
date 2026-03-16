@@ -17,6 +17,7 @@ extern float UIscaleY;
 extern int itemUseDialogX;
 extern int itemUseDialogY;
 extern bool closeCheck;
+extern bool runGameLoop;
 extern HWND* hwnd;
 
 // BGM Values
@@ -35,6 +36,9 @@ extern char deadZonePercent;
 extern LPDIRECT3DDEVICE8 dx;
 extern DXFont* BGMTrackFont;
 
+typedef void (__stdcall* Func_GameLoop)();
+Func_GameLoop GameLoop = (Func_GameLoop)(0x00418F80);
+
 void patchClient()
 {
 	// FPS (60 Default)
@@ -43,51 +47,64 @@ void patchClient()
 	// Car Detail
 	//*(char*)0x00503C1C = 0x03;
 
+#ifdef _DEBUG
+	// Enable debuging of SWF
+	* (int32_t*)(0x006F7A24) = 0xFFFFFFFF;
+#endif
+
 	// Force Shift-JIS
 	ForceShiftJIS();
-	setFunction(0x00555027, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x00554FC2, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x00554F67, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x00554C43, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x0055312F, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x005530D9, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x0054FEB3, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x0054FE73, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x0054D320, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x0054D2C8, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x0054445B, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x00544434, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x005443D8, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x0054113A, (void*)&MultiByteToWideCharShiftJIS_Ptr);
-	setFunction(0x005408AF, (void*)&MultiByteToWideCharShiftJIS_Ptr);
 	
-	setFunction(0x00552343, (void*)&GetUserDefaultLCIDShiftJIS_Ptr);
-
-	setFunction(0x00551d1f, (void*)&GetLocaleInfoAShiftJIS_Ptr);
-	setFunction(0x005524b2, (void*)&GetLocaleInfoAShiftJIS_Ptr);
-	setFunction(0x00554b95, (void*)&GetLocaleInfoAShiftJIS_Ptr);
-	setFunction(0x00554be1, (void*)&GetLocaleInfoAShiftJIS_Ptr);
-	setFunction(0x00554c22, (void*)&GetLocaleInfoAShiftJIS_Ptr);
-	setFunction(0x00554ca8, (void*)&GetLocaleInfoAShiftJIS_Ptr);
-	setFunction(0x00554ccf, (void*)&GetLocaleInfoAShiftJIS_Ptr);
-
-	setFunction(0x00554b82, (void*)&GetLocaleInfoWShiftJIS_Ptr);
-	setFunction(0x00554bbc, (void*)&GetLocaleInfoWShiftJIS_Ptr);
-	setFunction(0x00554c95, (void*)&GetLocaleInfoWShiftJIS_Ptr);
-	setFunction(0x00554cf8, (void*)&GetLocaleInfoWShiftJIS_Ptr);
-	setFunction(0x00554d3b, (void*)&GetLocaleInfoWShiftJIS_Ptr);
-
-	setFunction(0x0054c927, (void*)&GetACPShiftJIS_Ptr);
+	setFunction(0x00555027, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x00554FC2, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x00554F67, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x00554C43, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0055312F, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x005530D9, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0054FEB3, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0054FE73, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0054D320, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0054D2C8, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0054445B, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x00544434, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x005443D8, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0054113A, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x005408AF, (void*)&MultiByteToWideCharHook_Ptr);
 	
-	setFunction(0x0054c79c, (void*)&GetCPInfoShiftJIS_Ptr);
-	setFunction(0x0054c9b2, (void*)&GetCPInfoShiftJIS_Ptr);
-	setFunction(0x00551b45, (void*)&GetCPInfoShiftJIS_Ptr);
-	setFunction(0x00554ee8, (void*)&GetCPInfoShiftJIS_Ptr);
+	setFunction(0x00552343, (void*)&GetUserDefaultLCIDHook_Ptr);
+
+	setFunction(0x00551d1f, (void*)&GetLocaleInfoAHook_Ptr);
+	setFunction(0x005524b2, (void*)&GetLocaleInfoAHook_Ptr);
+	setFunction(0x00554b95, (void*)&GetLocaleInfoAHook_Ptr);
+	setFunction(0x00554be1, (void*)&GetLocaleInfoAHook_Ptr);
+	setFunction(0x00554c22, (void*)&GetLocaleInfoAHook_Ptr);
+	setFunction(0x00554ca8, (void*)&GetLocaleInfoAHook_Ptr);
+	setFunction(0x00554ccf, (void*)&GetLocaleInfoAHook_Ptr);
+
+	setFunction(0x00554b82, (void*)&GetLocaleInfoWHook_Ptr);
+	setFunction(0x00554bbc, (void*)&GetLocaleInfoWHook_Ptr);
+	setFunction(0x00554c95, (void*)&GetLocaleInfoWHook_Ptr);
+	setFunction(0x00554cf8, (void*)&GetLocaleInfoWHook_Ptr);
+	setFunction(0x00554d3b, (void*)&GetLocaleInfoWHook_Ptr);
+
+	setFunction(0x0054c927, (void*)&GetACPHook_Ptr);
 	
-	setFunction(0x004c466f, (void*)&CreateFontAShiftJIS_Ptr);
+	setFunction(0x0054c79c, (void*)&GetCPInfoHook_Ptr);
+	setFunction(0x0054c9b2, (void*)&GetCPInfoHook_Ptr);
+	setFunction(0x00551b45, (void*)&GetCPInfoHook_Ptr);
+	setFunction(0x00554ee8, (void*)&GetCPInfoHook_Ptr);
+	
+	setFunction(0x004C466F, (void*)&CreateFontAHook_Ptr);
+
+	setFunction(0x0051D4d6, (void*)&CreateFontIndirectAHook_Ptr);
+	setFunction(0x00408866, (void*)&CreateFontIndirectAHook_Ptr);
+
+	setFunction(0x00408891, (void*)&GetTextMetricsAHook_Ptr);
+	setFunction(0x0051D501, (void*)&GetTextMetricsAHook_Ptr);
+
 	*(byte*)0x00408850 = SHIFTJIS_CHARSET;
 	*(byte*)0x0051D4C0 = SHIFTJIS_CHARSET;
-
+	
 	
 	// Window Style
 	*(int*)0x0041C512 = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
@@ -124,7 +141,7 @@ void patchClient()
 
 	// Log and close Bug Fix
 	_beginthread(windowMonitorThread, 0, NULL);
-	insertFunction((int)0x0041C1C7, exitFix, 6, FT_JUMP);
+	//insertFunction((int)0x0041C1C7, exitFix, 6, FT_JUMP);
 
 	// Use Icon from Game EXE
 	*(int*)0x0041C58C = 0x104;
@@ -301,6 +318,12 @@ void patchClient()
 	// Direct Input SetCooperativeLevel
 	*(char*)0x0040AEEE = DISCL_BACKGROUND | DISCL_NONEXCLUSIVE;
 
+	// Allow the window to be moved without freezing the game
+	*(uint8_t*)0x0041C1CB = 0x8D; // ECX=>local_44,[EBP + -0x40] : Window Message
+	*(uint8_t*)0x0041C1CC = 0x4D;
+	*(uint8_t*)0x0041C1CD = 0xC0;
+	*(uint8_t*)0x0041C1CE = 0x51; // PUSH ECX (Message)
+	insertFunction((int)0x0041C1CF, HandleMessageHook_Ptr, 0x0041C212 - 0x0041C1CF, FT_CALL);
 
 #pragma region Custom Packets and alterations
 
@@ -623,9 +646,17 @@ void __cdecl windowMonitorThread(void* parg)
 		}
 		if (closeCheck)
 		{
-			if (IsWindowVisible(*hwnd) == false) running = false;
+			if (IsWindowVisible(*hwnd) == false)
+			{
+				running = false;
+				break;
+			}
 		}
-		Sleep(100);
+		if (runGameLoop)
+		{
+			GameLoop();
+		}
+		Sleep(1);
 	}
 	_Exit(0);
 }
@@ -801,42 +832,125 @@ void ForceShiftJIS()
 	SetConsoleCP(932);
 }
 
-int __stdcall MultiByteToWideCharShiftJIS(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar)
+int __stdcall MultiByteToWideCharHook(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar)
 {
 	int res = MultiByteToWideChar(932, dwFlags, lpMultiByteStr, cbMultiByte, lpWideCharStr, cchWideChar);
 	return res;
 }
 
-LCID GetUserDefaultLCIDShiftJIS()
+LCID __stdcall GetUserDefaultLCIDHook()
 {
 	return 0x0411;
 }
 
-int GetLocaleInfoAShiftJIS(LCID Locale, LCTYPE LCType, LPSTR lpLCData, int cchData)
+int __stdcall GetLocaleInfoAHook(LCID Locale, LCTYPE LCType, LPSTR lpLCData, int cchData)
 {
 	int res = GetLocaleInfoA(0x0411, LCType, lpLCData, cchData);
 	return res;
 }
 
-int GetLocaleInfoWShiftJIS(LCID Locale, LCTYPE LCType, LPWSTR lpLCData, int cchData)
+int __stdcall GetLocaleInfoWHook(LCID Locale, LCTYPE LCType, LPWSTR lpLCData, int cchData)
 {
 	int res = GetLocaleInfoW(0x0411, LCType, lpLCData, cchData);
 	return res;
 }
 
-UINT GetACPShiftJIS()
+UINT __stdcall GetACPHook()
 {
 	return 932;
 }
 
-BOOL GetCPInfoShiftJIS(UINT CodePage, LPCPINFO lpCPInfo)
+BOOL __stdcall GetCPInfoHook(UINT CodePage, LPCPINFO lpCPInfo)
 {
 	BOOL res = GetCPInfo(932, lpCPInfo);
 	return res;
 }
 
-HFONT CreateFontAShiftJIS(int cHeight, int cWidth, int cEscapement, int cOrientation, int cWeight, DWORD bItalic, DWORD bUnderline, DWORD bStrikeOut, DWORD iCharSet, DWORD iOutPrecision, DWORD iClipPrecision, DWORD iQuality, DWORD iPitchAndFamily, LPCSTR pszFaceName)
+HFONT __stdcall CreateFontAHook(int cHeight, int cWidth, int cEscapement, int cOrientation, int cWeight, DWORD bItalic, DWORD bUnderline, DWORD bStrikeOut, DWORD iCharSet, DWORD iOutPrecision, DWORD iClipPrecision, DWORD iQuality, DWORD iPitchAndFamily, LPCSTR pszFaceName)
 {
-	HFONT res = CreateFontA(cHeight, cWidth, cEscapement, cOrientation, cWeight, bItalic, bUnderline, bStrikeOut, SHIFTJIS_CHARSET, iOutPrecision, iClipPrecision, iQuality, iPitchAndFamily, pszFaceName);
+	HFONT res = CreateFontA(
+		cHeight,
+		cWidth,
+		cEscapement,
+		cOrientation,
+		cWeight,
+		bItalic,
+		bUnderline,
+		bStrikeOut,
+		SHIFTJIS_CHARSET,
+		iOutPrecision,
+		iClipPrecision,
+		iQuality,
+		iPitchAndFamily,
+		pszFaceName);
 	return res;
+}
+
+HFONT __stdcall CreateFontIndirectAHook(LOGFONTA* lplf)
+{
+	/*
+	std::stringstream ss;
+	ss << "Font - Height: " << lplf->lfHeight << " Width: " << lplf->lfWidth << std::endl;
+	OutputDebugStringA(ss.str().c_str());
+	*/
+	HFONT res = CreateFontA(
+		lplf->lfHeight,
+		lplf->lfWidth,
+		lplf->lfEscapement,
+		lplf->lfOrientation,
+		lplf->lfWeight,
+		lplf->lfItalic,
+		lplf->lfUnderline,
+		lplf->lfStrikeOut,
+		lplf->lfCharSet,
+		lplf->lfOutPrecision,
+		lplf->lfClipPrecision,
+		CLEARTYPE_QUALITY, //lplf->lfQuality,
+		lplf->lfPitchAndFamily,
+		lplf->lfFaceName);
+	return res;
+}
+
+BOOL __stdcall GetTextMetricsAHook(HDC hdc, LPTEXTMETRICA lptm)
+{
+	BOOL res = GetTextMetricsA(hdc, lptm);
+	return res;
+}
+
+void __stdcall HandleMessages(LPMSG lpMsg)
+{
+	if (!runGameLoop)
+	{
+		runGameLoop = true;
+	}
+	bool running = true;
+	bool isCursorVisible = true;
+	ULONGLONG lastMoveTime = GetTickCount64();
+	const ULONGLONG hideDelay = 2000; // 2 seconds
+	UINT count = 0;
+	while (running)
+	{
+		if (PeekMessageA(lpMsg, NULL, 0, 0, PM_REMOVE))
+		{
+			switch (lpMsg->message)
+			{
+			case WM_QUIT:
+				running = false;
+				break;
+			case WM_MOUSEMOVE:
+				lastMoveTime = GetTickCount64();
+				while (ShowCursor(TRUE) < 0) {}
+				break;
+			}
+			TranslateMessage(lpMsg);
+			DispatchMessageA(lpMsg);
+		}
+		// Check if the mouse has been still for too long
+		if ((GetTickCount64() - lastMoveTime > hideDelay)) {
+			while (ShowCursor(FALSE) > 0) {}
+		}
+		Sleep(1);
+	}
+	runGameLoop = false;
+	return;
 }

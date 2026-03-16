@@ -172,6 +172,7 @@ float* bottomJustF[]{
 //};
 
 int* repositionAddr[]{
+	// Check - Not text box
 	//(int*)(0x004DBB8C),		  // Not battle related
 	//(int*)(0x004265B0 + 0x25E), // Not battle related
 	//(int*)(0x004265B0 + 0x2E9), // Not battle related
@@ -198,7 +199,13 @@ int* repositionAddr[]{
 	//(int*)(0x00434910 + 0xE9F), // Not battle related
 	//(int*)(0x004389F0 + 0x2A5), // Not battle related
 	//(int*)(0x004389F0 + 0x2D1), // Not battle related
+
+
+
 	(int*)(0x0043F4B0 + 0x2AA), // Loading Screen
+	
+	
+	// Check - Not text box
 	//(int*)(0x00440460 + 0x2AA), // Not battle related
 	//(int*)(0x00440460 + 0x332), // Not battle related
 	//(int*)(0x0044F2E0 + 0x5DB), // Not battle related
@@ -236,6 +243,8 @@ int* repositionAddr[]{
 	//(int*)(0x0045ADB0 + 0x211), // Not battle related
 	//(int*)(0x0045ADB0 + 0x300), // Not battle related
 
+
+
 	(int*)(0x0045B660 + 0x177), // Item Use
 	(int*)(0x0045B660 + 0x287), // Item Use
 	(int*)(0x0045B660 + 0x3FE), // Item Use
@@ -261,6 +270,9 @@ int* repositionAddr[]{
 	(int*)(0x0046F5D0 + 0x1DB),	 // Item Box Close Button
 	(int*)(0x0046F5D0 + 0x2D7),	 // Item Box Close Button
 	(int*)(0x0046F5D0 + 0x401),	 // Item Box Close Button
+	
+	
+	// Check - Not text box
 	//(int*)(0x004FD760 + 0x6B),	 // Draw String
 	//(int*)(0x0046FCE0 + 0x240),	// Not battle related
 	//(int*)(0x0046FCE0 + 0x376),	// Not battle related
@@ -349,6 +361,9 @@ int* repositionAddr[]{
 	//(int*)(0x0048A820 + 0x177E),	// Not battle related
 	//(int*)(0x0048A820 + 0x1870),	// Not battle related
 	
+
+
+
 	(int*)(0x0048C940 + 0x4C),	// Battle Win/Lose Texture
 	(int*)(0x0048C940 + 0xB7),	// Battle Win/Lose Texture
 	(int*)(0x0048CB60 + 0x3DF),	// Battle Result Value Labels
@@ -361,6 +376,9 @@ int* repositionAddr[]{
 	(int*)(0x0048DD60 + 0x193), // Itembox (not in course)
 	(int*)(0x0048DD60 + 0x21E), // Itembox (not in course)	
 	(int*)(0x0048E1B0 + 0x16E), // Battle Result Dialog 
+	
+		
+	// Check - Not text box
 	//(int*)(0x00497150 + 0x161), // Not Battle Related
 	//(int*)(0x004983F0 + 0xD1),  // Not Battle Related
 	//(int*)(0x00499130 + 0x1FE), // Not Battle Related
@@ -422,10 +440,20 @@ int* repositionAddr[]{
 	//(int*)(0x004A1600 + 0x99E), // Not battle related
 	//(int*)(0x004A1600 + 0xA43), // Not battle related
 	//(int*)(0x004A8D90 + 0x287), // Not battle related	
+	
+		
+		
 	(int*)(0x004A91B0 + 0x468), // 
 	(int*)(0x004A91B0 + 0x4DB), // 
 	(int*)(0x004A91B0 + 0x55F), // 
+	
+		
+	// Check - Not text box
 	//(int*)(0x004A9830 + 0x1D5), // Not Shop price
+	
+		
+		
+		
 	(int*)(0x004AA150 + 0x119), // 
 	(int*)(0x004AA150 + 0x146), // 
 	(int*)(0x004AA150 + 0x1D7), // 
@@ -435,6 +463,10 @@ int* repositionAddr[]{
 	(int*)(0x004AA490 + 0x1B6), // 
 	(int*)(0x004AA490 + 0x1F7), // 
 	(int*)(0x004AA770 + 0x5F),  // Battle '+' for EXP
+	
+	
+	
+	// Check - Not text box
 	//(int*)(0x004AB050 + 0x32),  // not battle related
 	//(int*)(0x004AB050 + 0x400), // not battle related
 	//(int*)(0x004ADC80 + 0x358), // not battle related
@@ -462,7 +494,15 @@ int* repositionAddr[]{
 	//(int*)(0x004BC380 + 0x357), // not battle related
 	//(int*)(0x004BD090 + 0x107), // not battle related
 	//(int*)(0x004BD260 + 0x13B), // not battle related
+	
+		
+		
 	(int*)(0x004BF6F0 + 0x1E3), // Warning Screens	
+	
+		
+		
+		
+	// Check - Not text box
 	//(int*)(0x004C1E30 + 0x10B),
 	//(int*)(0x004C1E30 + 0x12C), // Tacho
 	//(int*)(0x004C1E30 + 0x14D),
@@ -499,6 +539,9 @@ int* repositionAddr[]{
 	//(int*)(0x004DCEB0 + 0x6FA), // Not battle related
 	//(int*)(0x004DCEB0 + 0x76E), // Not battle related
 	//(int*)(0x004DD720 + 0x821), // Not battle related
+	
+		
+		
 	(int*)(0x004DE420 + 0x1A6), // Battle Bars Background
 	(int*)(0x004DE420 + 0x26F), // Battle Bars Background
 	(int*)(0x004DE420 + 0x2CC), // Battle Bars Background
@@ -510,6 +553,10 @@ int* repositionAddr[]{
 	(int*)(0x004DF240 + 0x179), // Battle Clock Background
 	(int*)(0x004DF240 + 0x1DC), // Battle Clock Background
 	(int*)(0x004DF240 + 0xAE),  // Battle Clock
+	
+	
+	
+	// Check
 	//(int*)(0x004DF6E0 + 0x6E), // Not battle related
 	//(int*)(0x004DF8D0 + 0x7B), // Not battle related
 	//(int*)(0x004E0710 + 0x173), // Not battle related
@@ -538,7 +585,9 @@ int* repositionAddr[]{
 	//(int*)(0x004FB070 + 0x1A7),// Not battle related
 	//(int*)(0x004FB070 + 0x62), // Not battle related
 	//(int*)(0x004FB070 + 0x9C), // Not battle related
-	//(int*)(0x004FB830 + 0x94), // Not battle related
+	
+	//(int*)(0x004FB830 + 0x94), // Not battle related - Textbox carat
+	
 	//(int*)(0x004FB8D0 + 0x5B), // Not battle related
 	//(int*)(0x004FC140 + 0x23), // Not battle related
 	//(int*)(0x004FC140 + 0x3C), // Not battle related

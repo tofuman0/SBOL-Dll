@@ -6,9 +6,13 @@
 #include <dinput.h>
 #include <Psapi.h>
 #include <fstream>
+#include <iostream>
+#include <string>
+#include <sstream>
 #include <locale>
 #include <clocale>
 #include <mbctype.h>
+#include <debugapi.h>
 #include "asm.h"
 #include "bgm.h"
 #include "dx.h"
@@ -28,18 +32,24 @@ int debugLog(char *buffer, size_t count, const char *format, va_list argptr);
 int debugIt(const char *format, ...);
 int VerString(char* str, const char* format, ...);
 void ForceShiftJIS();
-int __stdcall MultiByteToWideCharShiftJIS(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar);
-constexpr void* MultiByteToWideCharShiftJIS_Ptr = (void*)(&MultiByteToWideCharShiftJIS);
-LCID GetUserDefaultLCIDShiftJIS();
-constexpr void* GetUserDefaultLCIDShiftJIS_Ptr = (void*)(&GetUserDefaultLCIDShiftJIS);
-int GetLocaleInfoAShiftJIS(LCID Locale, LCTYPE LCType, LPSTR lpLCData, int cchData);
-constexpr void* GetLocaleInfoAShiftJIS_Ptr = (void*)(&GetLocaleInfoAShiftJIS);
-int GetLocaleInfoWShiftJIS(LCID Locale, LCTYPE LCType, LPWSTR lpLCData, int cchData);
-constexpr void* GetLocaleInfoWShiftJIS_Ptr = (void*)(&GetLocaleInfoWShiftJIS);
-UINT GetACPShiftJIS();
-constexpr void* GetACPShiftJIS_Ptr = (void*)(&GetACPShiftJIS);
-BOOL GetCPInfoShiftJIS(UINT CodePage, LPCPINFO lpCPInfo);
-constexpr void* GetCPInfoShiftJIS_Ptr = (void*)(&GetCPInfoShiftJIS);
-HFONT CreateFontAShiftJIS(int cHeight, int cWidth, int cEscapement, int cOrientation, int cWeight, DWORD bItalic, DWORD bUnderline, DWORD bStrikeOut, DWORD iCharSet, DWORD iOutPrecision, DWORD iClipPrecision, DWORD iQuality, DWORD iPitchAndFamily, LPCSTR pszFaceName);
-constexpr void* CreateFontAShiftJIS_Ptr = (void*)(&CreateFontAShiftJIS);
+int __stdcall MultiByteToWideCharHook(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar);
+constexpr void* MultiByteToWideCharHook_Ptr = (void*)(&MultiByteToWideCharHook);
+LCID __stdcall GetUserDefaultLCIDHook();
+constexpr void* GetUserDefaultLCIDHook_Ptr = (void*)(&GetUserDefaultLCIDHook);
+int __stdcall GetLocaleInfoAHook(LCID Locale, LCTYPE LCType, LPSTR lpLCData, int cchData);
+constexpr void* GetLocaleInfoAHook_Ptr = (void*)(&GetLocaleInfoAHook);
+int __stdcall GetLocaleInfoWHook(LCID Locale, LCTYPE LCType, LPWSTR lpLCData, int cchData);
+constexpr void* GetLocaleInfoWHook_Ptr = (void*)(&GetLocaleInfoWHook);
+UINT __stdcall GetACPHook();
+constexpr void* GetACPHook_Ptr = (void*)(&GetACPHook);
+BOOL __stdcall GetCPInfoHook(UINT CodePage, LPCPINFO lpCPInfo);
+constexpr void* GetCPInfoHook_Ptr = (void*)(&GetCPInfoHook);
+HFONT __stdcall CreateFontAHook(int cHeight, int cWidth, int cEscapement, int cOrientation, int cWeight, DWORD bItalic, DWORD bUnderline, DWORD bStrikeOut, DWORD iCharSet, DWORD iOutPrecision, DWORD iClipPrecision, DWORD iQuality, DWORD iPitchAndFamily, LPCSTR pszFaceName);
+constexpr void* CreateFontAHook_Ptr = (void*)(&CreateFontAHook);
+HFONT __stdcall CreateFontIndirectAHook(LOGFONTA* lplf);
+constexpr void* CreateFontIndirectAHook_Ptr = (void*)(&CreateFontIndirectAHook);
+BOOL __stdcall GetTextMetricsAHook(HDC hdc, LPTEXTMETRICA lptm);
+constexpr void* GetTextMetricsAHook_Ptr = (void*)(&GetTextMetricsAHook);
+void __stdcall HandleMessages(LPMSG lpMsg);
+constexpr void* HandleMessageHook_Ptr = (void*)(&HandleMessages);
 #endif

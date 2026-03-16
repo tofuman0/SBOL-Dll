@@ -26,21 +26,39 @@ int itemUseDialogX = 56;
 int itemUseDialogY = 80;
 
 // DirectX 8 Stuff
-HFONT bgmHFont = CreateFont(
+/*
+CreateFontA(
+	param_2,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	1,
+	0,
+	0,
+	0,
+	1,
+	s_KATAKANA#_006302b8
+);
+*/
+HFONT bgmHFont = CreateFontA(
 	-10,
 	0,
 	0,
 	0,
-	FW_NORMAL,
+	FW_DONTCARE,
 	0,
 	0,
 	0,
 	SHIFTJIS_CHARSET,
-	OUT_CHARACTER_PRECIS,
-	CLIP_CHARACTER_PRECIS,
-	NONANTIALIASED_QUALITY,
-	MONO_FONT,
-	TEXT("ＭＳ ゴシック")
+	OUT_DEFAULT_PRECIS,
+	CLIP_DEFAULT_PRECIS,
+	CLEARTYPE_QUALITY,	// Looks much better
+	DEFAULT_PITCH,
+	(char*)(0x006302B8) // TEXT("ＭＳ ゴシック") - From client encoded in Shift JIS
 );
 LPDIRECT3DDEVICE8 dx = NULL;
 DXFont* BGMTrackFont = new DXFont(bgmHFont);
@@ -55,6 +73,7 @@ bool changeOgg = false;
 int changeToPlaylist = 0;
 HWND* hwnd = NULL;
 bool closeCheck = false;
+bool runGameLoop = false;
 
 // ASM Values
 int _EAX, _ECX, _EDX, _EBX, _EDI, _ESI;
@@ -93,6 +112,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 	{
 	case DLL_PROCESS_ATTACH:
 	{
+		//_CrtSetBreakAlloc(1074);
+
 		readRegistry();
 		if (op == nullptr) {
 			op = new OggPlayer(30, shuffleBGM ? true : false);

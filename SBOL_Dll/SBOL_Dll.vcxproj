@@ -78,6 +78,7 @@
     <TargetName>sbol</TargetName>
     <IncludePath>include\;include\d3d8\;$(DXSDK_DIR)Include\;$(IncludePath)</IncludePath>
     <LibraryPath>lib\$(Configuration)\;$(DXSDK_DIR)Include\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SBOLFolder)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
