@@ -1,11 +1,14 @@
 #include "dx.h"
 #include "asm.h"
+#include <string>
+#include <sstream>
 
 extern int resW;
 extern int resH;
 extern OggPlayer* op;
 extern LPDIRECT3DDEVICE8 dx;
 extern DXFont* BGMTrackFont;
+extern DXFont* PositionFont;
 extern int _EAX, _ECX, _EDX, _EBX, _EDI, _ESI;
 
 HRESULT __stdcall directxCustom()
@@ -15,6 +18,15 @@ HRESULT __stdcall directxCustom()
 		if (BGMTrackFont->CheckDevice() != S_OK)
 		{
 			HRESULT hr = BGMTrackFont->InitDeviceObjects(dx);
+#ifdef _DEBUG
+			if (hr != S_OK)
+				OutputDebugStringA("Failed to create font!\n");
+#endif
+			return hr;
+		}
+		else if (PositionFont->CheckDevice() != S_OK)
+		{
+			HRESULT hr = PositionFont->InitDeviceObjects(dx);
 #ifdef _DEBUG
 			if (hr != S_OK)
 				OutputDebugStringA("Failed to create font!\n");
@@ -47,7 +59,7 @@ void drawBGMString()
 		battleStatus == 6 ||
 		battleStatus == 7) // If not in battle
 	{
-		int y = resH - 150;
+		int y = resH - 149;
 		if (*(int*)(0x006F4E48) == 2)
 			y = resH - 16;
 		char bgmInfo[0x100];
@@ -71,14 +83,19 @@ void drawPositionString()
 		unsigned short junction = *(unsigned short*)(*(int*)(*(int*)(*(int*)0x006EBE4C + 0x118) + 0x3EC) + 0x18);
 		unsigned short distance = *(unsigned short*)(*(int*)(*(int*)(*(int*)0x006EBE4C + 0x118) + 0x3EC) + 0x1C);
 
-		int y = resH - 230;
+		int y = resH - 248;
 		if (*(int*)(0x006F4E48) == 2)
 			y = resH - 32;
 		char posInfo[0x100];
 		sprintf_s(posInfo, sizeof(posInfo), "POSITION: %04X:%04X:%04X", location1, junction, distance);
 		HRESULT hr = S_OK;
-		hr = BGMTrackFont->DrawText(8, (float)y, 0xFFBBBB99, posInfo, 0);
+		hr = PositionFont->DrawText(8, (float)y, 0xFFBBBB99, posInfo, 0);
 		if (hr != S_OK)
-			OutputDebugStringA("Failed draw text!\n");
+		{
+			std::stringstream ss;
+			auto lasterror = GetLastError();
+			ss << "Failed draw text. Error: " << lasterror << std::endl;
+			OutputDebugStringA(ss.str().c_str());
+		}
 	}
 }

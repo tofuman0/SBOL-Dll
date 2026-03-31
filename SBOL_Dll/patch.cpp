@@ -1,4 +1,6 @@
+#include <windows.h>
 #include "patch.h"
+#include "globals.h"
 #include "resolution.h"
 #include "strings.h"
 
@@ -6,6 +8,7 @@ extern char clientVer[4];
 extern char logItBuf[0x400];
 extern int resW;
 extern int resH;
+extern float drawDistanceMultiplier;
 extern int fullScreen;
 extern int skipWarning;
 extern unsigned char* itemFile;
@@ -19,6 +22,8 @@ extern int itemUseDialogY;
 extern bool closeCheck;
 extern bool runGameLoop;
 extern HWND* hwnd;
+
+extern SHAREDSPACE SharedSpace;
 
 // BGM Values
 extern OggPlayer* op;
@@ -102,6 +107,8 @@ void patchClient()
 	setFunction(0x00408891, (void*)&GetTextMetricsAHook_Ptr);
 	setFunction(0x0051D501, (void*)&GetTextMetricsAHook_Ptr);
 
+	setFunction(0x004FDF19, (void*)&TextOutAHook_Ptr);
+
 	*(byte*)0x00408850 = SHIFTJIS_CHARSET;
 	*(byte*)0x0051D4C0 = SHIFTJIS_CHARSET;
 	
@@ -109,7 +116,7 @@ void patchClient()
 	// Window Style
 	*(int*)0x0041C512 = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
 	*(int*)0x0041C49D = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
-
+	
 	// Version - We replace the sprintf function and ignore the values pushed and use our own and return the buffer from sprintf in VerString function.
 	insertFunction(0x0043B919, VerString, 5, FT_CALL);
 	//*(char*)0x43963d = clientVer[2]; // 2.3 requires more work as it pushes a xor'd register ebx
@@ -325,6 +332,9 @@ void patchClient()
 	*(uint8_t*)0x0041C1CE = 0x51; // PUSH ECX (Message)
 	insertFunction((int)0x0041C1CF, HandleMessageHook_Ptr, 0x0041C212 - 0x0041C1CF, FT_CALL);
 
+	// Add pointer to shared space for communication between dlls
+	*(void**)(SHARED_SPACE_PTR_ADDR) = (void*)&SharedSpace;
+
 #pragma region Custom Packets and alterations
 
 #pragma endregion
@@ -378,6 +388,58 @@ void setStrings()
 	}
 	}
 	*/
+	*(const char**)0x00695674 = CHAT_SEPARATOR;
+	
+	//CreateFontA Size overrides
+	
+	// AUTO RUN: x
+	*(char*)0x004D5DD9 = 8;   // X
+	*(int*)0x004D5DD4  = 239; // Y
+	*(char*)0x004D5DB1 = 12;  // Width
+	*(char*)0x004D5DB3 = 6;   // Height
+
+	// AUTO RUN: x
+	*(char*)0x004D5E28 = 8;   // X
+	*(int*)0x004D5E23  = 239; // Y
+	*(char*)0x004D5DFA = 12;  // Width
+	*(char*)0x004D5E02 = 6;   // Height
+
+	// CP: x and LV: x
+	*(char*)0x004D5D7B = 44;  // X
+	*(int*)0x004D5D76  = 267; // Y
+	*(char*)0x004D5D4D = 12;  // Width
+	*(char*)0x004D5D4F = 6;   // Height
+
+	// COURSE NAME: x
+	*(char*)0x004D5D04 = 8;   // X
+	*(int*)0x004D5CFF  = 295; // Y
+	*(char*)0x004D5CD6 = 12;  // Width
+	*(char*)0x004D5CD8 = 6;   // Height
+
+	// PERSONS IN COURSE: x
+	*(char*)0x004D5CB2 = 8;   // X
+	*(int*)0x004D5CAD  = 307; // Y
+	*(char*)0x004D5C8A = 12;  // Width
+	*(char*)0x004D5C8C = 6;   // Height
+
+	// NETWORK: x
+	*(char*)0x004ABF82 = 8;   // X
+	*(int*)0x004ABF7D  = 319; // Y
+	*(char*)0x004ABF57 = 12;  // Width
+	*(char*)0x004ABF5C = 6;   // Height
+
+	// Time attack - Y Increases by 10 each loop
+	*(int*)0x004D5F11  = 490; // X
+	*(int*)0x004D5ED0  = 203; // Y
+	*(char*)0x004D5EF1 = 12;  // Width
+	*(char*)0x004D5EF3 = 6;   // Height	
+}
+void setDrawDistance()
+{
+	for (int i = 0; i < sizeof(drawDistance) / sizeof(float); i++)
+	{
+		*drawDistance[i] *= drawDistanceMultiplier;
+	}
 }
 void setResolution()
 {
@@ -471,10 +533,10 @@ void setResolution()
 	//insertFunction((int)0x00508470, scaleUIElement, 0x7F, FT_JUMP);
 	//*(float**)0x00512332 = &floattest1;
 	//*(float**)0x0051236F = &floattest2;
-	UIdividerX = (640.0f / resW) * 20.0f;
-	UIdividerY = (480.0f / resH) * 20.0f;
-	UIscaleX = (float)((double)(0.05f / 640.0f) * resW);
-	UIscaleY = (float)((double)(0.05f / 480.0f) * resH);
+	UIdividerX = (float)((640.0 / resW) * 20.0);
+	UIdividerY = (float)((480.0 / resH) * 20.0);
+	UIscaleX = (float)((0.05 / 640.0) * resW);
+	UIscaleY = (float)((0.05 / 480.0) * resH);
 	itemUseDialogX = (resW / 2) - (320 - itemUseDialogX);
 	itemUseDialogY = (resH / 2) - (240 - itemUseDialogY);
 
@@ -648,15 +710,26 @@ void __cdecl windowMonitorThread(void* parg)
 		{
 			if (IsWindowVisible(*hwnd) == false)
 			{
+				// Add game save before close
+				SharedSpace.savegame.LockMaster();
+				while (SharedSpace.savegame.IsMasterLocked())
+				{
+					Sleep(10);
+				}
 				running = false;
 				break;
 			}
 		}
 		if (runGameLoop)
 		{
-			GameLoop();
+			try
+			{
+				GameLoop();
+			}
+			catch (...)	{ }
 		}
-		Sleep(1);
+		else
+			Sleep(1);
 	}
 	_Exit(0);
 }
@@ -704,6 +777,20 @@ void readRegistry()
 		}
 
 		BufferSize = sizeof(DWORD);
+		if (RegQueryValueEx(hKey, TEXT("DRAWDISTANCE"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
+		{
+			drawDistanceMultiplier = ((float)(*(int*)&value) / 100.0f);
+			if (drawDistanceMultiplier > 2.0f || drawDistanceMultiplier < 0.05f)
+				drawDistanceMultiplier = 1.0f;
+		}
+		else
+		{
+			drawDistanceMultiplier = 1.0f;
+			int drawdistance = 1;
+			RegSetValueEx(hKey, TEXT("DRAWDISTANCE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&drawdistance), BufferSize);
+		}
+
+		BufferSize = sizeof(DWORD);
 		if (RegQueryValueEx(hKey, TEXT("SKIPWARNING"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
 		{
 			skipWarning = value ? 1 : 0;
@@ -743,19 +830,23 @@ void readRegistry()
 	}
 	else
 	{
+		int drawdistance = 100;
 		resW = 640;
 		resH = 480;
 		fullScreen = 0;
+		drawDistanceMultiplier = 1.0f;
 		skipWarning = 0;
 		shuffleBGM = 0;
 		deadZonePercent = 5;
+
 		if (RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Genki\\SBOL"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS)
 		{
 			BufferSize = sizeof(DWORD);
 			RegSetValueEx(hKey, TEXT("RES_WIDTH"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resW), BufferSize);
 			RegSetValueEx(hKey, TEXT("RES_HEIGHT"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resH), BufferSize);
 			RegSetValueEx(hKey, TEXT("FULLSCREEN"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&fullScreen), BufferSize);
-			RegSetValueEx(hKey, TEXT("SKIPWARNING"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&fullScreen), BufferSize);
+			RegSetValueEx(hKey, TEXT("DRAWDISTANCE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&drawdistance), BufferSize);
+			RegSetValueEx(hKey, TEXT("SKIPWARNING"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&skipWarning), BufferSize);
 			RegSetValueEx(hKey, TEXT("SHUFFLEBGM"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&shuffleBGM), BufferSize);
 			RegSetValueEx(hKey, TEXT("AXIS_DEADZONE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&deadZonePercent), BufferSize);
 		}
@@ -880,9 +971,10 @@ HFONT __stdcall CreateFontAHook(int cHeight, int cWidth, int cEscapement, int cO
 		SHIFTJIS_CHARSET,
 		iOutPrecision,
 		iClipPrecision,
-		iQuality,
-		iPitchAndFamily,
-		pszFaceName);
+		CLEARTYPE_QUALITY, //iQuality,
+		FIXED_PITCH, //| FF_MODERN, //iPitchAndFamily,
+		"Courier New" //pszFaceName
+	);
 	return res;
 }
 
@@ -893,6 +985,7 @@ HFONT __stdcall CreateFontIndirectAHook(LOGFONTA* lplf)
 	ss << "Font - Height: " << lplf->lfHeight << " Width: " << lplf->lfWidth << std::endl;
 	OutputDebugStringA(ss.str().c_str());
 	*/
+
 	HFONT res = CreateFontA(
 		lplf->lfHeight,
 		lplf->lfWidth,
@@ -905,9 +998,10 @@ HFONT __stdcall CreateFontIndirectAHook(LOGFONTA* lplf)
 		lplf->lfCharSet,
 		lplf->lfOutPrecision,
 		lplf->lfClipPrecision,
-		CLEARTYPE_QUALITY, //lplf->lfQuality,
-		lplf->lfPitchAndFamily,
-		lplf->lfFaceName);
+		CLEARTYPE_QUALITY, // lplf->lfQuality, // 
+		FIXED_PITCH, // | FF_MODERN, //lplf->lfPitchAndFamily,
+		"Courier New" //lplf->lfFaceName
+	);
 	return res;
 }
 
@@ -953,4 +1047,15 @@ void __stdcall HandleMessages(LPMSG lpMsg)
 	}
 	runGameLoop = false;
 	return;
+}
+
+BOOL __stdcall TextOutAHook(HDC hdc, int x, int y, LPCSTR lpString, int c)
+{
+	BOOL res = TextOutA(
+		hdc,
+		x,
+		y,
+		lpString,
+		c);
+	return res;
 }

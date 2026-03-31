@@ -14,6 +14,7 @@ char logItBuf[0x400];
 
 int resW = 1280;
 int resH = 720;
+float drawDistanceMultiplier = 1.0f;
 int fullScreen = 0;
 int skipWarning = 0;
 unsigned char* itemFile;
@@ -25,25 +26,9 @@ float UIscaleY = 0.05f;
 int itemUseDialogX = 56;
 int itemUseDialogY = 80;
 
+SHAREDSPACE SharedSpace;
+
 // DirectX 8 Stuff
-/*
-CreateFontA(
-	param_2,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	1,
-	0,
-	0,
-	0,
-	1,
-	s_KATAKANA#_006302b8
-);
-*/
 HFONT bgmHFont = CreateFontA(
 	-10,
 	0,
@@ -61,7 +46,8 @@ HFONT bgmHFont = CreateFontA(
 	(char*)(0x006302B8) // TEXT("ＭＳ ゴシック") - From client encoded in Shift JIS
 );
 LPDIRECT3DDEVICE8 dx = NULL;
-DXFont* BGMTrackFont = new DXFont(bgmHFont);
+DXFont* BGMTrackFont = new DXFont(CreateFontA(12, 6, 0, 0, FW_DONTCARE, 0, 0, 0, SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, FIXED_PITCH, (char*)0x006302B8));
+DXFont* PositionFont = new DXFont(CreateFontA(18, 9, 0, 0, FW_BOLD, 0, 0, 0, SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, FIXED_PITCH, (char*)0x006302B8));
 
 // BGM Values
 OggPlayer* op = nullptr;
@@ -122,6 +108,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		setStrings();
 		fixResolutionChoice();
 		setResolution();
+		setDrawDistance();
 		patchClient();
 		
 		// Load offline DLL

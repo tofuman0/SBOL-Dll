@@ -7652,3 +7652,5 @@ const ITEMDETAILENTRY itemDetails[]{
 	{ 2069, (char*)(0x00633F4C), (char*)(0x00633798) },
 	{ 2070, (char*)(0x00633F28), (char*)(0x00633798) }
 };
+
+const char* CHAT_SEPARATOR = ": ";

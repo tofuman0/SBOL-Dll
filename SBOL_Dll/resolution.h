@@ -1,4 +1,8 @@
 #pragma once
+float* drawDistance[]{
+	(float*)0x005F405C, // Track draw distance
+};
+
 int* resWidth[]{
 	(int*)0x004122E6, // Window Width after start
 	(int*)0x0041251B, // Window Width after start

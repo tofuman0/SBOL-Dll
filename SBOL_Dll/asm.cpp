@@ -678,13 +678,22 @@ void __declspec(naked) directxReturn()
 }
 void adjustFloats(float* x, float* y)
 {
+	/*
 	if (x) *x = (float)floor((*x / 640.0f) * resW);
 	if (y) *y = (float)floor((*y / 480.0f) * resH);
+	*/
+	if (x) *x = (float)(((double)*x / 640.0) * resW);
+	if (y) *y = (float)(((double)*y / 480.0) * resH);
 }
 void adjustInts(int* x, int* y)
 {
+	/*
 	if (x) *x = (int)((*x / 640.0f) * resW);
 	if (y) *y = (int)((*y / 480.0f) * resH);
+	*/
+	if (x) *x = (int)(((double)*x / 640.0) * resW);
+	if (y) *y = (int)(((double)*y / 480.0) * resH);
+
 }
 void adjustXAxisValue(int* x)
 {

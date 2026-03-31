@@ -23,6 +23,7 @@ void patchClient();
 int fullScreenMode();
 int skipBootWarning();
 void setStrings();
+void setDrawDistance();
 void setResolution();
 void fixResolutionChoice();
 void windowMonitorThread(void* parg);
@@ -52,4 +53,6 @@ BOOL __stdcall GetTextMetricsAHook(HDC hdc, LPTEXTMETRICA lptm);
 constexpr void* GetTextMetricsAHook_Ptr = (void*)(&GetTextMetricsAHook);
 void __stdcall HandleMessages(LPMSG lpMsg);
 constexpr void* HandleMessageHook_Ptr = (void*)(&HandleMessages);
+BOOL __stdcall TextOutAHook(HDC hdc, int x, int y, LPCSTR lpString, int c);
+constexpr void* TextOutAHook_Ptr = (void*)(&TextOutAHook);
 #endif

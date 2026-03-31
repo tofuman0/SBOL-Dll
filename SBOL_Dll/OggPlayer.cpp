@@ -423,7 +423,7 @@ void OggPlayer::Update()
 			buffer.AudioBytes = BUFSIZE;
 
 			HRESULT hr;
-			if (FAILED(hr = pSourceVoice->SubmitSourceBuffer(&buffer))) return;
+			if (pSourceVoice == nullptr || FAILED(hr = pSourceVoice->SubmitSourceBuffer(&buffer))) return;
 			
 			currentDiskReadBuffer++;
 			currentDiskReadBuffer %= MAX_BUFFER_COUNT;
@@ -479,7 +479,7 @@ bool OggPlayer::IsPlaying()
 				vol < (((volume * (1.0f / 30.0f))))) {
 				float fadevol = min(((float)(volume * (1.0f / 30.0f)) / fade) * (max(1, offset)), 1.0f);
 				pSourceVoice->SetVolume(fadevol);
-#ifdef _DEBUG
+#ifdef _DEBUG_DISABLE
 				char debug[0x100];
 				snprintf(debug, sizeof(debug), "Volume adjusting up %0.3f. Offset %llu\n", fadevol, offset);
 				OutputDebugStringA(&debug[0]);
@@ -492,7 +492,7 @@ bool OggPlayer::IsPlaying()
 				(currentLoop == loopCount || loopCount == 0)) {
 				float fadevol = max(((float)(volume * (1.0f / 30.0f)) / fade) * (max(1, vf.pcmlengths[1] - offset)), 0.0f);
 				pSourceVoice->SetVolume(fadevol);
-#ifdef _DEBUG
+#ifdef _DEBUG_DISABLE
 				char debug[0x100];
 				snprintf(debug, sizeof(debug), "Volume adjusting down %0.3f. Offset %llu\n", fadevol, offset);
 				OutputDebugStringA(&debug[0]);
