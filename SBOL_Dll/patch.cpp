@@ -156,9 +156,11 @@ void patchClient()
 	*(int*)0x0041C5BF = 0x104;
 	*(int*)0x0041C5D5 = (int)clientName;
 	
-	// Speed Limit (111.11f by default)
-	*(float*)0x0060652C = 166.66f;
-	*(float*)0x0060C3D4 = 166.66f;
+	// Speed Limit (111.11f by default) - (Speed * 60 * 60) / 1000 - 2 values both are needed
+	// Player speed limit
+	*(float*)0x0060652C = 166.67f;
+	// Player speed limit
+	*(float*)0x0060C3D4 = 166.67f;
 
 	// Item dat file
 	*(unsigned char**)0x004388B9 = itemFile;
@@ -194,6 +196,27 @@ void patchClient()
 	*(unsigned char*)0x00466367 = 0x0A;
 	// Increase Type Limit in part shop (default is 6)
 	*(unsigned char*)0x0045EBB9 = 0x0A;
+
+	// DX Windows hook
+	insertFunction((int)0x0044BF11, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x0044E5CD, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x004502CA, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x00452BE1, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x00452CEC, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x00453E89, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x00453EE7, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x00453F4E, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x0045538F, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x004571CB, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x00458C48, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x004631B4, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x00464F3D, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x00480E69, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x0048201D, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x004879F5, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x004904A2, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x004ACC81, DxWindow, 5, FT_CALL);
+	insertFunction((int)0x004B011C, DxWindow, 5, FT_CALL);
 
 #ifdef DEBUG_LOG
 	//NOPSpace(0x00512744, 5);
@@ -912,13 +935,40 @@ int VerString(char* str, const char* format, ...)
 	return sprintf(str, versionStr, clientVer[0], clientVer[1], clientVer[2], clientVer[3]);
 }
 
+void __fastcall DxWindow(void* _this, void* edx, int x1, int y1, int x2, int y2)
+{
+	/*
+	std::stringstream ss;
+	ss << "x1: " << x1 << " y1: " << y1 << " x2: " << x2 << " y2: " << y2 << " Return Address: 0x" << std::hex << std::setfill('0') << std::setw(4) << _ReturnAddress() << std::endl;
+	OutputDebugStringA(ss.str().c_str());
+	*/
+	if (x1 == 0 && y1 == 0 && x2 == 640 && y2 == 480)
+	{
+		x2 = resW;
+		y2 = resH;
+	}
+	else
+	{
+		float xScale = ((1.0f / 640.0f) * (float)resW);
+		float yScale = ((1.0f / 480.0f) * (float)resH);
+		x1 = (int)((float)x1 * xScale);
+		y1 = (int)((float)y1 * xScale);
+		x2 = (int)((float)x2 * xScale);
+		y2 = (int)((float)y2 * xScale);
+	}
+	*(int*)((int)_this + 0xd9a8) = x1;
+	*(int*)((int)_this + 0xd9ac) = y1;
+	*(int*)((int)_this + 0xd9b0) = x2;
+	*(int*)((int)_this + 0xd9b4) = y2;
+}
+
 void ForceShiftJIS()
 {
 	SetThreadLocale(0x0411);
 	setlocale(LC_ALL, ".932");
 	_setmbcp(932);
-	std::locale loc(".932");
-	std::locale::global(loc);
+	//std::locale loc(".932");
+	//std::locale::global(loc);
 	SetConsoleOutputCP(932);
 	SetConsoleCP(932);
 }

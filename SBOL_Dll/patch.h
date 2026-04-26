@@ -13,6 +13,7 @@
 #include <clocale>
 #include <mbctype.h>
 #include <debugapi.h>
+#include <iomanip>
 #include "asm.h"
 #include "bgm.h"
 #include "dx.h"
@@ -32,6 +33,7 @@ void Log(char type, char* in);
 int debugLog(char *buffer, size_t count, const char *format, va_list argptr);
 int debugIt(const char *format, ...);
 int VerString(char* str, const char* format, ...);
+void __fastcall DxWindow(void* _this, void* edx, int x1, int y1, int x2, int y2);
 void ForceShiftJIS();
 int __stdcall MultiByteToWideCharHook(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar);
 constexpr void* MultiByteToWideCharHook_Ptr = (void*)(&MultiByteToWideCharHook);

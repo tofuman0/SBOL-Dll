@@ -10,6 +10,7 @@ int* resWidth[]{
 	(int*)0x005C1684, // Window Width on start
 	
 	// Other 3d windows
+	/*
 	(int*)0x00452CE1,
 	(int*)0x00453E7E,
 	(int*)0x00453F43,
@@ -24,6 +25,7 @@ int* resWidth[]{
 	(int*)0x00490498,
 	(int*)0x004ACC73,
 	(int*)0x004B00D7,
+	*/
 };
 
 float* resWidthF[]{
@@ -68,6 +70,7 @@ int* resHeight[]{
 	(int*)0x005C1688, // Window Height on start
 
 	// Other 3d windows
+	/*
 	(int*)0x00452CDC,
 	(int*)0x00453E79,
 	(int*)0x00453F3E,
@@ -82,6 +85,7 @@ int* resHeight[]{
 	(int*)0x00490493,
 	(int*)0x004ACC6E,
 	(int*)0x004B00D2,
+	*/
 };
 
 float* resHeightF[]{
