@@ -444,6 +444,8 @@ void OggPlayer::SetVolume(int _vol)
 void OggPlayer::Mute()
 {
 	float vol = 0.0f;
+	if (!pSourceVoice)
+		return;
 	pSourceVoice->GetVolume(&vol);
 	if (vol > 0.0f)
 		pSourceVoice->SetVolume(0.0f);
@@ -453,6 +455,8 @@ void OggPlayer::Mute()
 void OggPlayer::Unmute()
 {
 	float vol = 0.0f;
+	if (!pSourceVoice)
+		return;
 	pSourceVoice->GetVolume(&vol);
 	if (vol == 0.0f)
 		pSourceVoice->SetVolume(volume * (1.0f / 30.0f));

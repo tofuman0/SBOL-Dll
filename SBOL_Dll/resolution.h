@@ -182,8 +182,10 @@ float* bottomJustF[]{
 int* repositionAddr[]{
 	// Check - Not text box
 	//(int*)(0x004DBB8C),		  // Not battle related
+	// 
 	//(int*)(0x004265B0 + 0x25E), // Not battle related
 	//(int*)(0x004265B0 + 0x2E9), // Not battle related
+	
 	//(int*)(0x00434910 + 0x17E), // Not battle related
 	//(int*)(0x00434910 + 0x24F), // Not battle related
 	//(int*)(0x00434910 + 0x3BB), // Not battle related
@@ -205,6 +207,7 @@ int* repositionAddr[]{
 	//(int*)(0x00434910 + 0xDD2), // Not battle related
 	//(int*)(0x00434910 + 0xE21), // Not battle related
 	//(int*)(0x00434910 + 0xE9F), // Not battle related
+	
 	//(int*)(0x004389F0 + 0x2A5), // Not battle related
 	//(int*)(0x004389F0 + 0x2D1), // Not battle related
 
@@ -216,6 +219,7 @@ int* repositionAddr[]{
 	// Check - Not text box
 	//(int*)(0x00440460 + 0x2AA), // Not battle related
 	//(int*)(0x00440460 + 0x332), // Not battle related
+	
 	//(int*)(0x0044F2E0 + 0x5DB), // Not battle related
 	//(int*)(0x0044F2E0 + 0x8B9), // Not battle related
 	//(int*)(0x0044F2E0 + 0x98D), // Not battle related
@@ -224,8 +228,10 @@ int* repositionAddr[]{
 	//(int*)(0x0044F2E0 + 0xB51), // Not battle related
 	//(int*)(0x0044F2E0 + 0xE41), // Not battle related
 	//(int*)(0x0044F2E0 + 0xEE7), // Not battle related
+	
 	//(int*)(0x00450460 + 0x114), // Not battle related
 	//(int*)(0x00450460 + 0x55F), // Not battle related
+	
 	//(int*)(0x004510D0 + 0x477), // Not battle related
 	//(int*)(0x004510D0 + 0x5B3), // Not battle related
 	//(int*)(0x004510D0 + 0x6C1), // Not battle related
@@ -237,17 +243,21 @@ int* repositionAddr[]{
 	//(int*)(0x004510D0 + 0xA6E), // Not battle related
 	//(int*)(0x004510D0 + 0xAE8), // Not battle related
 	//(int*)(0x004510D0 + 0xB9F), // Not battle related
+	
 	//(int*)(0x00452030 + 0x1BA), // Not battle related
 	//(int*)(0x00452030 + 0x868), // Not battle related
 	//(int*)(0x00452030 + 0xD51), // Not battle related
+	
 	//(int*)(0x00454450 + 0x192), // Not battle related
 	//(int*)(0x00454450 + 0x1D6), // Not battle related
+	
 	//(int*)(0x0045A510 + 0x209), // Not battle related
 	//(int*)(0x0045A510 + 0x31D), // Not battle related
 	//(int*)(0x0045A510 + 0x4A3), // Not battle related
 	//(int*)(0x0045A510 + 0x51C), // Not battle related
 	//(int*)(0x0045A510 + 0x5BF), // Not battle related
 	//(int*)(0x0045A510 + 0x69F), // Not battle related
+	
 	//(int*)(0x0045ADB0 + 0x211), // Not battle related
 	//(int*)(0x0045ADB0 + 0x300), // Not battle related
 
@@ -280,12 +290,14 @@ int* repositionAddr[]{
 	(int*)(0x0046F5D0 + 0x401),	 // Item Box Close Button
 	
 	
-	// Check - Not text box
+	// Check - Text scale in this list
 	//(int*)(0x004FD760 + 0x6B),	 // Draw String
+	
 	//(int*)(0x0046FCE0 + 0x240),	// Not battle related
 	//(int*)(0x0046FCE0 + 0x376),	// Not battle related
 	//(int*)(0x0046FCE0 + 0x4B7),	// Not battle related
 	//(int*)(0x0046FCE0 + 0x55C),	// Not battle related
+	
 	//(int*)(0x00470800 + 0x420),	// Not battle related
 	//(int*)(0x00470800 + 0x543),	// Not battle related
 	//(int*)(0x00470800 + 0x5E0),	// Not battle related
@@ -302,6 +314,7 @@ int* repositionAddr[]{
 	//(int*)(0x00470800 + 0xDB5),	// Not battle related
 	//(int*)(0x00470800 + 0xE1E),	// Not battle related
 	//(int*)(0x00470800 + 0xE87),	// Not battle related
+	
 	//(int*)(0x004717F0 + 0x22F4),	// Not battle related
 	//(int*)(0x004717F0 + 0x28FA),	// Not battle related
 	//(int*)(0x004717F0 + 0x3C9C),	// Not battle related
@@ -311,29 +324,36 @@ int* repositionAddr[]{
 	//(int*)(0x004717F0 + 0x4452),	// Not battle related
 	//(int*)(0x004717F0 + 0x451F),	// Not battle related
 	//(int*)(0x004717F0 + 0x45CD),	// Not battle related
+	
 	//(int*)(0x00477520 + 0x327),	// Not battle related
 	//(int*)(0x00477520 + 0x39F),	// Not battle related
 	//(int*)(0x00477520 + 0x442),	// Not battle related
 	//(int*)(0x00477520 + 0x4E7),	// Not battle related
 	//(int*)(0x00477520 + 0x5A4),	// Not battle related
 	//(int*)(0x00477520 + 0x673),	// Not battle related
+	
 	//(int*)(0x00478810 + 0x289),	// Not battle related
 	//(int*)(0x00478810 + 0x31A),	// Not battle related
 	//(int*)(0x00478810 + 0x3C1),	// Not battle related
 	//(int*)(0x00478810 + 0x54C),	// Not battle related
+	
 	//(int*)(0x00478E30 + 0x60),	// Not battle related
+	
 	//(int*)(0x0047A320 + 0x280),	// Not battle related
 	//(int*)(0x0047A320 + 0x328),	// Not battle related
 	//(int*)(0x0047A320 + 0x3DB),	// Not battle related
 	//(int*)(0x0047A320 + 0x596),	// Not battle related
+	
 	//(int*)(0x0047B1C0 + 0x202),	// Not battle related
 	//(int*)(0x0047B1C0 + 0x2EA),	// Not battle related
 	//(int*)(0x0047B1C0 + 0x3F5),	// Not battle related
 	//(int*)(0x0047B1C0 + 0x496),	// Not battle related
+	
 	//(int*)(0x0047DDA0 + 0x28C),	// Not battle related
 	//(int*)(0x0047DDA0 + 0x325),	// Not battle related
 	//(int*)(0x0047DDA0 + 0x3CD),	// Not battle related
 	//(int*)(0x0047DDA0 + 0x4FF),	// Not battle related
+	
 	//(int*)(0x00484400 + 0x4E8),	// Not battle related
 	//(int*)(0x00484400 + 0x61D),	// Not battle related
 	//(int*)(0x00484400 + 0x755),	// Not battle related
@@ -344,17 +364,24 @@ int* repositionAddr[]{
 	//(int*)(0x00484400 + 0xC1C),	// Not battle related
 	//(int*)(0x00484400 + 0xD89),	// Not battle related
 	//(int*)(0x00484400 + 0xDD1),	// Not battle related
+	
 	//(int*)(0x004859F0 + 0x1AC),	// Not battle related  
 	//(int*)(0x004859F0 + 0x68),	// Not battle related
+	
 	//(int*)(0x00486880 + 0x13A),	// Not battle related
+	
 	//(int*)(0x00486A10 + 0x2AC),	// Not battle related
 	//(int*)(0x00486A10 + 0x362),	// Not battle related
+	
 	//(int*)(0x00487EB0 + 0x1FF),	// Not battle related
+	
 	//(int*)(0x00488780 + 0x33D),	// Not battle related
+	
 	//(int*)(0x00489310 + 0x295),	// Not battle related
 	//(int*)(0x00489310 + 0x332),	// Not battle related
 	//(int*)(0x00489310 + 0x3E3),	// Not battle related
 	//(int*)(0x00489310 + 0x514),	// Not battle related
+	
 	//(int*)(0x0048A020 + 0x25C),	// Not battle related
 	//(int*)(0x0048A020 + 0x382),	// Not battle related
 	//(int*)(0x0048A020 + 0x441),	// Not battle related
@@ -388,24 +415,30 @@ int* repositionAddr[]{
 		
 	// Check - Not text box
 	//(int*)(0x00497150 + 0x161), // Not Battle Related
+	
 	//(int*)(0x004983F0 + 0xD1),  // Not Battle Related
+	
 	//(int*)(0x00499130 + 0x1FE), // Not Battle Related
 	//(int*)(0x00499130 + 0x44A), // Not Battle Related
+	
 	//(int*)(0x00499DE0 + 0x339), // Not Battle Related
 	//(int*)(0x00499DE0 + 0x478), // Not Battle Related
 	//(int*)(0x00499DE0 + 0x5E3), // Not Battle Related
 	//(int*)(0x00499DE0 + 0x683), // Not Battle Related
+	
 	//(int*)(0x0049B080 + 0x37D), // Not Battle Related
 	//(int*)(0x0049B080 + 0x510), // Not Battle Related
 	//(int*)(0x0049B080 + 0x651), // Not Battle Related
 	//(int*)(0x0049B080 + 0x8C2), // Not Battle Related
 	//(int*)(0x0049B080 + 0x937), // Not Battle Related
+	
 	//(int*)(0x0049C5A0 + 0x20B), // Not Battle Related	
 	//(int*)(0x0049C5A0 + 0x32E), // Not Battle Related
 	//(int*)(0x0049C5A0 + 0x436), // Not Battle Related
 	//(int*)(0x0049C5A0 + 0x557), // Not Battle Related
 	//(int*)(0x0049C5A0 + 0x602), // Not Battle Related
 	//(int*)(0x0049C5A0 + 0x6B9), // Not Battle Related
+	
 	//(int*)(0x0049D0B0 + 0x231), // Not Battle Related
 	//(int*)(0x0049D0B0 + 0x354), // Not Battle Related
 	//(int*)(0x0049D0B0 + 0x468), // Not Battle Related
@@ -415,6 +448,7 @@ int* repositionAddr[]{
 	//(int*)(0x0049DB80 + 0x3CF), // Not Battle Related
 	//(int*)(0x0049DB80 + 0x4E4), // Not Battle Related
 	//(int*)(0x0049DB80 + 0x588), // Not Battle Related 
+	
 	//(int*)(0x0049E470 + 0x295), // Not battle related
 	//(int*)(0x0049E470 + 0x3DD), // Not battle related
 	//(int*)(0x0049E470 + 0x559), // Not battle related
@@ -422,9 +456,11 @@ int* repositionAddr[]{
 	//(int*)(0x0049E470 + 0x648), // Not battle related
 	//(int*)(0x0049E470 + 0x6BC), // Not battle related
 	//(int*)(0x0049E470 + 0x774), // Not battle related
+	
 	//(int*)(0x0049F270 + 0x1DB), // Not battle related
 	//(int*)(0x0049F270 + 0x2C6), // Not battle related
 	//(int*)(0x0049F270 + 0x3AF), // Not battle related
+	
 	//(int*)(0x0049F8E0 + 0x36C), // Not battle related
 	//(int*)(0x0049F8E0 + 0x453), // Not battle related
 	//(int*)(0x0049F8E0 + 0x50B), // Not battle related
@@ -435,10 +471,12 @@ int* repositionAddr[]{
 	//(int*)(0x0049F8E0 + 0x9E0), // Not battle related
 	//(int*)(0x0049F8E0 + 0xA6C), // Not battle related
 	//(int*)(0x0049F8E0 + 0xB1B), // Not battle related
+	
 	//(int*)(0x004A0B70 + 0x23F), // Not battle related
 	//(int*)(0x004A0B70 + 0x324), // Not battle related
 	//(int*)(0x004A0B70 + 0x407), // Not battle related
 	//(int*)(0x004A0B70 + 0x524), // Not battle related
+	
 	//(int*)(0x004A1600 + 0x312), // Not battle related
 	//(int*)(0x004A1600 + 0x5E7), // Not battle related
 	//(int*)(0x004A1600 + 0x660), // Not battle related
@@ -447,6 +485,7 @@ int* repositionAddr[]{
 	//(int*)(0x004A1600 + 0x8B7), // Not battle related
 	//(int*)(0x004A1600 + 0x99E), // Not battle related
 	//(int*)(0x004A1600 + 0xA43), // Not battle related
+	
 	//(int*)(0x004A8D90 + 0x287), // Not battle related	
 	
 		
@@ -477,8 +516,10 @@ int* repositionAddr[]{
 	// Check - Not text box
 	//(int*)(0x004AB050 + 0x32),  // not battle related
 	//(int*)(0x004AB050 + 0x400), // not battle related
+	
 	//(int*)(0x004ADC80 + 0x358), // not battle related
 	//(int*)(0x004ADC80 + 0x40E), // not battle related
+	
 	//(int*)(0x004B1100 + 0x1050),// not battle related
 	//(int*)(0x004B1100 + 0x1184),// not battle related
 	//(int*)(0x004B1100 + 0x13EC),// not battle related
@@ -495,12 +536,16 @@ int* repositionAddr[]{
 	//(int*)(0x004B1100 + 0xC55), // not battle related
 	//(int*)(0x004B1100 + 0xDBB), // not battle related
 	//(int*)(0x004B1100 + 0xF1C), // not battle related
+	
 	//(int*)(0x004B5220 + 0x31D), // not battle related
+	
 	//(int*)(0x004BC380 + 0x11E), // not battle related
 	//(int*)(0x004BC380 + 0x232), // not battle related
 	//(int*)(0x004BC380 + 0x2C2), // not battle related
 	//(int*)(0x004BC380 + 0x357), // not battle related
+	
 	//(int*)(0x004BD090 + 0x107), // not battle related
+	
 	//(int*)(0x004BD260 + 0x13B), // not battle related
 	
 		
@@ -515,27 +560,39 @@ int* repositionAddr[]{
 	//(int*)(0x004C1E30 + 0x12C), // Tacho
 	//(int*)(0x004C1E30 + 0x14D),
 	//(int*)(0x004C1E30 + 0x172),
+	
 	//(int*)(0x004D2C80 + 0x9A),  // Not battle related
+	
 	//(int*)(0x004D83F0 + 0x452), // Not battle related
 	//(int*)(0x004D83F0 + 0x9DF), // Not battle related
 	//(int*)(0x004D83F0 + 0xA21), // Not battle related
+	
 	//(int*)(0x004DB1D0 + 0x4B),
 	//(int*)(0x004DB1D0 + 0x8D), // Tacho
+	
 	//(int*)(0x004DB4F0 + 0x6E), // Gears Shift Assist
 	//(int*)(0x004DB4F0 + 0xB3),	
+	
 	//(int*)(0x004DB750 + 0x3A), // Not battle related
+	
 	//(int*)(0x004DB800 + 0x31), // Not battle related
+	
 	//(int*)(0x004DB910 + 0x2D), // Not battle related
 	//(int*)(0x004DB910 + 0x69), // Not battle related
 	//(int*)(0x004DB910 + 0xA5), // Not battle related
+	
 	//(int*)(0x004DBAF0 + 0x3B), // Not battle related	
+	
 	//(int*)(0x004DBBE0 + 0x15D), // Gears Shift Assist
 	//(int*)(0x004DBBE0 + 0x182), // Nothing visible
 	//(int*)(0x004DBBE0 + 0x260),
 	//(int*)(0x004DBBE0 + 0x2AF),
+	
 	//(int*)(0x004DC5E0 + 0xCD), // Not battle related
+	
 	//(int*)(0x004DC990 + 0x45), // Not battle related
 	//(int*)(0x004DC990 + 0xAE), // Not battle related
+	
 	//(int*)(0x004DCEB0 + 0x1ED), // Not battle related
 	//(int*)(0x004DCEB0 + 0x264), // Not battle related
 	//(int*)(0x004DCEB0 + 0x2DB), // Not battle related
@@ -546,6 +603,7 @@ int* repositionAddr[]{
 	//(int*)(0x004DCEB0 + 0x5C3), // Not battle related
 	//(int*)(0x004DCEB0 + 0x6FA), // Not battle related
 	//(int*)(0x004DCEB0 + 0x76E), // Not battle related
+	
 	//(int*)(0x004DD720 + 0x821), // Not battle related
 	
 		
@@ -561,34 +619,42 @@ int* repositionAddr[]{
 	(int*)(0x004DF240 + 0x179), // Battle Clock Background
 	(int*)(0x004DF240 + 0x1DC), // Battle Clock Background
 	(int*)(0x004DF240 + 0xAE),  // Battle Clock
-	
+	//(int*)(0x004DF6E0 + 0x6E), // Not battle related
+	(int*)(0x004DF8D0 + 0x7B),  // Battle Cancel Text
+
 	
 	
 	// Check
-	//(int*)(0x004DF6E0 + 0x6E), // Not battle related
-	//(int*)(0x004DF8D0 + 0x7B), // Not battle related
 	//(int*)(0x004E0710 + 0x173), // Not battle related
 	//(int*)(0x004E0710 + 0x1BC), // Not battle related
 	//(int*)(0x004E0710 + 0x1FC), // Not battle related
 	//(int*)(0x004E0710 + 0x4B), // Nothing Visible 3
 	//(int*)(0x004E0710 + 0x92), // Chat and Buttons Dialogs
+	
 	//(int*)(0x004F49E0 + 0x47), // Not battle related
+	
 	//(int*)(0x004F4F90 + 0x8E), // Not battle related
 	//(int*)(0x004F4F90 + 0xBA), // Chat box left
+	
 	//(int*)(0x004F6BE0 + 0xAA), // Chat background
 	//(int*)(0x004F6BE0 + 0xD9), // Address book back
+	
 	//(int*)(0x004F7F80 + 0x104), // Not battle related
 	//(int*)(0x004F7F80 + 0x11F),	// Not battle related
+	
 	//(int*)(0x004F8150 + 0x1C1),	// Not battle related
 	//(int*)(0x004F8150 + 0x1F9),	// Not battle related
+	
 	//(int*)(0x004F8560 + 0x10F),	// Not battle related
 	//(int*)(0x004F8560 + 0x12E),	// Not battle related
 	//(int*)(0x004F8560 + 0x1FF),	// Not battle related
 	//(int*)(0x004F8560 + 0x217), // Address book back
 	//(int*)(0x004F8560 + 0x2C8), // address book search
 	//(int*)(0x004F8560 + 0x2E0),// Not battle related
+	
 	//(int*)(0x004F88B0 + 0x229),// Not battle related
 	//(int*)(0x004F88B0 + 0x258),// Not battle related
+	
 	//(int*)(0x004FB070 + 0x163),// Not battle related
 	//(int*)(0x004FB070 + 0x1A7),// Not battle related
 	//(int*)(0x004FB070 + 0x62), // Not battle related
@@ -597,11 +663,13 @@ int* repositionAddr[]{
 	//(int*)(0x004FB830 + 0x94), // Not battle related - Textbox carat
 	
 	//(int*)(0x004FB8D0 + 0x5B), // Not battle related
+	
 	//(int*)(0x004FC140 + 0x23), // Not battle related
 	//(int*)(0x004FC140 + 0x3C), // Not battle related
 	//(int*)(0x004FC140 + 0x55), // Not battle related
 	//(int*)(0x004FC140 + 0x6E), // address book search
 	//(int*)(0x004FC140 + 0x87), // Not battle related
+	
 	//(int*)(0x004FC800 + 0x1CD),// Not battle related
 	//(int*)(0x004FC800 + 0x1EC),// Not battle related
 	//(int*)(0x004FC800 + 0x28B),// Not battle related
@@ -609,11 +677,16 @@ int* repositionAddr[]{
 	//(int*)(0x004FC800 + 0x328),// Not battle related
 	//(int*)(0x004FC800 + 0xA9), // Not battle related
 	//(int*)(0x004FC800 + 0xC8), // Not battle related
+	
 	//(int*)(0x004FCB40 + 0x93), // Not battle related
+	
 	//(int*)(0x004FCD40 + 0xE4), // Not battle related
 	//(int*)(0x004FCD40 + 0xFD), // Not battle related
+	
 	//(int*)(0x004FD8D0 + 0x81), // Not battle related
+	
 	//(int*)(0x004FD990 + 0x2A), // Not battle related
+	
 	//(int*)(0x004FDAA0 + 0x45)  // Not battle related
 };
 
