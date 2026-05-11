@@ -1,9 +1,11 @@
 #pragma once
 float* drawDistance[]{
+	nullptr,
 	(float*)0x005F405C, // Track draw distance
 };
 
 int* resWidth[]{
+	nullptr,
 	(int*)0x004122E6, // Window Width after start
 	(int*)0x0041251B, // Window Width after start
 	(int*)0x004A68C5, // 3d window width in game
@@ -29,41 +31,43 @@ int* resWidth[]{
 };
 
 float* resWidthF[]{
+	nullptr,
 	(float*)0x004E601D,
-	(float*)0x0045CEB0, // Item black back
+	//(float*)0x0045CEB0, // Item black back but using createUIElement
 	(float*)0x004BC492, // Garage black back
 	(float*)0x00434957,
 	(float*)0x0045A6FA,
-	(float*)0x0045B7CB,
+	//(float*)0x0045B7CB, // Item box but using createUIElement
 	(float*)0x00470C01,
 	(float*)0x0048A257,
 	(float*)0x0049C78C,
 	(float*)0x0049D2C2,
-	//(float*)0x004E2451, // ?
-	//(float*)0x004E27AE, // ?
-	//(float*)0x004E33BD, // ?
-	//(float*)0x004E3478, // ?
-	//(float*)0x004E34C5, // ?
-	//(float*)0x004E34E3, // ?
-	//(float*)0x004E3501,	// ?
-	//(float*)0x004E351F,	// ?
-	//(float*)0x004E353D,	// ?
-	//(float*)0x004E355B,	// ?
-	//(float*)0x004E3579,	// ?
-	//(float*)0x004E3597,	// ?
-	//(float*)0x004E35B5,	// ?
-	//(float*)0x004E35D3,	// ?
-	//(float*)0x004E35F1,	// ?
-	//(float*)0x004E360F,	// ?
-	//(float*)0x004E362D,	// ?
-	//(float*)0x004E364B,	// ?
-	//(float*)0x004E5F52,	// ?
-	//(float*)0x004E5FB3,	// ?
-	//(float*)0x004E6057,	// ?
-	//(float*)0x004F6C7C	// ?
+	//(float*)0x004E2451, // ???
+	//(float*)0x004E27AE, // ???
+	//(float*)0x004E33BD, // ???
+	//(float*)0x004E3478, // ???
+	//(float*)0x004E34C5, // ???
+	//(float*)0x004E34E3, // ???
+	//(float*)0x004E3501, // ???
+	//(float*)0x004E351F, // ???
+	//(float*)0x004E353D, // ???
+	//(float*)0x004E355B, // ???
+	//(float*)0x004E3579, // ???
+	//(float*)0x004E3597, // ???
+	//(float*)0x004E35B5, // ???
+	//(float*)0x004E35D3, // ???
+	//(float*)0x004E35F1, // ???
+	//(float*)0x004E360F, // ???
+	//(float*)0x004E362D, // ???
+	//(float*)0x004E364B, // ???
+	//(float*)0x004E5F52, // ???
+	//(float*)0x004E5FB3, // ???
+	//(float*)0x004E6057, // ???
+	//(float*)0x004F6C7C, // ???
 };
 
 int* resHeight[]{
+	nullptr,
 	(int*)0x004122F6, // Window Height after start
 	(int*)0x00412524, // Window Height after start
 	(int*)0x004A68D0, // 3d window height in game
@@ -89,22 +93,20 @@ int* resHeight[]{
 };
 
 float* resHeightF[]{
-	(float*)0x0045CEA5, // Item black back
+	nullptr,
+	//(float*)0x0045CEA5, // Item black back but using createUIElement
 	(float*)0x004BC487,	// Garage black back
 	(float*)0x0043494C,
 	(float*)0x0045A6F5,
-	(float*)0x0045B7C0,
+	//(float*)0x0045B7C0, // Item box but using createUIElement
 	(float*)0x00470BFC,
 	(float*)0x0048A252,
 	(float*)0x0049C787,
 	(float*)0x0049D2BD,
-	//(float*)0x00
-	//(float*)0x00
-	//(float*)0x00
-	//(float*)0x00
 };
 
 int* centerJust[]{
+	nullptr,
 	(int*)0x004DC601,
 	(int*)0x004DC9A4,
 	(int*)0x004DC3D9, // Garage dialog
@@ -114,6 +116,7 @@ int* centerJust[]{
 };
 
 int* centerJustV[]{
+	nullptr,
 	(int*)0x004DC3D4, // Garage dialog
 	(int*)0x00443683, // Quit dialog
 	(int*)0x00426623, // Error dialog
@@ -121,6 +124,7 @@ int* centerJustV[]{
 };
 
 int* rightJust[] {
+	nullptr,
 	(int*)0x004DBBF6,
 	(int*)0x004DBDAB,
 	(int*)0x004DB509,
@@ -129,6 +133,7 @@ int* rightJust[] {
 };
 
 int* bottomJust[]{
+	nullptr,
 	(int*)0x004DBCE9,
 	(int*)0x004DB501,
 	(int*)0x004D84D1,
@@ -143,35 +148,40 @@ int* bottomJust[]{
 };
 
 float* centerJustF[]{
+	nullptr,
 	(float*)0x004DC9D1,
 };
 
 float* rightJustF[]{
+	nullptr,
 	(float*)0x004DB217,
 	(float*)0x004DB59F,
 	(float*)0x004DB786,
 	(float*)0x004DB82D,
-	(float*)0x005F36F8,
 	(float*)0x004DB939,
 	(float*)0x004DB975,
-	(float*)0x004DB9B1
+	(float*)0x004DB9B1,
+	(float*)0x005F36F8, // Tacho needle X
 };
 
 float* bottomJustF[]{
+	nullptr,
 	(float*)0x004DB212,
 	(float*)0x004DB59A,
 	(float*)0x004DB781,
 	(float*)0x004DB828,
-	(float*)0x004DBB16,
+	
+	(float*)0x004DBB16, // in course icon back box
 	(float*)0x004DBB74,
 	(float*)0x004D5BA3,
 	(float*)0x004D5BF2,
-	(float*)0x004D5C41,
+	(float*)0x004D5C41, // Navi map back box (affected by tachno needle Y also)
 	(float*)0x004DC9CC,
-	(float*)0x005F36F4,
+	
 	(float*)0x004DB934,
 	(float*)0x004DB970,
-	(float*)0x004DB9AC
+	(float*)0x004DB9AC,
+	(float*)0x005F36F4, // Tacho needle Y
 };
 
 //int* repositionAddr[]{
@@ -179,6 +189,629 @@ float* bottomJustF[]{
 //	(int*)(0x0045CEBA), // Itembox
 //};
 
+ADJUSTFLOATS adjustFloatAddr[]{
+	{ nullptr, nullptr, nullptr },
+	{ &adjustfloatsNBR, (float*)0x005F36F8, (float*)0x005F36F4 }, // Tacho needle
+	{ &adjustfloatsN, (float*)0x005F36F0, (float*)0x005F36EC }, // Tacho needle pivot point
+	{ adjustfloats43, (float*)0x005EEB2C, nullptr }, // Handle offsets related
+	{ adjustfloats43, (float*)0x005EEB30, nullptr }, // Handle offsets related
+	{ adjustfloats43, (float*)0x005EEB34, nullptr }, // Handle offsets related
+	{ adjustfloats43, (float*)0x005EEB38, nullptr }, // Handle offsets related
+	{ adjustfloats43, (float*)0x005EEB3C, nullptr }, // Handle offsets related
+	{ adjustfloats43, (float*)0x005EEB40, nullptr }, // Handle offsets related
+	{ adjustfloats43, (float*)0x005EEB44, nullptr }, // Handle offsets related
+	{ adjustfloats43, (float*)0x005EEB48, nullptr }, // Handle offsets related
+	{ adjustfloats43, (float*)0x005EEB4C, nullptr }, // Handle offsets related
+	{ adjustfloats43, nullptr, (float*)0x005EEB50 }, // Handle offsets related
+	{ adjustfloats43, nullptr, (float*)0x005EEB54 }, // Handle offsets related
+	{ adjustfloats43, nullptr, (float*)0x005EEB58 }, // Handle offsets related
+	{ adjustfloats43, nullptr, (float*)0x005EEB5C }, // Handle offsets related
+	{ adjustfloats43, (float*)0x005EEB60, nullptr }, // Handle offsets related
+	{ adjustfloats43, nullptr, (float*)0x005EEB64 }, // Handle offsets related
+	{ adjustfloats43, nullptr, (float*)0x005EEB68 }, // Handle offsets related
+	{ adjustfloats43, nullptr, (float*)0x005EEB6C }, // Handle offsets related
+	{ adjustfloats43, nullptr, (float*)0x005EEB70 }, // Handle offsets related
+	{ adjustfloats43, nullptr, (float*)0x005EEB74 }, // Handle offsets related
+	{ adjustfloats43, nullptr, (float*)0x005EEB78 }, // Handle offsets related
+};
+
+ADJUSTINTS adjustIntAddr[]{
+	{ nullptr, nullptr, nullptr },
+	//{ &adjustintsN, (int*)0x00600900, (int*)0x00600904 }, // Tache needle size
+	{ &adjustints, (int*)0x004E185B, (int*)0x004E1862 }, // Mirror size
+	{ &adjustints, (int*)0x004E184D, (int*)0x004E1854 }, // Mirror position
+};
+
+REPLACEFUNCTION createUIElementObjectAddr[]{
+	{ createUIElementObject, nullptr },
+	//{ createUIElementObject, (int*)0x004263C5 },
+	//{ createUIElementObject, (int*)0x00431529 },
+	//{ createUIElementObject, (int*)0x00431532 },
+	//{ createUIElementObject, (int*)0x00431540 },
+	//{ createUIElementObject, (int*)0x00434C8F },
+	//{ createUIElementObject, (int*)0x0043501A },
+	//{ createUIElementObject, (int*)0x0043507F },
+	//{ createUIElementObject, (int*)0x004350F1 },
+	//{ createUIElementObject, (int*)0x0043513D },
+	//{ createUIElementObject, (int*)0x00435517 },
+	//{ createUIElementObject, (int*)0x0043556B },
+	//{ createUIElementObject, (int*)0x004355BC },
+	//{ createUIElementObject, (int*)0x0043560C },
+	//{ createUIElementObject, (int*)0x004404A8 },
+	//{ createUIElementObject, (int*)0x0044FEB9 },
+	//{ createUIElementObject, (int*)0x0044FF1D },
+	//{ createUIElementObject, (int*)0x00450342 },
+	//{ createUIElementObject, (int*)0x0045038B },
+	//{ createUIElementObject, (int*)0x0045B705 },
+	//{ createUIElementObject, (int*)0x0045B796 },
+	//{ createUIElementObject, (int*)0x0045BEAD },
+	//{ createUIElementObject, (int*)0x0045BF0A },
+	//{ createUIElementObject, (int*)0x0045D225 },
+	//{ createUIElementObject, (int*)0x0045D27F },
+	//{ createUIElementObject, (int*)0x0045D672 },
+	//{ createUIElementObject, (int*)0x0045D68D },
+	//{ createUIElementObject, (int*)0x00477C20 },
+	//{ createUIElementObject, (int*)0x00478DE9 },
+	//{ createUIElementObject, (int*)0x00485B1D },
+	//{ createUIElementObject, (int*)0x00497355 },
+	//{ createUIElementObject, (int*)0x0049B7F2 },
+	//{ createUIElementObject, (int*)0x0049B851 },
+	//{ createUIElementObject, (int*)0x0049CCF5 },
+	//{ createUIElementObject, (int*)0x0049CD4F },
+	//{ createUIElementObject, (int*)0x0049D795 },
+	//{ createUIElementObject, (int*)0x0049D7EF },
+	//{ createUIElementObject, (int*)0x0049E93D },
+	//{ createUIElementObject, (int*)0x004A908D },
+	//{ createUIElementObject, (int*)0x004A9433 },
+	//{ createUIElementObject, (int*)0x004AB4C0 },
+	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004ABF85 }, // Course network string
+	{ createUIElementObject, (int*)0x004BC43D }, // Enter garage dialog string
+	//{ createUIElementObject, (int*)0x004BD725 },
+	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5CB5 }, // Persons in course
+	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5D07 }, // Course Name
+	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5D7E }, // LV CP String
+	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5DDC }, // Autorun String
+	//{ createUIElementObject, (int*)0x004D5E2B },
+	//{ createUIElementObject, (int*)0x004D5F18 },
+	//{ createUIElementObject, (int*)0x004D8D66 },
+	//{ createUIElementObject, (int*)0x004DC729 },
+	//{ createUIElementObject, (int*)0x004DE74D },
+	//{ createUIElementObject, (int*)0x004DE79B },
+	//{ createUIElementObject, (int*)0x004DE7E9 },
+	//{ createUIElementObject, (int*)0x004DE839 },
+	//{ createUIElementObject, (int*)0x004DE8C1 },
+	//{ createUIElementObject, (int*)0x004DE90E },
+	//{ createUIElementObject, (int*)0x004FBB54 }, // Textbox input
+	//{ createUIElementObject, (int*)0x004FBB92 },
+	//{ createUIElementObject, (int*)0x004FD1F4 },
+	//{ createUIElementObject, (int*)0x004FD33F },
+	{ createUIElementObject_Scale_Reposition, (int*)0x004FD9EE }, // Chat log text
+	//{ createUIElementObject, (int*)0x004FDA26 },
+};
+REPLACEFUNCTION createUIElementAddr[]{
+	{ createUIElement, nullptr },
+	//{ createUIElement, (int*)0x0042680E }, // ???
+	//{ createUIElement, (int*)0x00426899 }, // ???
+	//{ createUIElement, (int*)0x00434968 }, // ???
+	//{ createUIElement, (int*)0x00434A8E }, // ???
+	//{ createUIElement, (int*)0x00434B5F }, // ???
+	//{ createUIElement, (int*)0x00434CCB }, // ???
+	//{ createUIElement, (int*)0x00434D1B }, // ???
+	//{ createUIElement, (int*)0x00434DBB }, // ???
+	//{ createUIElement, (int*)0x00434EA0 }, // ???
+	//{ createUIElement, (int*)0x00434EEF }, // ???
+	//{ createUIElement, (int*)0x00434F3E }, // ???
+	//{ createUIElement, (int*)0x00435221 }, // ???
+	//{ createUIElement, (int*)0x0043529E }, // ???
+	//{ createUIElement, (int*)0x00435383 }, // ???
+	//{ createUIElement, (int*)0x004353E1 }, // ???
+	//{ createUIElement, (int*)0x00435427 }, // ???
+	//{ createUIElement, (int*)0x00435468 }, // ???
+	//{ createUIElement, (int*)0x004354AD }, // ???
+	//{ createUIElement, (int*)0x00435644 }, // ???
+	//{ createUIElement, (int*)0x00435693 }, // ???
+	//{ createUIElement, (int*)0x004356E2 }, // ???
+	//{ createUIElement, (int*)0x00435731 }, // ???
+	//{ createUIElement, (int*)0x004357AF }, // ???
+	//{ createUIElement, (int*)0x00438C95 }, // ???
+	//{ createUIElement, (int*)0x00438CC1 }, // ???
+	{ createUIElement_43, (int*)0x0043F75A }, // Loading Screen
+	//{ createUIElement, (int*)0x0044070A }, // ???
+	//{ createUIElement, (int*)0x00440792 }, // ???
+	//{ createUIElement, (int*)0x0044F8BB }, // ???
+	//{ createUIElement, (int*)0x0044FB99 }, // ???
+	//{ createUIElement, (int*)0x0044FC6D }, // ???
+	//{ createUIElement, (int*)0x0044FCE6 }, // ???
+	//{ createUIElement, (int*)0x0044FD4F }, // ???
+	//{ createUIElement, (int*)0x0044FE31 }, // ???
+	//{ createUIElement, (int*)0x00450121 }, // ???
+	//{ createUIElement, (int*)0x004501C7 }, // ???
+	//{ createUIElement, (int*)0x00450574 }, // ???
+	//{ createUIElement, (int*)0x004509BF }, // ???
+	//{ createUIElement, (int*)0x00451547 }, // ???
+	//{ createUIElement, (int*)0x00451683 }, // ???
+	//{ createUIElement, (int*)0x00451791 }, // ???
+	//{ createUIElement, (int*)0x0045189F }, // ???
+	//{ createUIElement, (int*)0x0045195F }, // ???
+	//{ createUIElement, (int*)0x004519EB }, // ???
+	//{ createUIElement, (int*)0x00451A65 }, // ???
+	//{ createUIElement, (int*)0x00451AE0 }, // ???
+	//{ createUIElement, (int*)0x00451B3E }, // ???
+	//{ createUIElement, (int*)0x00451BB8 }, // ???
+	//{ createUIElement, (int*)0x00451C6F }, // ???
+	//{ createUIElement, (int*)0x004521EA }, // ???
+	//{ createUIElement, (int*)0x00452898 }, // ???
+	//{ createUIElement, (int*)0x00452D81 }, // ???
+	//{ createUIElement, (int*)0x004545E2 }, // ???
+	//{ createUIElement, (int*)0x00454626 }, // ???
+	//{ createUIElement, (int*)0x0045A719 }, // ???
+	//{ createUIElement, (int*)0x0045A82D }, // ???
+	//{ createUIElement, (int*)0x0045A9B3 }, // ???
+	//{ createUIElement, (int*)0x0045AA2C }, // ???
+	//{ createUIElement, (int*)0x0045AACF }, // ???
+	//{ createUIElement, (int*)0x0045ABAF }, // ???
+	//{ createUIElement, (int*)0x0045AFC1 }, // ???
+	//{ createUIElement, (int*)0x0045B0B0 }, // ???
+	//{ createUIElement, (int*)0x0045B7D7 }, // ???
+	//{ createUIElement, (int*)0x0045B8E7 }, // ???
+	//{ createUIElement, (int*)0x0045BA5E }, // ???
+	//{ createUIElement, (int*)0x0045BADA }, // ???
+	//{ createUIElement, (int*)0x0045BBB8 }, // ???
+	//{ createUIElement, (int*)0x0045BD30 }, // ???
+	//{ createUIElement, (int*)0x0045BD83 }, // ???
+	//{ createUIElement, (int*)0x0045C250 }, // ???
+	//{ createUIElement, (int*)0x0045C359 }, // ???
+	//{ createUIElement, (int*)0x0045CEBA }, // ???
+	//{ createUIElement, (int*)0x0045D7F1 }, // ???
+	//{ createUIElement, (int*)0x0045D8A0 }, // ???
+	//{ createUIElement, (int*)0x0045D91A }, // ???
+	//{ createUIElement, (int*)0x0045D9C5 }, // ???
+	//{ createUIElement, (int*)0x0045DA41 }, // ???
+	//{ createUIElement, (int*)0x0045DAE3 }, // ???
+	//{ createUIElement, (int*)0x0045DBED }, // ???
+	//{ createUIElement, (int*)0x0045DEEF }, // ???
+	//{ createUIElement, (int*)0x0045E0B3 }, // ???
+	//{ createUIElement, (int*)0x0045E21C }, // ???
+	//{ createUIElement, (int*)0x0045E307 }, // ???
+	//{ createUIElement, (int*)0x0045F367 }, // ???
+	//{ createUIElement, (int*)0x0046F7AB }, // ???
+	//{ createUIElement, (int*)0x0046F8A7 }, // ???
+	//{ createUIElement, (int*)0x0046F9D1 }, // ???
+	//{ createUIElement, (int*)0x0046FF20 }, // ???
+	//{ createUIElement, (int*)0x00470056 }, // ???
+	//{ createUIElement, (int*)0x00470197 }, // ???
+	//{ createUIElement, (int*)0x0047023C }, // ???
+	//{ createUIElement, (int*)0x00470C20 }, // ???
+	//{ createUIElement, (int*)0x00470D43 }, // ???
+	//{ createUIElement, (int*)0x00470DE0 }, // ???
+	//{ createUIElement, (int*)0x00470EBF }, // ???
+	//{ createUIElement, (int*)0x00470FA5 }, // ???
+	//{ createUIElement, (int*)0x004710B6 }, // ???
+	//{ createUIElement, (int*)0x004711B1 }, // ???
+	//{ createUIElement, (int*)0x00471265 }, // ???
+	//{ createUIElement, (int*)0x004712FA }, // ???
+	//{ createUIElement, (int*)0x00471363 }, // ???
+	//{ createUIElement, (int*)0x00471406 }, // ???
+	//{ createUIElement, (int*)0x004714D3 }, // ???
+	//{ createUIElement, (int*)0x0047154B }, // ???
+	//{ createUIElement, (int*)0x004715B5 }, // ???
+	//{ createUIElement, (int*)0x0047161E }, // ???
+	//{ createUIElement, (int*)0x00471687 }, // ???
+	//{ createUIElement, (int*)0x0047548C }, // ???
+	//{ createUIElement, (int*)0x00475A4C }, // ???
+	//{ createUIElement, (int*)0x00475AB7 }, // ???
+	//{ createUIElement, (int*)0x00475B81 }, // ???
+	//{ createUIElement, (int*)0x00475C42 }, // ???
+	//{ createUIElement, (int*)0x00475D0F }, // ???
+	//{ createUIElement, (int*)0x00475DBD }, // ???
+	//{ createUIElement, (int*)0x00477847 }, // ???
+	//{ createUIElement, (int*)0x004778BF }, // ???
+	//{ createUIElement, (int*)0x00477962 }, // ???
+	//{ createUIElement, (int*)0x00477A07 }, // ???
+	//{ createUIElement, (int*)0x00477AC4 }, // ???
+	//{ createUIElement, (int*)0x00477B93 }, // ???
+	//{ createUIElement, (int*)0x00478A99 }, // ???
+	//{ createUIElement, (int*)0x00478B2A }, // ???
+	//{ createUIElement, (int*)0x00478BD1 }, // ???
+	//{ createUIElement, (int*)0x00478D5C }, // ???
+	//{ createUIElement, (int*)0x00478E90 }, // ???
+	//{ createUIElement, (int*)0x0047A5A0 }, // ???
+	//{ createUIElement, (int*)0x0047A648 }, // ???
+	//{ createUIElement, (int*)0x0047A6FB }, // ???
+	//{ createUIElement, (int*)0x0047A8B6 }, // ???
+	//{ createUIElement, (int*)0x0047B3C2 }, // ???
+	//{ createUIElement, (int*)0x0047B4AA }, // ???
+	//{ createUIElement, (int*)0x0047B5B5 }, // ???
+	//{ createUIElement, (int*)0x0047B656 }, // ???
+	//{ createUIElement, (int*)0x0047E02C }, // ???
+	//{ createUIElement, (int*)0x0047E0C5 }, // ???
+	//{ createUIElement, (int*)0x0047E16D }, // ???
+	//{ createUIElement, (int*)0x0047E29F }, // ???
+	//{ createUIElement, (int*)0x004848E8 }, // ???
+	//{ createUIElement, (int*)0x00484A1D }, // ???
+	//{ createUIElement, (int*)0x00484B55 }, // ???
+	//{ createUIElement, (int*)0x00484C88 }, // ???
+	//{ createUIElement, (int*)0x00484DDA }, // ???
+	//{ createUIElement, (int*)0x00484EC5 }, // ???
+	//{ createUIElement, (int*)0x00484FAE }, // ???
+	//{ createUIElement, (int*)0x0048501C }, // ???
+	//{ createUIElement, (int*)0x00485189 }, // ???
+	//{ createUIElement, (int*)0x004851D1 }, // ???
+	//{ createUIElement, (int*)0x00485A58 }, // ???
+	//{ createUIElement, (int*)0x00485B9C }, // ???
+	//{ createUIElement, (int*)0x004869BA }, // ???
+	//{ createUIElement, (int*)0x00486CBC }, // ???
+	//{ createUIElement, (int*)0x00486D72 }, // ???
+	//{ createUIElement, (int*)0x004880AF }, // ???
+	//{ createUIElement, (int*)0x00488ABD }, // ???
+	//{ createUIElement, (int*)0x004895A5 }, // ???
+	//{ createUIElement, (int*)0x00489642 }, // ???
+	//{ createUIElement, (int*)0x004896F3 }, // ???
+	//{ createUIElement, (int*)0x00489824 }, // ???
+	//{ createUIElement, (int*)0x0048A27C }, // ???
+	//{ createUIElement, (int*)0x0048A3A2 }, // ???
+	//{ createUIElement, (int*)0x0048A461 }, // ???
+	//{ createUIElement, (int*)0x0048A55B }, // ???
+	//{ createUIElement, (int*)0x0048A601 }, // ???
+	//{ createUIElement, (int*)0x0048A6B0 }, // ???
+	//{ createUIElement, (int*)0x0048A78C }, // ???
+	//{ createUIElement, (int*)0x0048B87F }, // ???
+	//{ createUIElement, (int*)0x0048B96B }, // ???
+	//{ createUIElement, (int*)0x0048BE71 }, // ???
+	//{ createUIElement, (int*)0x0048BEF8 }, // ???
+	//{ createUIElement, (int*)0x0048BF9E }, // ???
+	//{ createUIElement, (int*)0x0048C090 }, // ???
+	//{ createUIElement, (int*)0x0048C98C }, // ???
+	//{ createUIElement, (int*)0x0048C9F7 }, // ???
+	//{ createUIElement, (int*)0x0048CF3F }, // ???
+	//{ createUIElement, (int*)0x0048D1A4 }, // ???
+	//{ createUIElement, (int*)0x0048D2B9 }, // ???
+	//{ createUIElement, (int*)0x0048D696 }, // ???
+	//{ createUIElement, (int*)0x0048D9AF }, // ???
+	//{ createUIElement, (int*)0x0048DAEA }, // ???
+	//{ createUIElement, (int*)0x0048DBB5 }, // ???
+	//{ createUIElement, (int*)0x0048DEF3 }, // ???
+	//{ createUIElement, (int*)0x0048DF7E }, // ???
+	//{ createUIElement, (int*)0x0048E31E }, // ???
+	//{ createUIElement, (int*)0x004972B1 }, // ???
+	//{ createUIElement, (int*)0x004984C1 }, // ???
+	//{ createUIElement, (int*)0x0049932E }, // ???
+	//{ createUIElement, (int*)0x0049957A }, // ???
+	//{ createUIElement, (int*)0x0049A119 }, // ???
+	//{ createUIElement, (int*)0x0049A258 }, // ???
+	//{ createUIElement, (int*)0x0049A3C3 }, // ???
+	//{ createUIElement, (int*)0x0049A463 }, // ???
+	//{ createUIElement, (int*)0x0049B3FD }, // ???
+	//{ createUIElement, (int*)0x0049B590 }, // ???
+	//{ createUIElement, (int*)0x0049B6D1 }, // ???
+	//{ createUIElement, (int*)0x0049B942 }, // ???
+	//{ createUIElement, (int*)0x0049B9B7 }, // ???
+	//{ createUIElement, (int*)0x0049C7AB }, // ???
+	//{ createUIElement, (int*)0x0049C8CE }, // ???
+	//{ createUIElement, (int*)0x0049C9D6 }, // ???
+	//{ createUIElement, (int*)0x0049CAF7 }, // ???
+	//{ createUIElement, (int*)0x0049CBA2 }, // ???
+	//{ createUIElement, (int*)0x0049CC59 }, // ???
+	//{ createUIElement, (int*)0x0049D2E1 }, // ???
+	//{ createUIElement, (int*)0x0049D404 }, // ???
+	//{ createUIElement, (int*)0x0049D518 }, // ???
+	//{ createUIElement, (int*)0x0049D666 }, // ???
+	//{ createUIElement, (int*)0x0049D6F3 }, // ???
+	//{ createUIElement, (int*)0x0049DE4E }, // ???
+	//{ createUIElement, (int*)0x0049DF4F }, // ???
+	//{ createUIElement, (int*)0x0049E064 }, // ???
+	//{ createUIElement, (int*)0x0049E108 }, // ???
+	//{ createUIElement, (int*)0x0049E705 }, // ???
+	//{ createUIElement, (int*)0x0049E84D }, // ???
+	//{ createUIElement, (int*)0x0049E9C9 }, // ???
+	//{ createUIElement, (int*)0x0049EA41 }, // ???
+	//{ createUIElement, (int*)0x0049EAB8 }, // ???
+	//{ createUIElement, (int*)0x0049EB2C }, // ???
+	//{ createUIElement, (int*)0x0049EBE4 }, // ???
+	//{ createUIElement, (int*)0x0049F44B }, // ???
+	//{ createUIElement, (int*)0x0049F536 }, // ???
+	//{ createUIElement, (int*)0x0049F61F }, // ???
+	//{ createUIElement, (int*)0x0049FC4C }, // ???
+	//{ createUIElement, (int*)0x0049FD33 }, // ???
+	//{ createUIElement, (int*)0x0049FDEB }, // ???
+	//{ createUIElement, (int*)0x0049FF37 }, // ???
+	//{ createUIElement, (int*)0x0049FF9C }, // ???
+	//{ createUIElement, (int*)0x004A00DB }, // ???
+	//{ createUIElement, (int*)0x004A0149 }, // ???
+	//{ createUIElement, (int*)0x004A02C0 }, // ???
+	//{ createUIElement, (int*)0x004A034C }, // ???
+	//{ createUIElement, (int*)0x004A03FB }, // ???
+	//{ createUIElement, (int*)0x004A0DAF }, // ???
+	//{ createUIElement, (int*)0x004A0E94 }, // ???
+	//{ createUIElement, (int*)0x004A0F77 }, // ???
+	//{ createUIElement, (int*)0x004A1094 }, // ???
+	//{ createUIElement, (int*)0x004A1912 }, // ???
+	//{ createUIElement, (int*)0x004A1BE7 }, // ???
+	//{ createUIElement, (int*)0x004A1C60 }, // ???
+	//{ createUIElement, (int*)0x004A1DC6 }, // ???
+	//{ createUIElement, (int*)0x004A1E39 }, // ???
+	//{ createUIElement, (int*)0x004A1EB7 }, // ???
+	//{ createUIElement, (int*)0x004A1F9E }, // ???
+	//{ createUIElement, (int*)0x004A2043 }, // ???
+	//{ createUIElement, (int*)0x004A9017 }, // ???
+	//{ createUIElement, (int*)0x004A9618 }, // ???
+	//{ createUIElement, (int*)0x004A968B }, // ???
+	//{ createUIElement, (int*)0x004A970F }, // ???
+	//{ createUIElement, (int*)0x004A9A05 }, // ???
+	//{ createUIElement, (int*)0x004AA269 }, // ???
+	//{ createUIElement, (int*)0x004AA296 }, // ???
+	//{ createUIElement, (int*)0x004AA327 }, // ???
+	//{ createUIElement, (int*)0x004AA358 }, // ???
+	//{ createUIElement, (int*)0x004AA5A8 }, // ???
+	//{ createUIElement, (int*)0x004AA5D5 }, // ???
+	//{ createUIElement, (int*)0x004AA646 }, // ???
+	//{ createUIElement, (int*)0x004AA687 }, // ???
+	//{ createUIElement, (int*)0x004AA7CF }, // ???
+	//{ createUIElement, (int*)0x004AB082 }, // ???
+	//{ createUIElement, (int*)0x004AB450 }, // ???
+	//{ createUIElement, (int*)0x004ADFD8 }, // ???
+	//{ createUIElement, (int*)0x004AE08E }, // ???
+	//{ createUIElement, (int*)0x004B16D7 }, // ???
+	//{ createUIElement, (int*)0x004B180F }, // ???
+	//{ createUIElement, (int*)0x004B196B }, // ???
+	//{ createUIElement, (int*)0x004B1AA0 }, // ???
+	//{ createUIElement, (int*)0x004B1BE6 }, // ???
+	//{ createUIElement, (int*)0x004B1D55 }, // ???
+	//{ createUIElement, (int*)0x004B1EBB }, // ???
+	//{ createUIElement, (int*)0x004B201C }, // ???
+	//{ createUIElement, (int*)0x004B2150 }, // ???
+	//{ createUIElement, (int*)0x004B2284 }, // ???
+	//{ createUIElement, (int*)0x004B24EC }, // ???
+	//{ createUIElement, (int*)0x004B2697 }, // ???
+	//{ createUIElement, (int*)0x004B27E8 }, // ???
+	//{ createUIElement, (int*)0x004B2972 }, // ???
+	//{ createUIElement, (int*)0x004B2ABA }, // ???
+	//{ createUIElement, (int*)0x004B2BEE }, // ???
+	//{ createUIElement, (int*)0x004B553D }, // ???
+	//{ createUIElement, (int*)0x004BC49E }, // ???
+	{ createUIElement, (int*)0x004BC5B2 }, // Enter garage dialog back
+	{ createUIElement, (int*)0x004BC642 }, // Enter garage OK button
+	{ createUIElement, (int*)0x004BC6D7 }, // Enter garage CANCEL button
+	//{ createUIElement, (int*)0x004BD197 }, // ???
+	//{ createUIElement, (int*)0x004BD39B }, // ???
+	//{ createUIElement, (int*)0x004BF8D3 }, // ???
+	{ createUIElement, (int*)0x004C1F3B }, // Mirror frame top
+	{ createUIElement, (int*)0x004C1F5C }, // Mirror frame bottom
+	{ createUIElement, (int*)0x004C1F7D }, // Mirror frame left
+	{ createUIElement, (int*)0x004C1FA2 }, // Mirror frame right
+	{ createUIElement_AutoScale_Handle, (int*)0x004C3152 }, // Handle string above player car
+	{ createUIElement_AutoScale_TeamName, (int*)0x004C31D1 }, // Team name above handle box
+	{ createUIElement_AutoScale_43, (int*)0x004C3231 }, // Box around player handle
+	{ createUIElement_AutoScale_43, (int*)0x004C3284 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C32D7 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C332E }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C337B }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C33C8 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3417 }, // Safemode above player car
+	{ createUIElement_AutoScale_43, (int*)0x004C3470 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3554 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C363F }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C36BC }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3735 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3798 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3811 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3874 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C38D7 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3954 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C39B7 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3A1A }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3A7D }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3AF0 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3B53 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3BB6 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3C19 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3C97 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3D13 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3D76 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3DF2 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3E55 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3EB8 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3F38 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3F9B }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C3FFE }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C4061 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C40D7 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C413A }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C419D }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C4200 }, // Handle box related
+	{ createUIElement_AutoScale_43, (int*)0x004C4263 }, // Handle box related
+	//{ createUIElement, (int*)0x004D2D1A }, // ???
+	//{ createUIElement, (int*)0x004D59A7 }, // ???
+	//{ createUIElement, (int*)0x004D59E8 }, // ???
+	//{ createUIElement_Scale, (int*)0x004D5A11 }, // car arrows on navimap (rival and player)
+	//{ createUIElement, (int*)0x004D5AF2 }, // ???
+	//{ createUIElement, (int*)0x004D5B3B }, // ???
+	//{ createUIElement, (int*)0x004D5B7B }, // ???
+	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D5BAC }, // "NORMAL MAP" above navi box
+	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D5BFB }, // "WIDE MAP" above navi box
+	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D5C4A }, // navi box
+	//{ createUIElement, (int*)0x004D5E9B }, // ???
+	//{ createUIElement_Scale, (int*)0x004D8842 }, // Naimap road
+	//{ createUIElement, (int*)0x004D8DCF }, // ???
+	//{ createUIElement, (int*)0x004D8E11 }, // ???
+	{ createUIElement_Scale_Reposition_BottomRight, (int*)0x004DB21B }, // Tacho guage back
+	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004DB25D }, // Tacho needle
+	{ createUIElement_Scale_Reposition_BottomRight, (int*)0x004DB55E }, // Digital speed
+	{ createUIElement_Scale_Reposition_BottomRight, (int*)0x004DB5A3 }, // "kmph" next to speed
+	{ createUIElement_Scale_Reposition_BottomRight, (int*)0x004DB78A }, // "assist" above "kmph"
+	{ createUIElement_Scale_Reposition_BottomRight, (int*)0x004DB831 }, // gear indicator
+	//{ createUIElement, (int*)0x004DB93D }, // ???
+	//{ createUIElement, (int*)0x004DB979 }, // ???
+	//{ createUIElement, (int*)0x004DB9B5 }, // ???
+	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004DBB2B }, // Icon backing
+	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004DBB8C }, // Icon
+	//{ createUIElement, (int*)0x004DBD3D }, // Linked to bottom right buttonsg
+	//{ createUIElement, (int*)0x004DBD62 }, // Linked to bottom right buttons
+	//{ createUIElement, (int*)0x004DBE40 }, // ???
+	//{ createUIElement, (int*)0x004DBE8F }, // ???
+	//{ createUIElement, (int*)0x004DC6AD }, // ???
+	//{ createUIElement, (int*)0x004DC9D5 }, // ???
+	//{ createUIElement, (int*)0x004DCA3E }, // ???
+	//{ createUIElement, (int*)0x004DD09D }, // ???
+	//{ createUIElement, (int*)0x004DD114 }, // ???
+	//{ createUIElement, (int*)0x004DD18B }, // ???
+	//{ createUIElement, (int*)0x004DD250 }, // ???
+	//{ createUIElement, (int*)0x004DD2DF }, // ???
+	//{ createUIElement, (int*)0x004DD385 }, // ???
+	//{ createUIElement, (int*)0x004DD3FC }, // ???
+	//{ createUIElement, (int*)0x004DD473 }, // ???
+	//{ createUIElement, (int*)0x004DD5AA }, // ???
+	//{ createUIElement, (int*)0x004DD61E }, // ???
+	//{ createUIElement, (int*)0x004DDF41 }, // ???
+	//{ createUIElement, (int*)0x004DE45C }, // ???
+	//{ createUIElement, (int*)0x004DE4A2 }, // ???
+	//{ createUIElement, (int*)0x004DE4EE }, // ???
+	//{ createUIElement, (int*)0x004DE5C6 }, // ???
+	//{ createUIElement, (int*)0x004DE68F }, // ???
+	//{ createUIElement, (int*)0x004DE6EC }, // ???
+	//{ createUIElement, (int*)0x004DF110 }, // ???
+	//{ createUIElement, (int*)0x004DF15D }, // ???
+	//{ createUIElement, (int*)0x004DF2EE }, // ???
+	//{ createUIElement, (int*)0x004DF3B9 }, // ???
+	//{ createUIElement, (int*)0x004DF41C }, // ???
+	//{ createUIElement, (int*)0x004DF74E }, // ???
+	//{ createUIElement, (int*)0x004DF94B }, // ???
+	//{ createUIElement, (int*)0x004E075B }, // ???
+	//{ createUIElement, (int*)0x004E07A2 }, // ???
+	//{ createUIElement, (int*)0x004E0883 }, // ??? 
+	//{ createUIElement, (int*)0x004E08CC }, // ???
+	//{ createUIElement, (int*)0x004E090C }, // ???
+	//{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F4A27 }, // Addressbook and bottom right buttons scale - Handled by interactionUIElements
+	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F501E }, // Chatbox back right side
+	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F504A }, // Chatbox back left side
+	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F6C8A }, // Chatbox backing
+	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F6CB9 }, // Addressbook backing
+	//{ createUIElement, (int*)0x004F8084 }, // ???
+	//{ createUIElement, (int*)0x004F809F }, // ???
+	//{ createUIElement, (int*)0x004F8311 }, // ???
+	//{ createUIElement, (int*)0x004F8349 }, // ???
+	//{ createUIElement, (int*)0x004F866F }, // ???
+	//{ createUIElement, (int*)0x004F868E }, // ???
+	//{ createUIElement, (int*)0x004F875F }, // ???
+	//{ createUIElement, (int*)0x004F8777 }, // ???
+	//{ createUIElement, (int*)0x004F8828 }, // ???
+	//{ createUIElement, (int*)0x004F8840 }, // ???
+	//{ createUIElement, (int*)0x004F8AD9 }, // ???
+	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F8B08 }, // Addressbook input textbox
+	//{ createUIElement, (int*)0x004FB0D2 }, // ???
+	//{ createUIElement, (int*)0x004FB10C }, // ???
+	//{ createUIElement, (int*)0x004FB1D3 }, // ???
+	//{ createUIElement, (int*)0x004FB217 }, // ???
+	//{ createUIElement, (int*)0x004FB8C4 }, // Textbox carat
+	//{ createUIElement, (int*)0x004FB92B }, // ???
+	//{ createUIElement, (int*)0x004FC163 }, // ???
+	//{ createUIElement, (int*)0x004FC17C }, // ???
+	//{ createUIElement, (int*)0x004FC195 }, // ???
+	//{ createUIElement, (int*)0x004FC1AE }, // ???
+	//{ createUIElement, (int*)0x004FC1C7 }, // ???
+	//{ createUIElement, (int*)0x004FC8A9 }, // ???
+	//{ createUIElement, (int*)0x004FC8C8 }, // ???
+	//{ createUIElement, (int*)0x004FC9CD }, // ???
+	//{ createUIElement, (int*)0x004FC9EC }, // ???
+	//{ createUIElement, (int*)0x004FCA8B }, // ???
+	//{ createUIElement, (int*)0x004FCAAA }, // ???
+	//{ createUIElement, (int*)0x004FCB28 }, // ???
+	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004FCBD3 }, // Chat and addressbook scrollbar back
+	//{ createUIElement, (int*)0x004FCE24 }, // ???
+	//{ createUIElement, (int*)0x004FCE3D }, // ???
+	//{ createUIElement, (int*)0x004FD7CB }, // createUIElementObject (Textboxes affected)
+	//{ createUIElement, (int*)0x004FD951 }, // ???
+	//{ createUIElement, (int*)0x004FD9BA }, // ???
+	//{ createUIElement, (int*)0x004FDAE5 }, // ???
+};
+REPLACEFUNCTION positionUIElementAddr[]{
+	{ positionUIElement, nullptr },
+	//{ positionUIElement_Reposition, (int*)0x004546FA }, // ???
+	//{ positionUIElement_Reposition, (int*)0x0045F547 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x0045F6C8 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004755E6 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004756CF }, // ???
+	//{ positionUIElement_Reposition, (int*)0x0047575B }, // ???
+	//{ positionUIElement_Reposition, (int*)0x00475835 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x00492EE9 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004A93FF }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004A9B9F }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F4A59 }, // All chat area buttons Handled by MoveUIElement
+	//{ positionUIElement_Reposition, (int*)0x004F81DD }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F81F0 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F8240 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F8256 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F828D }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F82A3 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F893D }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F8950 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F89A5 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F89BB }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F89FA }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F8A10 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F8A47 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F8A5D }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F8A94 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004F8AAA }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004FC914 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004FC92B }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004FCB80 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004FCB93 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004FCC21 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004FCC30 }, // ???
+	//{ positionUIElement_Reposition, (int*)0x004FDB06 }, // ???
+};
+REPLACEFUNCTION interactionUIElementAddr[]{
+	{ interactionUIElement, nullptr },
+	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004FCDDF }, // Chat scrollbars
+	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004FCA5C }, // ???
+	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004FC99E }, // Srollbar down buttons
+	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004FC87A }, // Scrollbar up buttons
+	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004F87FC }, // Chatbox minimize button
+	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004F8733 }, // ???
+	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004F8640 }, // Chat type buttons
+	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004F8056 }, // ???
+	{ interactionUIElement_Scale_Reposition_BottomRight, (int*)0x004DBD00 }, // Buttom right buttons
+};
+REPLACEFUNCTION moveUIElementAddr[]{
+	{ moveUIElement, nullptr },
+	{ moveUIElement_Position, (int*)0x004F81B6 }, // Chat type buttons
+	{ moveUIElement_Position, (int*)0x004F822A }, // Chat
+	{ moveUIElement_Position, (int*)0x004F8277 }, // Chat
+	{ moveUIElement_Position, (int*)0x004F8916 }, // Chat type buttons
+	{ moveUIElement_Position, (int*)0x004F898A }, // Chat
+	{ moveUIElement_Position, (int*)0x004F89E4 }, // Chat
+	{ moveUIElement_Position, (int*)0x004F8A31 }, // Chat
+	{ moveUIElement_Position, (int*)0x004F8A7E }, // Chat
+	{ moveUIElement_Position, (int*)0x004FC8ED }, // Chat
+	{ moveUIElement_Position, (int*)0x004FCB59 }, // Chat
+	{ moveUIElement_Position, (int*)0x004FCC06 }, // Chat
+};
+REPLACEFUNCTION createTextboxAddr[]{
+	{ nullptr, nullptr },
+	{ createTextbox, (int*)0x0041714A }, // Login screen
+	//{ createTextbox, (int*)0x004758C6 }, // ???
+	//{ createTextbox, (int*)0x00476040 }, // ???
+	//{ createTextbox, (int*)0x004760B9 }, // ???
+	//{ createTextbox, (int*)0x0047A7CE }, // ???
+	{ createTextbox_Scale_Reposition_TopLeft, (int*)0x004F4FC4 }, // Chatbox
+	{ createTextbox_Scale_Reposition_TopLeft, (int*)0x004F52AE }, // Chatbox after chat
+	{ createTextbox_Scale_Reposition_TopLeft, (int*)0x004F9561 }, // Addressbook add
+};
+REPLACEFUNCTION createTextboxCaratAddr[]{
+	{ nullptr, nullptr },
+	{ createTextboxCarat, (int*)0x004FB48C }, //
+	{ createTextboxCarat, (int*)0x004FB652 }, //
+	{ createTextboxCarat, (int*)0x004FB733 }, //
+	{ createTextboxCarat, (int*)0x004FBD16 }, // Login screen and chatbox and addressbook add
+	{ createTextboxCarat, (int*)0x004FBF39 }, //
+	{ createTextboxCarat, (int*)0x004FC0A5 }, //
+};
+REPLACEFUNCTION addressboxTextboxAddr[]{
+	{ nullptr, nullptr },
+	{ addressbookTextbox, (int*)0x004F6C31 },
+	{ addressbookTextbox, (int*)0x004F94BE },
+};
 int* repositionAddr[]{
 	// Check - Not text box
 	//(int*)(0x004DBB8C),		  // Not battle related

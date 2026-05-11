@@ -1,14 +1,18 @@
 #include <windows.h>
 #include "patch.h"
 #include "globals.h"
+#include "structures.h"
 #include "resolution.h"
 #include "strings.h"
+#include "debugapi.h"
 
 extern char clientVer[4];
 extern char logItBuf[0x400];
 extern int resW;
+extern int virtualResW;
 extern int resH;
 extern float drawDistanceMultiplier;
+extern float UIscale;
 extern int fullScreen;
 extern int skipWarning;
 extern unsigned char* itemFile;
@@ -40,6 +44,7 @@ extern char deadZonePercent;
 // DirectX 8 Values
 extern LPDIRECT3DDEVICE8 dx;
 extern DXFont* BGMTrackFont;
+extern bool drawStrings;
 
 typedef void (__stdcall* Func_GameLoop)();
 Func_GameLoop GameLoop = (Func_GameLoop)(0x00418F80);
@@ -60,62 +65,11 @@ void patchClient()
 	// Force Shift-JIS
 	ForceShiftJIS();
 	
-	setFunction(0x00555027, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x00554FC2, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x00554F67, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x00554C43, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x0055312F, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x005530D9, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x0054FEB3, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x0054FE73, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x0054D320, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x0054D2C8, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x0054445B, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x00544434, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x005443D8, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x0054113A, (void*)&MultiByteToWideCharHook_Ptr);
-	setFunction(0x005408AF, (void*)&MultiByteToWideCharHook_Ptr);
-	
-	setFunction(0x00552343, (void*)&GetUserDefaultLCIDHook_Ptr);
-
-	setFunction(0x00551d1f, (void*)&GetLocaleInfoAHook_Ptr);
-	setFunction(0x005524b2, (void*)&GetLocaleInfoAHook_Ptr);
-	setFunction(0x00554b95, (void*)&GetLocaleInfoAHook_Ptr);
-	setFunction(0x00554be1, (void*)&GetLocaleInfoAHook_Ptr);
-	setFunction(0x00554c22, (void*)&GetLocaleInfoAHook_Ptr);
-	setFunction(0x00554ca8, (void*)&GetLocaleInfoAHook_Ptr);
-	setFunction(0x00554ccf, (void*)&GetLocaleInfoAHook_Ptr);
-
-	setFunction(0x00554b82, (void*)&GetLocaleInfoWHook_Ptr);
-	setFunction(0x00554bbc, (void*)&GetLocaleInfoWHook_Ptr);
-	setFunction(0x00554c95, (void*)&GetLocaleInfoWHook_Ptr);
-	setFunction(0x00554cf8, (void*)&GetLocaleInfoWHook_Ptr);
-	setFunction(0x00554d3b, (void*)&GetLocaleInfoWHook_Ptr);
-
-	setFunction(0x0054c927, (void*)&GetACPHook_Ptr);
-	
-	setFunction(0x0054c79c, (void*)&GetCPInfoHook_Ptr);
-	setFunction(0x0054c9b2, (void*)&GetCPInfoHook_Ptr);
-	setFunction(0x00551b45, (void*)&GetCPInfoHook_Ptr);
-	setFunction(0x00554ee8, (void*)&GetCPInfoHook_Ptr);
-	
-	setFunction(0x004C466F, (void*)&CreateFontAHook_Ptr);
-
-	setFunction(0x0051D4d6, (void*)&CreateFontIndirectAHook_Ptr);
-	setFunction(0x00408866, (void*)&CreateFontIndirectAHook_Ptr);
-
-	setFunction(0x00408891, (void*)&GetTextMetricsAHook_Ptr);
-	setFunction(0x0051D501, (void*)&GetTextMetricsAHook_Ptr);
-
-	setFunction(0x004FDF19, (void*)&TextOutAHook_Ptr);
-
-	*(byte*)0x00408850 = SHIFTJIS_CHARSET;
-	*(byte*)0x0051D4C0 = SHIFTJIS_CHARSET;
-	
-	
 	// Window Style
 	*(int*)0x0041C512 = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
 	*(int*)0x0041C49D = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
+	// Stop resizing window
+	insertFunction(0x00418E69, GetSupportedResolution, 5, FT_CALL);
 	
 	// Version - We replace the sprintf function and ignore the values pushed and use our own and return the buffer from sprintf in VerString function.
 	insertFunction(0x0043B919, VerString, 5, FT_CALL);
@@ -139,7 +93,7 @@ void patchClient()
 	*(char**)0x004281FB = defaultServerName;
 
 	// Use registry to check for full screen and skip warning
-	insertFunction(0x00418DF1, fullScreenMode, 10, FT_CALL);
+	insertFunction(0x00418DF1, notFullScreenMode, 10, FT_CALL);
 	insertFunction(0x00426FA5, skipBootWarning, 8, FT_CALL);
 	NOPSpace(0x00426F9B, 5);
 
@@ -334,6 +288,7 @@ void patchClient()
 	// Custom DirectX Stuff
 	insertFunction((int)0x004C769C, directxCustom, 14, FT_CALL); // Outside Car
 	insertFunction((int)0x004C8A12, directxCustom, 7, FT_CALL); // Inside Car
+	insertFunction(0x004D94F1, DrawStrings, 5, FT_CALL);
 
 	// Direct Input
 	//insertFunction((int)0x0040B464, adjustXAxis, 7, FT_CALL);
@@ -349,11 +304,13 @@ void patchClient()
 	*(char*)0x0040AEEE = DISCL_BACKGROUND | DISCL_NONEXCLUSIVE;
 
 	// Allow the window to be moved without freezing the game
+	/*
 	*(uint8_t*)0x0041C1CB = 0x8D; // ECX=>local_44,[EBP + -0x40] : Window Message
 	*(uint8_t*)0x0041C1CC = 0x4D;
 	*(uint8_t*)0x0041C1CD = 0xC0;
 	*(uint8_t*)0x0041C1CE = 0x51; // PUSH ECX (Message)
 	insertFunction((int)0x0041C1CF, HandleMessageHook_Ptr, 0x0041C212 - 0x0041C1CF, FT_CALL);
+	*/
 
 	// Add pointer to shared space for communication between dlls
 	*(void**)(SHARED_SPACE_PTR_ADDR) = (void*)&SharedSpace;
@@ -362,7 +319,7 @@ void patchClient()
 
 #pragma endregion
 }
-int fullScreenMode()
+int notFullScreenMode()
 {
 	return fullScreen ? 0 : 1;
 }
@@ -461,7 +418,7 @@ void setDrawDistance()
 {
 	for (int i = 0; i < sizeof(drawDistance) / sizeof(float); i++)
 	{
-		*drawDistance[i] *= drawDistanceMultiplier;
+//		if(drawDistance[i] != nullptr) *drawDistance[i] *= drawDistanceMultiplier;
 	}
 }
 void setResolution()
@@ -476,55 +433,103 @@ void setResolution()
 
 	for (int i = 0; i < sizeof(resWidth) / sizeof(int); i++)
 	{
-		*resWidth[i] = resW;
+		if(resWidth[i] != nullptr) *resWidth[i] = resW;
 	}
 	for (int i = 0; i < sizeof(resHeight) / sizeof(int); i++)
 	{
-		*resHeight[i] = resH;
+		if(resHeight[i] != nullptr) *resHeight[i] = resH;
 	}
 	for (int i = 0; i < sizeof(resWidthF) / sizeof(float); i++)
 	{
-		*resWidthF[i] = (float)resW;
+		if(resWidthF[i] != nullptr) *resWidthF[i] = (float)resW;
 	}
 	for (int i = 0; i < sizeof(resHeightF) / sizeof(float); i++)
 	{
-		*resHeightF[i] = (float)resH;
+		if(resHeightF[i] != nullptr) *resHeightF[i] = (float)resH;
 	}
 #pragma endregion
 #pragma region Positioning
+	/*
 	for (int i = 0; i < sizeof(centerJust) / sizeof(int); i++)
 	{
-		*centerJust[i] = (resW / 2) - (320 - (*centerJust[i]));
+		if(centerJust[i] != nullptr) *centerJust[i] = (resW / 2) - (320 - (*centerJust[i]));
 	}
 	for (int i = 0; i < sizeof(centerJustV) / sizeof(int); i++)
 	{
-		*centerJustV[i] = (resH / 2) - (240 - (*centerJustV[i]));
+		if(centerJustV[i] != nullptr) *centerJustV[i] = (resH / 2) - (240 - (*centerJustV[i]));
 	}
 	for (int i = 0; i < sizeof(rightJust) / sizeof(int); i++)
 	{
-		*rightJust[i] = resW - (640 - *rightJust[i]);
+		if(rightJust[i] != nullptr) *rightJust[i] = resW - (640 - *rightJust[i]);
 	}
 	for (int i = 0; i < sizeof(bottomJust) / sizeof(int); i++)
 	{
-		*bottomJust[i] = resH - (480 - *bottomJust[i]);
+		if(bottomJust[i] != nullptr) *bottomJust[i] = resH - (480 - *bottomJust[i]);
 	}
 	for (int i = 0; i < sizeof(centerJustF) / sizeof(float); i++)
 	{
-		*centerJustF[i] = (resW / 2) - (320 - (*centerJustF[i]));
+		if(centerJustF[i] != nullptr) *centerJustF[i] = (resW / 2) - (320 - (*centerJustF[i]));
 	}
 	for (int i = 0; i < sizeof(rightJustF) / sizeof(float); i++)
 	{
-		*rightJustF[i] = resW - (640.0f - *rightJustF[i]);
+		if(rightJustF[i] != nullptr) *rightJustF[i] = resW - (640.0f - *rightJustF[i]);
 	}
 	for (int i = 0; i < sizeof(bottomJustF) / sizeof(float); i++)
 	{
-		*bottomJustF[i] = resH - (480.0f - *bottomJustF[i]);
+		if(bottomJustF[i] != nullptr) *bottomJustF[i] = resH - (480.0f - *bottomJustF[i]);
 	}
+	*/
+
+	/*
 	for (int i = 0; i < sizeof(repositionAddr) / sizeof(int); i++)
 	{
 		insertFunction((int)repositionAddr[i], positionUIElement, 5, FT_CALL);
 	}
-	insertFunction(0x0045F6C8, positionUIElement3, 5, FT_CALL);
+	*/
+
+	
+	for (int i = 0; i < sizeof(adjustFloatAddr) / sizeof(ADJUSTFLOATS); i++)
+	{
+		if (adjustFloatAddr[i].function != nullptr) adjustFloatAddr[i].AdjustFloats();
+	}
+	for (int i = 0; i < sizeof(adjustIntAddr) / sizeof(ADJUSTINTS); i++)
+	{
+		if (adjustIntAddr[i].function != nullptr) adjustIntAddr[i].AdjustInts();
+	}
+	for (int i = 0; i < sizeof(createUIElementObjectAddr) / sizeof(REPLACEFUNCTION); i++)
+	{
+		if (createUIElementObjectAddr[i].address != nullptr) insertFunction((int)createUIElementObjectAddr[i].address, createUIElementObjectAddr[i].function, 5, FT_CALL);
+	}
+	for (int i = 0; i < sizeof(createUIElementAddr) / sizeof(REPLACEFUNCTION); i++)
+	{
+		if (createUIElementAddr[i].address != nullptr) insertFunction((int)createUIElementAddr[i].address, createUIElementAddr[i].function, 5, FT_CALL);
+	}
+	for (int i = 0; i < sizeof(positionUIElementAddr) / sizeof(REPLACEFUNCTION); i++)
+	{
+		if (positionUIElementAddr[i].address != nullptr) insertFunction((int)positionUIElementAddr[i].address, positionUIElementAddr[i].function, 5, FT_CALL);
+	}
+	for (int i = 0; i < sizeof(interactionUIElementAddr) / sizeof(REPLACEFUNCTION); i++)
+	{
+		if (interactionUIElementAddr[i].address != nullptr) insertFunction((int)interactionUIElementAddr[i].address, interactionUIElementAddr[i].function, 5, FT_CALL);
+	}
+	for (int i = 0; i < sizeof(moveUIElementAddr) / sizeof(REPLACEFUNCTION); i++)
+	{
+		if (moveUIElementAddr[i].address != nullptr) insertFunction((int)moveUIElementAddr[i].address, moveUIElementAddr[i].function, 5, FT_CALL);
+	}
+	for (int i = 0; i < sizeof(createTextboxAddr) / sizeof(REPLACEFUNCTION); i++)
+	{
+		if (createTextboxAddr[i].address != nullptr) insertFunction((int)createTextboxAddr[i].address, createTextboxAddr[i].function, 5, FT_CALL);
+	}
+	for (int i = 0; i < sizeof(createTextboxCaratAddr) / sizeof(REPLACEFUNCTION); i++)
+	{
+		if (createTextboxCaratAddr[i].address != nullptr) insertFunction((int)createTextboxCaratAddr[i].address, createTextboxCaratAddr[i].function, 5, FT_CALL);
+	}
+	for (int i = 0; i < sizeof(addressboxTextboxAddr) / sizeof(REPLACEFUNCTION); i++)
+	{
+		if (addressboxTextboxAddr[i].address != nullptr) insertFunction((int)addressboxTextboxAddr[i].address, addressboxTextboxAddr[i].function, 5, FT_CALL);
+	}
+
+	//insertFunction(0x0045F6C8, positionUIElement3, 5, FT_CALL);
 
 	// Battle strings
 	insertFunction(0x004DE74D, placeStringLeftAlign, 5, FT_CALL);
@@ -554,8 +559,6 @@ void setResolution()
 #pragma endregion
 #pragma region Scaling Patches
 	//insertFunction((int)0x00508470, scaleUIElement, 0x7F, FT_JUMP);
-	//*(float**)0x00512332 = &floattest1;
-	//*(float**)0x0051236F = &floattest2;
 	UIdividerX = (float)((640.0 / resW) * 20.0);
 	UIdividerY = (float)((480.0 / resH) * 20.0);
 	UIscaleX = (float)((0.05 / 640.0) * resW);
@@ -563,59 +566,68 @@ void setResolution()
 	itemUseDialogX = (resW / 2) - (320 - itemUseDialogX);
 	itemUseDialogY = (resH / 2) - (240 - itemUseDialogY);
 
-	*(float**)0x00416DC0 = &UIdividerX;
-	*(float**)0x00416DCE = &UIdividerY;
+	// Unknown
+	//*(float**)0x00416DC0 = &UIdividerX;
+	//*(float**)0x00416DCE = &UIdividerY;
 
 	// Shadows in Garage effected
 	*(float**)0x004587D3 = &UIdividerX;
 	*(float**)0x004587EE = &UIdividerY;
 
-	// UI Selection Position effected
+	// UI Selection Position effected (buttons and input boxes)
 	*(float**)0x0051C9B2 = &UIdividerX;
 	*(float**)0x0051C9D3 = &UIdividerY;
 
-	*(float**)0x005084AA = &UIscaleX;
-	*(float**)0x005084C2 = &UIscaleY;
+	// Unknown
+	//*(float**)0x005084AA = &UIscaleX;
+	//*(float**)0x005084C2 = &UIscaleY;
 
-	*(float**)0x0050977F = &UIscaleX;
-	*(float**)0x0050978E = &UIscaleY;
+	// Unknown
+	//*(float**)0x0050977F = &UIscaleX;
+	//*(float**)0x0050978E = &UIscaleY;
 
-	*(float**)0x00511A1F = &UIscaleX;
-	*(float**)0x00511A35 = &UIscaleY;
+	// Unknown
+	//*(float**)0x00511A1F = &UIscaleX;
+	//*(float**)0x00511A35 = &UIscaleY;
 
-	*(float**)0x00511A4B = &UIscaleX;
-	*(float**)0x00511A61 = &UIscaleY;
+	// Unknown
+	//*(float**)0x00511A4B = &UIscaleX;
+	//*(float**)0x00511A61 = &UIscaleY;
 
-	// UI affected
+	// UI affected - Scales title screen
 	*(float**)0x00512332 = &UIscaleX;
 	*(float**)0x0051236F = &UIscaleY;
 
+	// black screen box
 	*(float**)0x0051249F = &UIscaleX;
 	*(float**)0x005124D6 = &UIscaleY;
 
-	*(float**)0x00512A3B = &UIscaleX;
-	*(float**)0x00512A64 = &UIscaleY;
+	// Unknown
+	//*(float**)0x00512A3B = &UIscaleX;
+	//*(float**)0x00512A64 = &UIscaleY;
 
-	*(float**)0x005133D5 = &UIscaleX;
-	*(float**)0x005133E8 = &UIscaleY;
+	// Unknown
+	//*(float**)0x005133D5 = &UIscaleX;
+	//*(float**)0x005133E8 = &UIscaleY;
 
-	*(float**)0x005133FB = &UIscaleX;
-	*(float**)0x00513407 = &UIscaleY;
+	// Unknown
+	//*(float**)0x005133FB = &UIscaleX;
+	//*(float**)0x00513407 = &UIscaleY;
 
-	//*(float**)0x00515594 = &UIscaleX;
-	*(float**)0x005155A6 = &UIscaleY;
-	*(float**)0x005155D6 = &UIscaleX;
+	// Unknown
+	//*(float**)0x005155A6 = &UIscaleY;
+	//*(float**)0x005155D6 = &UIscaleX;
 
-	//*(float**)0x00515753 = &UIscaleX;
-	*(float**)0x0051576C = &UIscaleY;
-	*(float**)0x0051577A = &UIscaleX;
+	// Unknown
+	//*(float**)0x0051576C = &UIscaleY;
+	//*(float**)0x0051577A = &UIscaleX;
 
 	// Input fields affected
-	*(float**)0x00516035 = &UIscaleY;
-	*(float**)0x0051604E = &UIscaleX;
+	//*(float**)0x00516035 = &UIscaleY;
+	//*(float**)0x0051604E = &UIscaleX;
 
 	// UI interaction
-	insertFunction(0x00512BE4, adjustUI, 5, FT_CALL);
+	//insertFunction(0x00512BE4, adjustUI, 5, FT_CALL);
 
 	// Set dialog positions and such
 	//insertFunction(0x0045C7E0, setTexturePositions, 5, FT_CALL);
@@ -632,40 +644,14 @@ void setResolution()
 
 	for (int i = 0; i < sizeof(drawStringAddr) / sizeof(int); i++)
 	{
-		insertFunction((int)drawStringAddr[i], drawString, 5, FT_CALL);
+	//	insertFunction((int)drawStringAddr[i], drawString, 5, FT_CALL);
 	}
-
-	// Mirror
-	*(int*)0x004E185B = (int)(((float)(*(int*)0x004E185B) / 480.0f) * resH); // Width
-	*(int*)0x004E1862 = (int)(((float)(*(int*)0x004E1862) / 480.0f) * resH); // Height
-
-	*(int*)0x004E184D = (resW / 2) - (*(int*)0x004E185B / 2); // X Position
-															  //*(int*)0x004E1854; // Y Position
-
-															  // Mirror Frame
-															  //*(float*)0x004C1F26; // Top Height
-	*(float*)0x004C1F2B = (float)(*(int*)0x004E185B) + 4.0f; // Top Width
-															 //*(float*)0x004C1F30; // Top Y
-	*(float*)0x004C1F35 = (float)(*(int*)0x004E184D) - 2.0f; // Top X
-															 //*(float*)0x004C1F47; // Bottom Height
-	*(float*)0x004C1F4C = (float)(*(int*)0x004E185B) + 4.0f; // Bottom Width
-	*(float*)0x004C1F51 = *(float*)0x004C1F30 + ((float)(*(int*)0x004E1862) + 2.0f); // Bottom Y
-	*(float*)0x004C1F56 = (float)(*(int*)0x004E184D) - 2.0f; // Bottom X
-	*(float*)0x004C1F68 = (float)(*(int*)0x004E1862) + 2.0f; // Left Height
-															 //*(float*)0x004C1F6D; // Left Width
-															 //*(float*)0x004C1F72; // Left Y
-	*(float*)0x004C1F77 = (float)(*(int*)0x004E184D) - 2.0f; // Left X
-	*(float*)0x004C1F89 = (float)(*(int*)0x004E1862) + 2.0f; // Right Height
-															 //*(float*)0x004C1F8E; // Right Width
-															 //*(float*)0x004C1F93; // Right Y
-	*(float*)0x004C1F98 = (float)(*(int*)0x004E184D) + (float)(*(int*)0x004E185B); // Right X
-
 #pragma endregion
 }
 void fixResolutionChoice()
 {
 	// If windowed mode we'll assume we'll create the window at that resolution only fullscreen could break things
-	if (fullScreenMode())
+	if (notFullScreenMode())
 	{
 		return;
 	}
@@ -704,18 +690,21 @@ void fixResolutionChoice()
 		{
 			resW = supportedResolutions[0][i];
 			resH = supportedResolutions[1][i];
+			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
 			break;
 		}
 		else if (supportedResolutions[0][i] > resW)
 		{
 			resW = supportedResolutions[0][i - 1];
 			resH = supportedResolutions[1][i - 1];
+			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
 			break;
 		}
 		else  if (i == settingCount - 1)
 		{
 			resW = supportedResolutions[0][i];
 			resH = supportedResolutions[1][i];
+			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
 			break;
 		}
 	}
@@ -725,13 +714,13 @@ void __cdecl windowMonitorThread(void* parg)
 	bool running = true;
 	while (running)
 	{
-		if ((*(void**)(0x006EAAE0)) && !dx)
+		if ((*(void**)(0x006EAAE0)) && dx != (LPDIRECT3DDEVICE8)(*(void**)(0x006EAAE0)))
 		{
 			dx = (LPDIRECT3DDEVICE8)(*(void**)(0x006EAAE0));
 		}
 		if (closeCheck)
 		{
-			if (IsWindowVisible(*hwnd) == false)
+			if (hwnd && IsWindowVisible(*hwnd) == false)
 			{
 				// Add game save before close
 				SharedSpace.savegame.LockMaster();
@@ -752,8 +741,9 @@ void __cdecl windowMonitorThread(void* parg)
 			catch (...)	{ }
 		}
 		else
-			Sleep(1);
+			Sleep(10);
 	}
+	OutputDebugStringA("Game exited due to window not found.");
 	_Exit(0);
 }
 void readRegistry()
@@ -781,10 +771,12 @@ void readRegistry()
 		{
 			if ((resH = value) < 480)
 				resH = 480;
+			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
 		}
 		else
 		{
 			resH = 480;
+			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
 			RegSetValueEx(hKey, TEXT("RES_HEIGHT"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resH), BufferSize);
 		}
 
@@ -809,8 +801,22 @@ void readRegistry()
 		else
 		{
 			drawDistanceMultiplier = 1.0f;
-			int drawdistance = 1;
+			int drawdistance = 100;
 			RegSetValueEx(hKey, TEXT("DRAWDISTANCE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&drawdistance), BufferSize);
+		}
+
+		BufferSize = sizeof(DWORD);
+		if (RegQueryValueEx(hKey, TEXT("UISCALE"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
+		{
+			UIscale = ((float)(*(int*)&value) / 100.0f);
+			if (UIscale == 0.0f)
+				UIscale = 1.0f;
+		}
+		else
+		{
+			UIscale = 1.0f;
+			int uiscale = 100;
+			RegSetValueEx(hKey, TEXT("UISCALE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&uiscale), BufferSize);
 		}
 
 		BufferSize = sizeof(DWORD);
@@ -854,8 +860,10 @@ void readRegistry()
 	else
 	{
 		int drawdistance = 100;
+		int uiscale = 100;
 		resW = 640;
 		resH = 480;
+		virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
 		fullScreen = 0;
 		drawDistanceMultiplier = 1.0f;
 		skipWarning = 0;
@@ -869,6 +877,7 @@ void readRegistry()
 			RegSetValueEx(hKey, TEXT("RES_HEIGHT"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resH), BufferSize);
 			RegSetValueEx(hKey, TEXT("FULLSCREEN"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&fullScreen), BufferSize);
 			RegSetValueEx(hKey, TEXT("DRAWDISTANCE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&drawdistance), BufferSize);
+			RegSetValueEx(hKey, TEXT("UISCALE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&uiscale), BufferSize);
 			RegSetValueEx(hKey, TEXT("SKIPWARNING"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&skipWarning), BufferSize);
 			RegSetValueEx(hKey, TEXT("SHUFFLEBGM"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&shuffleBGM), BufferSize);
 			RegSetValueEx(hKey, TEXT("AXIS_DEADZONE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&deadZonePercent), BufferSize);
@@ -967,12 +976,103 @@ void ForceShiftJIS()
 	SetThreadLocale(0x0411);
 	setlocale(LC_ALL, ".932");
 	_setmbcp(932);
-	//std::locale loc(".932");
-	//std::locale::global(loc);
 	SetConsoleOutputCP(932);
 	SetConsoleCP(932);
-}
 
+	setFunction(0x00555027, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x00554FC2, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x00554F67, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x00554C43, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0055312F, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x005530D9, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0054FEB3, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0054FE73, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0054D320, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0054D2C8, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0054445B, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x00544434, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x005443D8, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x0054113A, (void*)&MultiByteToWideCharHook_Ptr);
+	setFunction(0x005408AF, (void*)&MultiByteToWideCharHook_Ptr);
+
+	setFunction(0x00552343, (void*)&GetUserDefaultLCIDHook_Ptr);
+
+	setFunction(0x00551d1f, (void*)&GetLocaleInfoAHook_Ptr);
+	setFunction(0x005524b2, (void*)&GetLocaleInfoAHook_Ptr);
+	setFunction(0x00554b95, (void*)&GetLocaleInfoAHook_Ptr);
+	setFunction(0x00554be1, (void*)&GetLocaleInfoAHook_Ptr);
+	setFunction(0x00554c22, (void*)&GetLocaleInfoAHook_Ptr);
+	setFunction(0x00554ca8, (void*)&GetLocaleInfoAHook_Ptr);
+	setFunction(0x00554ccf, (void*)&GetLocaleInfoAHook_Ptr);
+
+	setFunction(0x00554b82, (void*)&GetLocaleInfoWHook_Ptr);
+	setFunction(0x00554bbc, (void*)&GetLocaleInfoWHook_Ptr);
+	setFunction(0x00554c95, (void*)&GetLocaleInfoWHook_Ptr);
+	setFunction(0x00554cf8, (void*)&GetLocaleInfoWHook_Ptr);
+	setFunction(0x00554d3b, (void*)&GetLocaleInfoWHook_Ptr);
+
+	setFunction(0x0054c927, (void*)&GetACPHook_Ptr);
+
+	setFunction(0x0054c79c, (void*)&GetCPInfoHook_Ptr);
+	setFunction(0x0054c9b2, (void*)&GetCPInfoHook_Ptr);
+	setFunction(0x00551b45, (void*)&GetCPInfoHook_Ptr);
+	setFunction(0x00554ee8, (void*)&GetCPInfoHook_Ptr);
+
+	setFunction(0x004C466F, (void*)&CreateFontAHook_Ptr);
+
+	setFunction(0x0051D4d6, (void*)&CreateFontIndirectAHook_Ptr);
+	setFunction(0x00408866, (void*)&CreateFontIndirectAHook_Ptr);
+
+	setFunction(0x00408891, (void*)&GetTextMetricsAHook_Ptr);
+	setFunction(0x0051D501, (void*)&GetTextMetricsAHook_Ptr);
+
+	setFunction(0x004FDF19, (void*)&TextOutAHook_Ptr);
+
+	*(byte*)0x00408850 = SHIFTJIS_CHARSET;
+	*(byte*)0x0051D4C0 = SHIFTJIS_CHARSET;
+}
+int __cdecl GetSupportedResolution(int deviceid, int unknown2, int width, int height, int unknown3)
+{
+	/* The game will check to see if the window is running at a supported resolution and if not return -1 */
+	/* This function sets all supported resolutions to the set resolution */
+	void* unknownobject;
+	void* dxobject;
+	typedef struct st_supportedresolution {
+		int width;
+		int height;
+		int fps;
+		int unknown2;
+		int unknown3;
+	} SUPPORTED_RESOLUTION;
+	SUPPORTED_RESOLUTION* supportedResolution;
+	int supportedResolutionCount;
+
+	dxobject = (void*)0x006EAAC8;
+	unknownobject = (void*)(*(int*)(*(int*)((int)dxobject + 4) + 0x18 + deviceid * 0x24));
+	if (*(int*)((int)unknownobject + 0xE0) == 0) {
+		supportedResolutionCount = 0;
+	}
+	else {
+		supportedResolutionCount = (*(int*)((int)unknownobject + 0xE4) - *(int*)((int)unknownobject + 0xE0)) / 0x14;
+	}
+	supportedResolution = *(SUPPORTED_RESOLUTION**)((int)unknownobject + 0xE0);
+	if (supportedResolution == nullptr) return -1;
+	for (int i = 0; i < supportedResolutionCount; i++)
+	{
+		supportedResolution[i].width = resW;
+		supportedResolution[i].height = resH;
+		supportedResolution[i].unknown2 = unknown2;
+		supportedResolution[i].unknown3 = unknown3;
+	}
+	return 0;
+}
+void __cdecl DrawStrings(void* unknown1, void* unknown2, int unknown3)
+{
+	using UnknownFunc = void(__cdecl*)(void*, void*, int);
+	UnknownFunc UnknownFuncOrig = (UnknownFunc)(0x004035C0);
+	UnknownFuncOrig(unknown1, unknown2, unknown3);
+	drawStrings = true;
+}
 int __stdcall MultiByteToWideCharHook(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar)
 {
 	int res = MultiByteToWideChar(932, dwFlags, lpMultiByteStr, cbMultiByte, lpWideCharStr, cchWideChar);

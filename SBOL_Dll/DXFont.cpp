@@ -96,6 +96,8 @@ HRESULT DXFont::DrawText(FLOAT sx, FLOAT sy, DWORD dwColor, char* strText, DWORD
 	// Fill vertex buffer
 	FONT2DVERTEX* pVertices = NULL;
 	DWORD         dwNumTriangles = 0;
+	if (m_pVB == NULL)
+		return E_FAIL;
 	m_pVB->Lock(0, 0, (BYTE**)&pVertices, D3DLOCK_DISCARD);
 
 	while (*strText)
@@ -153,10 +155,12 @@ HRESULT DXFont::DrawText(FLOAT sx, FLOAT sy, DWORD dwColor, char* strText, DWORD
 	InvalidateDeviceObjects();
 	return S_OK;
 }
-HRESULT DXFont::DrawTextScaled(FLOAT x, FLOAT y, FLOAT z, FLOAT fXScale, FLOAT fYScale, DWORD dwColor, char* strText, DWORD dwFlags)
+HRESULT DXFont::DrawTextScaled(FLOAT x, FLOAT y, FLOAT z, FLOAT fXScale, FLOAT fYScale, DWORD dwColor, const char* strText, DWORD dwFlags)
 {
 	if (m_pd3dDevice == NULL)
 		return E_FAIL;
+
+	RestoreDeviceObjects();
 
 	// Set up renderstate
 	m_pd3dDevice->CaptureStateBlock(m_dwSavedStateBlock);
@@ -185,6 +189,8 @@ HRESULT DXFont::DrawTextScaled(FLOAT x, FLOAT y, FLOAT z, FLOAT fXScale, FLOAT f
 	// Fill vertex buffer
 	FONT2DVERTEX* pVertices;
 	DWORD         dwNumTriangles = 0L;
+	if (m_pVB == NULL)
+		return E_FAIL;
 	m_pVB->Lock(0, 0, (BYTE**)&pVertices, D3DLOCK_DISCARD);
 
 	while (*strText)
@@ -241,6 +247,7 @@ HRESULT DXFont::DrawTextScaled(FLOAT x, FLOAT y, FLOAT z, FLOAT fXScale, FLOAT f
 	// Restore the modified renderstates
 	m_pd3dDevice->ApplyStateBlock(m_dwSavedStateBlock);
 
+	InvalidateDeviceObjects();
 	return S_OK;
 }
 HRESULT DXFont::GetTextExtent(char* strText, SIZE* pSize)

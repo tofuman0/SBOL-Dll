@@ -1,6 +1,7 @@
 #include "asm.h"
 
 extern int resW;
+extern int virtualResW;
 extern int resH;
 extern int fullScreen;
 extern int skipWarning;
@@ -10,6 +11,7 @@ extern float UIdividerX;
 extern float UIdividerY;
 extern float UIscaleX;
 extern float UIscaleY;
+extern float UIscale;
 extern int itemUseDialogX;
 extern int itemUseDialogY;
 extern char logItBuf[0x400];
@@ -24,131 +26,435 @@ extern char textBuf[0x1000];
 extern unsigned int isClosed;
 
 placeStringFunc placeStringGame = (placeStringFunc)(0x004FD760);
+createUIElementObjectFunc createUIElementObjectOrig = (createUIElementObjectFunc)(0x004FD760);
+createUIElementFunc createUIElementOrig = (createUIElementFunc)(0x00404250);
+positionUIElementFunc positionUIElementOrig = (positionUIElementFunc)(0x004042F0);
+interactionUIElementFunc interactionUIElementOrig = (interactionUIElementFunc)(0x004F49E0);
+PositionInteractionUIFunc positionInteractionUIOrig = (PositionInteractionUIFunc)(0x004F48E0);
 
-void __declspec(naked) positionUIElement()
+void __fastcall createUIElementObject(void* _this, void* edx, int posx, int posy)
 {
-	__asm {
-		SaveEAX();
-		SaveECX();
-		mov edx, dword ptr ds : [esp + 10h];
-		mov float2, edx;
-		mov edx, dword ptr ds : [esp + 0ch];
-		mov float3, edx;
+	D3DSURFACE_DESC desc;
+	using GetDescFunc = void(__stdcall*)(void*, int, void*);
+	GetDescFunc GetDesc = *(GetDescFunc*)((**(int**)((int)_this + 0x60)) + 0x38);
+
+	posx = (int)(((float)posx / 640.0f) * (float)resW);
+	posy = (int)(((float)posy / 480.0f) * (float)resH);
+	*(int*)((int)_this + 0x6C) = posx;
+	*(int*)((int)_this + 0x70) = posy;
+
+	GetDesc(*(int**)((int)_this + 0x60), 0, &desc);
+
+	auto width = (((float)desc.Width / 640.0f) * resW);
+	auto height = (((float)desc.Height / 480.0f) * resH);
+
+	createUIElementOrig((void *)((int)_this + 0x78), edx, (float)posx, (float)posy, width, height, 0, -1, -1);
+}
+void __fastcall createUIElementObject_AutoScale(void* _this, void* edx, int posx, int posy)
+{
+	D3DSURFACE_DESC desc;
+	using GetDescFunc = void(__stdcall*)(void*, int, void*);
+	GetDescFunc GetDesc = *(GetDescFunc*)((**(int**)((int)_this + 0x60)) + 0x38);
+
+	*(int*)((int)_this + 0x6C) = posx;
+	*(int*)((int)_this + 0x70) = posy;
+
+	GetDesc(*(int**)((int)_this + 0x60), 0, &desc);
+
+	auto width = (((float)desc.Width / 640.0f) * (float)resW);
+	auto height = (((float)desc.Height / 480.0f) * (float)resH);
+
+	createUIElementOrig((void*)((int)_this + 0x78), edx, (float)posx, (float)posy, width, height, 0, -1, -1);
+}
+void __fastcall createUIElementObject_Scale(void* _this, void* edx, int posx, int posy)
+{
+	D3DSURFACE_DESC desc;
+	using GetDescFunc = void(__stdcall*)(void*, int, void*);
+	GetDescFunc GetDesc = *(GetDescFunc*)((**(int**)((int)_this + 0x60)) + 0x38);
+
+	*(int*)((int)_this + 0x6C) = posx;
+	*(int*)((int)_this + 0x70) = posy;
+
+	GetDesc(*(int**)((int)_this + 0x60), 0, &desc);
+
+	auto width = ((float)desc.Width * UIscale);
+	auto height = ((float)desc.Height * UIscale);
+
+	createUIElementOrig((void*)((int)_this + 0x78), edx, (float)posx, (float)posy, width, height, 0, -1, -1);
+}
+void __fastcall createUIElementObject_Scale_Reposition(void* _this, void* edx, int posx, int posy)
+{
+	D3DSURFACE_DESC desc;
+	using GetDescFunc = void(__stdcall*)(void*, int, void*);
+	GetDescFunc GetDesc = *(GetDescFunc*)((**(int**)((int)_this + 0x60)) + 0x38);
+
+	posx = (int)((float)posx * UIscale);
+	posy = (int)((float)posy * UIscale);
+	*(int*)((int)_this + 0x6C) = posx;
+	*(int*)((int)_this + 0x70) = posy;
+
+	GetDesc(*(int**)((int)_this + 0x60), 0, &desc);
+
+	auto width = ((float)desc.Width * UIscale);
+	auto height = ((float)desc.Height * UIscale);
+
+	createUIElementOrig((void*)((int)_this + 0x78), edx, (float)posx, (float)posy, width, height, 0, -1, -1);
+}
+void __fastcall createUIElementObject_Scale_Reposition_BottomLeft(void* _this, void* edx, int posx, int posy)
+{
+	auto yOffset = -((480.0f - posy) * UIscale);
+	D3DSURFACE_DESC desc;
+	using GetDescFunc = void(__stdcall*)(void*, int, void*);
+	GetDescFunc GetDesc = *(GetDescFunc*)((**(int**)((int)_this + 0x60)) + 0x38);
+
+	posx = (int)((float)posx * UIscale);
+	posy = resH + (int)yOffset;
+	*(int*)((int)_this + 0x6C) = posx;
+	*(int*)((int)_this + 0x70) = posy;
+
+	GetDesc(*(int**)((int)_this + 0x60), 0, &desc);
+
+	auto width = ((float)desc.Width * UIscale);
+	auto height = ((float)desc.Height * UIscale);
+
+	createUIElementOrig((void*)((int)_this + 0x78), edx, (float)posx, (float)posy, width, height, 0, -1, -1);
+}
+void __fastcall createUIElement(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8)
+{
+	posx = (posx / 640.0f) * (float)resW;
+	posy = (posy / 480.0f) * (float)resH;
+	width = (width / 640.0f) * (float)resW;
+	height = (height / 480.0f) * (float)resH;
+	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
+}
+void __fastcall createUIElement_43(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8)
+{
+	posx = (posx / 640.0f) * (float)virtualResW;
+	posy = (posy / 480.0f) * (float)resH;
+	width = (width / 640.0f) * (float)virtualResW;
+	height = (height / 480.0f) * (float)resH;
+	
+	posx += (resW / 2.0f) - ((float)virtualResW / 2.0f);
+
+	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
+}
+void __fastcall createUIElement_Scale_Reposition(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8)
+{
+	auto xOffset = -((640.0f - posx) * UIscale);
+	auto yOffset = -((480.0f - posy) * UIscale);
+	width *= UIscale;
+	height *= UIscale;
+	posx = ((posx / 640.0f) * (float)resW) + xOffset;
+	posy = ((posy / 480.0f) * (float)resH) + yOffset;
+	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
+}
+void __fastcall createUIElement_Scale_Reposition_TopLeft(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8)
+{
+	posx *= UIscale;
+	posy *= UIscale;
+	width *= UIscale;
+	height *= UIscale;
+	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
+}
+void __fastcall createUIElement_Scale_Reposition_BottomLeft(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8)
+{
+	auto yOffset = -((480.0f - posy) * UIscale);
+	width *= UIscale;
+	height *= UIscale;
+	posx *= UIscale;
+	posy = (float)resH + yOffset;
+	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
+}
+void __fastcall createUIElement_Scale_Reposition_BottomRight(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8)
+{
+	auto xOffset = -((640.0f - posx) * UIscale);
+	auto yOffset = -((480.0f - posy) * UIscale);
+	width *= UIscale;
+	height *= UIscale;
+	posx = (float)resW + xOffset;
+	posy = (float)resH + yOffset;
+	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
+}
+void __fastcall createUIElement_AutoScale(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8)
+{
+	width = (width / 640.0f) * (float)resW;
+	height = (height / 480.0f) * (float)resH;
+	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
+}
+void __fastcall createUIElement_AutoScale_43(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8)
+{
+	width = (width / 640.0f) * (float)virtualResW;
+	height = (height / 480.0f) * (float)resH;
+	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
+}
+void __fastcall createUIElement_AutoScale_Handle(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8)
+{
+	width = (width / 640.0f) * (float)virtualResW;
+	height = (height / 480.0f) * (float)resH;
+	posx -= ((1.0f / 640.0f) * ((((float)virtualResW - 640.0f) * 36.0f) + (float)virtualResW));
+	posy -= (2.0f / 480.0f) * (float)resH;
+	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
+}
+void __fastcall createUIElement_AutoScale_TeamName(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8)
+{
+	width = (width / 640.0f) * (float)virtualResW;
+	height = (height / 480.0f) * (float)resH;
+	posx -= ((1.0f / 640.0f) * ((((float)virtualResW - 640.0f) * 36.0f) + (float)virtualResW));
+	posy -= (4.0f / 480.0f) * (float)resH;
+	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
+}
+void __fastcall createUIElement_Scale(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8)
+{
+	width *= UIscale;
+	height *= UIscale;
+	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
+}
+void __fastcall positionUIElement(void* _this, void* edx, float posx, float posy, int type)
+{
+	posx = (posx / 640.0f) * (float)resW;
+	posy = (posy / 480.0f) * (float)resH;
+	positionUIElementOrig(_this, edx, posx, posy, type);
+}
+void __fastcall positionUIElement_Reposition(void* _this, void* edx, float posx, float posy, int type)
+{
+	posx = posx * UIscale;
+	posy = posy * UIscale; 
+	positionUIElementOrig(_this, edx, posx, posy, type);
+}
+void __fastcall interactionUIElement(void* _this, void* edx, int posx, int posy, int width, int height)
+{
+	posx = (int)(((float)posx / 640.0f) * (float)resW);
+	posy = (int)(((float)posy / 480.0f) * (float)resH);
+	width = (int)(((float)width / 640.0f) * (float)resW);
+	height = (int)(((float)height / 480.0f) * (float)resH);
+
+	uiInteractBoundary(_this, edx, posx, posy, width, height);
+	createUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
+}
+void __fastcall interactionUIElement_Scale(void* _this, void* edx, int posx, int posy, int width, int height)
+{
+	width = (int)((float)width * UIscale);
+	height = (int)((float)height * UIscale);
+	
+	uiInteractBoundary(_this, edx, posx, posy, width, height);
+	createUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
+}
+void __fastcall interactionUIElement_Scale_Reposition(void* _this, void* edx, int posx, int posy, int width, int height)
+{
+	auto xOffset = -((640 - posx) * UIscale);
+	auto yOffset = -((480 - posy) * UIscale);
+	width = (int)((float)width * UIscale);
+	height = (int)((float)height * UIscale);
+	posx = (int)((((float)posx / 640.0f) * (float)resW) - xOffset);
+	posy = (int)((((float)posy / 480.0f) * (float)resH) - yOffset);
+
+	uiInteractBoundary(_this, edx, posx, posy, width, height);
+	createUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
+}
+void __fastcall interactionUIElement_Scale_Reposition_TopLeft(void* _this, void* edx, int posx, int posy, int width, int height)
+{
+	width = (int)((float)width * UIscale);
+	height = (int)((float)height * UIscale);
+	posx = (int)((float)posx * UIscale);
+	posy = (int)((float)posy * UIscale);
+	
+	uiInteractBoundary(_this, edx, posx, posy, width, height);
+	createUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
+}
+void __fastcall interactionUIElement_Scale_Reposition_BottomRight(void* _this, void* edx, int posx, int posy, int width, int height)
+{
+	auto xOffset = -((640 - posx) * UIscale);
+	auto yOffset = -((480 - posy) * UIscale);
+	width = (int)((float)width * UIscale);
+	height = (int)((float)height * UIscale);
+	posx = resW + (int)xOffset;
+	posy = resH + (int)yOffset;
+
+	uiInteractBoundary(_this, edx, posx, posy, width, height);
+	createUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
+}
+void __fastcall moveUIElement(void* _this, void* edx, int posx, int posy)
+{
+	posx = (int)(((float)posx / 640.0f) * (float)resW);
+	posy = (int)(((float)posy / 480.0f) * (float)resH);
+
+	positionInteractionUIOrig(_this, edx, posx, posy);
+	positionUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, 1);
+}
+void __fastcall moveUIElement_Position(void* _this, void* edx, int posx, int posy)
+{
+	posx = (int)((float)posx * UIscale);
+	posy = (int)((float)posy * UIscale);
+
+	positionInteractionUIOrig(_this, edx, posx, posy);
+	positionUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, 1);
+}
+void __fastcall uiInteractBoundary(void* _this, void* edx, int posx, int posy, int width, int height)
+{
+	HRGN hrgn;
+	*(int*)((int)_this + 0x1c) = height;
+	*(int*)((int)_this + 0x18) = width;
+	*(int*)((int)_this + 0x10) = posx;
+	*(int*)((int)_this + 0x14) = posy;
+	hrgn = CreateRectRgn(posx, posy, width + posx, height + posy);
+	if (*(HGDIOBJ*)((int)_this + 4) != NULL) {
+		DeleteObject(*(HGDIOBJ*)((int)_this + 4));
+		*(HRGN*)((int)_this + 4) = hrgn;
 	}
+	else
+		*(HRGN*)((int)_this + 4) = hrgn;
+}
+void __fastcall createTextbox(void* _this, void* edx, float posx, float posy)
+{
+	HRGN handle = *(HRGN*)((int)_this + 0xE10);
 
-	adjustFloats(&float3, &float2);
+	posx = (posx / 640.0f) * (float)resW;
+	posy = (posy / 480.0f) * (float)resH;
 
-	__asm {
-		mov edx, dword ptr ds : [esp + 08h];
-		mov float4, edx;
-		mov edx, dword ptr ds : [esp + 04h];
-		mov float5, edx;
+	if (handle != NULL)
+		OffsetRgn(handle, (int)posx, (int)posy);
+	createUIElementObject_AutoScale((void*)((int)_this + 0xB3C), edx, (int)posx, (int)posy);
+}
+void __fastcall createTextbox_Scale_Reposition_TopLeft(void* _this, void* edx, float posx, float posy)
+{
+	HRGN handle = *(HRGN*)((int)_this + 0xE10);
+	posy = posy * UIscale;
+	posx = posx * UIscale;
+
+	if (handle != NULL)
+		OffsetRgn(handle, (int)posx, (int)posy);
+
+	createUIElementObject_Scale((void*)((int)_this + 0xB3C), edx, (int)posx, (int)posy);
+}
+void __fastcall createTextboxCarat(void* _this, void* edx, int caratpos)
+{
+	using UnknownFunc = void(__fastcall*)(void*);
+	using UnknownFunc2 = int(*)();
+	UnknownFunc unknownfunction = *(UnknownFunc*)0x004FB790;
+	
+	int positioninstring;
+	int stringlength;
+	void* object = (void*)((int)_this + 0x68);
+	float characterwidth = (float)*(int*)((int)_this + 0xb7c);
+	int posx = *(int*)((int)_this + 0xba8);
+	int posy = *(int*)((int)_this + 0xbac);
+	int height = *(int*)((int)_this + 0xb54);
+	
+	if (*(int*)0x00696178 != caratpos) {
+		*(int*)0x00696178 = caratpos;
 	}
-
-	adjustFloats(&float5, &float4);
-
-	__asm {
-		mov eax, float2;
-		mov dword ptr ds : [esp + 10h], eax;
-		mov eax, float3;
-		mov dword ptr ds : [esp + 0ch], eax;
-		mov eax, float4;
-		mov dword ptr ds : [esp + 08h], eax;
-		mov eax, float5;
-		mov dword ptr ds : [esp + 04h], eax;
-		mov edx, dword ptr ds : [esp + 18h];
-		RestoreEAX();
-		or eax, 0FFFFFFFFh;
-		cmp edx, eax;
-		fld dword ptr ds : [esp + 04h];
-		jne _00404267;
-		fsub dword ptr ds : [005B542Ch];
-		jmp _00404279;
-	_00404267:
-		fild dword ptr ds : [esp + 18h];
-		fdivr dword ptr ds : [esp + 0Ch];
-		fdivr dword ptr ds : [005B542Ch];
-		fsubr dword ptr ds : [esp + 04h];
-	_00404279:
-		mov edx, dword ptr ds : [esp + 1Ch];
-		fstp dword ptr ds : [esp + 04h];
-		cmp edx, eax;
-		jne _00404291;
-		fld dword ptr ds : [esp + 08h];
-		fsub dword ptr ds : [005B542Ch];
-		jmp _004042A3;
-	_00404291:
-		fild dword ptr ds : [esp + 1Ch];
-		fdivr dword ptr ds : [esp + 10h];
-		fdivr dword ptr ds : [005B542Ch];
-		fsubr dword ptr ds : [esp + 08h];
-	_004042A3:
-		fld st(0);
-		fadd dword ptr ds : [esp + 10h];
-		mov eax, dword ptr ds : [esp + 04h];
-		mov edx, dword ptr ds : [esp + 14h];
-		RestoreECX();
-		mov dword ptr ds : [ecx], eax;
-		mov dword ptr ds : [ecx + 18h], eax;
-		mov dword ptr ds : [ecx + 08h], edx;
-		mov dword ptr ds : [ecx + 20h], edx;
-		fst dword ptr ds : [ecx + 04h];
-		mov eax, dword ptr ds : [ecx + 04h];
-		fld st(1);
-		mov eax, edx;
-		fstp dword ptr ds : [ecx + 1Ch];
-		fld dword ptr ds : [esp + 04h];
-		fadd dword ptr ds : [esp + 0Ch];
-		mov dword ptr ds : [ecx + 38h], eax;
-		mov dword ptr ds : [ecx + 50h], eax;
-		fst dword ptr ds : [esp + 04h];
-		fstp dword ptr ds : [ecx + 30h];
-		mov edx, dword ptr ds : [esp + 04h];
-		fstp dword ptr ds : [ecx + 34h];
-		mov dword ptr ds : [ecx + 48h], edx;
-		fstp dword ptr ds : [ecx + 4Ch];
-		ret 001Ch;
+	stringlength = caratpos - *(int*)((int)_this + 0xE0C);
+	if (stringlength < 0) {
+		*(int*)((int)_this + 0xE0C) = *(int*)((int)_this + 0xE0C) - stringlength;
+		stringlength = 0;
+		unknownfunction(_this);
+	}
+	positioninstring = *(int*)((int)_this + 0xE08);
+	if (positioninstring < stringlength) {
+		*(int*)((int)_this + 0xE0C) = *(int*)((int)_this + 0xE0C) + (stringlength - positioninstring);
+		unknownfunction(_this);
+		stringlength = positioninstring;
+	}
+	
+	if(*(int*)0x006EC81C != 0)
+	{
+		characterwidth = characterwidth * UIscale;
+		auto calculatedposx = (characterwidth * (float)stringlength) + (float)posx;
+		createUIElement_Scale(object, edx, calculatedposx, (float)posy, 1.0, (float)height, 0, -1, -1);
+	}
+	else
+	{
+		characterwidth = (characterwidth / 640.0f) * (float)resW;
+		auto calculatedposx = (characterwidth * (float)stringlength) + (float)posx;
+		createUIElement_AutoScale(object, edx, calculatedposx, (float)posy, 1.0, (float)height, 0, -1, -1);
 	}
 }
-void __declspec(naked) logPositionUIElement()
+void adjustfloats(float* x, float* y)
 {
-	__asm {
-		mov eax, [esp + 08h];
-		push esi;
-		mov esi, ecx;
-		push eax;
-		mov ecx, [esp + 0Ch];
-		push ecx;
-		mov ecx, esi;
-		call_imm(004F48E0h);
-		SaveECX();
-		mov eax, dword ptr[esp + 0Ch];
-		mov int1, eax;
-		mov eax, dword ptr[esp + 08h];
-		mov int2, eax;
+	if (x)
+		*x = (*x / 640.0f) * resW;
+	if (y)
+		*y = (*y / 480.0f) * resH;
+}
+void adjustfloats43(float* x, float* y)
+{
+	if (x)
+		*x = (*x / 640.0f) * (resH * SCREEN_RATIO_4_3);
+	if (y)
+		*y = (*y / 480.0f) * resH;
+}
+void adjustfloatsN(float* x, float* y)
+{
+	if (x)
+		*x *= UIscale;
+	if (y)
+		*y *= UIscale;
+}
+void adjustfloatsNBR(float* x, float* y)
+{
+	if (x)
+	{
+		auto xOffset = -((640.0f - *x) * UIscale);
+		*x = resW + xOffset;
 	}
-
-	//debugIt("%u, %u", int2, int1);
-
-	__asm {
-		RestoreECX();
-		mov eax, int2;
-		mov dword ptr[esp + 08h], eax;
-		mov eax, int1;
-		mov dword ptr[esp + 0Ch], eax;
-		fild dword ptr[esp + 0Ch];
-		push 01h;
-		push ecx;
-		fstp dword ptr[esp];
-		fild dword ptr[esp + 10h];
-		push ecx;
-		lea ecx, [esi + 24h];
-		fstp dword ptr[esp];
-		call_imm(004042F0h);
-		pop esi;
-		ret 0008h;
+	if (y)
+	{
+		auto yOffset = -((480.0f - *y) * UIscale);
+		*y = resH + yOffset;
 	}
 }
+void adjustints(int* x, int* y)
+{
+	if (x)
+		*x = (int)(((float)*x / 640.0f) * (float)resW);
+	if (y)
+		*y = (int)(((float)*y / 480.0f) * (float)resH);
+}
+void adjustintsN(int* x, int* y)
+{
+	if (x)
+		*x = (int)((float)*x * UIscale);
+	if (y)
+		*y = (int)((float)*y * UIscale);
+}
+void adjustintsNTC(int* x, int* y)
+{
+	if (x)
+		*x = (int)((float)*x * UIscale);
+	if (y)
+		*y = (int)((float)*y * UIscale);
+}
+void __fastcall addressbookTextbox(void* _this, void* edx, int posx, int posy)
+{
+	using uiInteractBoundaryFunc = void(__fastcall*)(void*, void*, int, int, int, int);
+	using unknownFunc = void(__fastcall*)(void*, void*, int, int);
+	using textboxFunc = void(__fastcall*)(void*, void*, float, float);
+	using setInteractAreaFunc = void(__fastcall*)(void*, void*, int, int, int, int);
+	uiInteractBoundaryFunc uiInteractBoundary = (uiInteractBoundaryFunc)0x004F48A0;
+	unknownFunc unknown = (unknownFunc)0x004FCB40;
+	textboxFunc textbox = (textboxFunc)0x004FBB10;
+	setInteractAreaFunc setInteractArea = (setInteractAreaFunc)0x004FDA00;
+
+	int* objectPosx = (int*)((int)_this + 0xAD94);
+	int* objectPosy = (int*)((int)_this + 0xAD98);
+	int* objectWidth = (int*)((int)_this + 0xAD9C);
+	int* objectHeight = (int*)((int)_this + 0xADA0);
+	void* interactObject = (void*)((int)_this + 0xADA4);
+	void* unknownObject = (void*)((int)_this + 0xA75C);
+	void* textboxObject = (void*)((int)_this + 0x97C4);
+	void* interactAreaObject = (void*)((int)_this + 0xA5EC);
+
+	auto scaleValue = [](int a) { return (int)((float)a * UIscale); };
+	auto scaleValueF = [](float a) { return a * UIscale; };
+
+	*objectPosx = posx + scaleValue(479);
+	*objectPosy = posy + scaleValue(25);
+	uiInteractBoundary(interactObject, edx, scaleValue(482), scaleValue(25), *objectWidth, *objectHeight);
+	unknown(unknownObject, edx, 623, 25);
+	textbox(textboxObject, edx, scaleValueF(487.0f), scaleValueF(3.0f));
+	setInteractArea(interactAreaObject, edx, scaleValue(487), scaleValue(3), scaleValue(128), scaleValue(16));
+}
+
 void __declspec(naked) positionUIElement2()
 {
 	__asm {
@@ -602,7 +908,7 @@ void __declspec(naked) drawString()
 		push ecx;
 		lea ecx, dword ptr ds : [esi + 78h];
 		fstp dword ptr[esp];
-		call positionUIElement; // positionUIElement
+		call createUIElement;
 		pop esi;
 		add esp, 28h;
 		ret 0008h;
@@ -705,13 +1011,13 @@ void adjustXAxisValue(int* x)
 	if ((*x > 0 && *x < 75) || (*x < 0 && *x > -75))
 		*x = 0;
 	else if ((*x > 0 && *x < 100) || (*x < 0 && *x > -100))
-		*x *= 0.1;
+		*x = (int)((double)*x * 0.1);
 	else if ((*x > 0 && *x < 300) || (*x < 0 && *x > -300))
-		*x *= 0.3;
+		*x = (int)((double)*x * 0.3);
 	else if ((*x > 0 && *x < 600) || (*x < 0 && *x > -600))
-		*x *= 0.6;
+		*x = (int)((double)*x * 0.6);
 	else if ((*x > 0 && *x < 800) || (*x < 0 && *x > -800))
-		*x *= 0.8;
+		*x = (int)((double)*x * 0.8);
 #ifdef _DEBUG
 	snprintf(logItBuf, sizeof(logItBuf), "X Axis: %d, Adjusted: %d\n", int2, *x);
 	OutputDebugStringA(logItBuf);

@@ -7,13 +7,15 @@
 #include "OggPlayer.h"
 #include "resource.h"
 #include "globals.h"
+#include "structures.h"
 #include "DXFont.h"
 
 char clientVer[4] = { 2, 3, 1, 'b' };
 char logItBuf[0x400];
 
-int resW = 1280;
-int resH = 720;
+int resW = 640;
+int virtualResW = 640;
+int resH = 480;
 float drawDistanceMultiplier = 1.0f;
 int fullScreen = 0;
 int skipWarning = 0;
@@ -23,6 +25,7 @@ float UIdividerX = 20.0f;
 float UIdividerY = 20.0f;
 float UIscaleX = 0.05f;
 float UIscaleY = 0.05f;
+float UIscale = 0.75f;
 int itemUseDialogX = 56;
 int itemUseDialogY = 80;
 
@@ -48,6 +51,7 @@ HFONT bgmHFont = CreateFontA(
 LPDIRECT3DDEVICE8 dx = NULL;
 DXFont* BGMTrackFont = new DXFont(CreateFontA(12, 6, 0, 0, FW_DONTCARE, 0, 0, 0, SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, FIXED_PITCH, (char*)0x006302B8));
 DXFont* PositionFont = new DXFont(CreateFontA(18, 9, 0, 0, FW_BOLD, 0, 0, 0, SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, FIXED_PITCH, (char*)0x006302B8));
+bool drawStrings = false;
 
 // BGM Values
 OggPlayer* op = nullptr;

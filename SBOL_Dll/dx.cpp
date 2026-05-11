@@ -2,13 +2,17 @@
 #include "asm.h"
 #include <string>
 #include <sstream>
+#include <iomanip>
 
 extern int resW;
+extern int virtualResW;
 extern int resH;
+extern float UIscale;
 extern OggPlayer* op;
 extern LPDIRECT3DDEVICE8 dx;
 extern DXFont* BGMTrackFont;
 extern DXFont* PositionFont;
+extern bool drawStrings;
 extern int _EAX, _ECX, _EDX, _EBX, _EDI, _ESI;
 
 HRESULT __stdcall directxCustom()
@@ -33,7 +37,7 @@ HRESULT __stdcall directxCustom()
 #endif
 			return hr;
 		}
-		else
+		else if (drawStrings)
 		{
 			// Current track string on UI
 			if (*(int*)0x006EC81C != NULL)
@@ -46,6 +50,7 @@ HRESULT __stdcall directxCustom()
 			{
 				drawPositionString();
 			}
+			drawStrings = false;
 #endif
 		}
 		return dx->EndScene();
@@ -59,16 +64,30 @@ void drawBGMString()
 		battleStatus == 6 ||
 		battleStatus == 7) // If not in battle
 	{
-		int y = resH - 149;
+		int posy = 331;
+		int posx = 8;
+		auto yOffset = 0.0f;
+
 		if (*(int*)(0x006F4E48) == 2)
-			y = resH - 16;
-		char bgmInfo[0x100];
-		sprintf_s(bgmInfo, sizeof(bgmInfo), "CURRENT TRACK: %s", op->GetTrackName());
+			posy = 464;
+
+		yOffset = -((480.0f - posy) * UIscale);
+		posy = (float)resH + yOffset;
+		posx *= UIscale;
+
+		std::stringstream bgmInfo;
+		bgmInfo << "CURRENT TRACK: " << op->GetTrackName();
 		HRESULT hr = S_OK;
-		hr = BGMTrackFont->DrawText(8, (float)y, 0xFFBBBB99, bgmInfo, 0);
+		if(BGMTrackFont->CheckDevice() == S_OK)
+			hr = BGMTrackFont->DrawTextScaled(posx, posy, 1.0f, UIscale, UIscale, 0xFFBBBB99, bgmInfo.str().c_str(), 0);
 #ifdef _DEBUG
 		if (hr != S_OK)
-			OutputDebugStringA("Failed draw text!\n");
+		{
+			std::stringstream ss;
+			auto lasterror = GetLastError();
+			ss << "Failed draw text. Error: " << lasterror << std::endl;
+			OutputDebugStringA(ss.str().c_str());
+		}
 #endif
 	}
 }
@@ -83,13 +102,22 @@ void drawPositionString()
 		unsigned short junction = *(unsigned short*)(*(int*)(*(int*)(*(int*)0x006EBE4C + 0x118) + 0x3EC) + 0x18);
 		unsigned short distance = *(unsigned short*)(*(int*)(*(int*)(*(int*)0x006EBE4C + 0x118) + 0x3EC) + 0x1C);
 
-		int y = resH - 248;
+		int posy = 232;
+		int posx = 8;
+		auto yOffset = 0.0f;
+
 		if (*(int*)(0x006F4E48) == 2)
-			y = resH - 32;
-		char posInfo[0x100];
-		sprintf_s(posInfo, sizeof(posInfo), "POSITION: %04X:%04X:%04X", location1, junction, distance);
+			posy = 448;
+		
+		yOffset = -((480.0f - posy) * UIscale);
+		posy = (float)resH + yOffset;
+		posx *= UIscale;
+
+		std::stringstream posInfo;
+		posInfo << "POSITION: " << std::hex << std::uppercase << std::setfill('0') << std::setw(4) << location1 << ":" << std::setw(4) << junction << ":" << std::setw(4) << distance;
 		HRESULT hr = S_OK;
-		hr = PositionFont->DrawText(8, (float)y, 0xFFBBBB99, posInfo, 0);
+		if (PositionFont->CheckDevice() == S_OK)
+			hr = PositionFont->DrawTextScaled(posx, posy, 1.0f, UIscale, UIscale, 0xFFBBBB99, posInfo.str().c_str(), 0);
 		if (hr != S_OK)
 		{
 			std::stringstream ss;

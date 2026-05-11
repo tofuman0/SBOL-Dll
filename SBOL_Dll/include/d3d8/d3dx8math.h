@@ -43,7 +43,7 @@ typedef struct D3DXVECTOR2
 {
 #ifdef __cplusplus
 public:
-    D3DXVECTOR2() {};
+    D3DXVECTOR2() { };
     D3DXVECTOR2( CONST FLOAT * );
     D3DXVECTOR2( FLOAT x, FLOAT y );
 

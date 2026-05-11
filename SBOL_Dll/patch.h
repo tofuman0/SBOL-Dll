@@ -20,8 +20,11 @@
 #include "DXFont.h"
 #include "OggPlayer.h"
 
+extern DXFont* BGMTrackFont;
+extern DXFont* PositionFont;
+
 void patchClient();
-int fullScreenMode();
+int notFullScreenMode();
 int skipBootWarning();
 void setStrings();
 void setDrawDistance();
@@ -35,6 +38,9 @@ int debugIt(const char *format, ...);
 int VerString(char* str, const char* format, ...);
 void __fastcall DxWindow(void* _this, void* edx, int x1, int y1, int x2, int y2);
 void ForceShiftJIS();
+
+int __cdecl GetSupportedResolution(int deviceid, int unknown2, int width, int height, int unknown3);
+void __cdecl DrawStrings(void*, void*, int);
 int __stdcall MultiByteToWideCharHook(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar);
 constexpr void* MultiByteToWideCharHook_Ptr = (void*)(&MultiByteToWideCharHook);
 LCID __stdcall GetUserDefaultLCIDHook();

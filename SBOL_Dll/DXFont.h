@@ -42,7 +42,7 @@ public:
 	HRESULT CheckDevice();
 	HRESULT SetFont(HFONT hFont);
 	HRESULT DrawText(FLOAT x, FLOAT y, DWORD dwColor, char* strText, DWORD dwFlags = 0L);
-	HRESULT DrawTextScaled(FLOAT x, FLOAT y, FLOAT z, FLOAT fXScale, FLOAT fYScale, DWORD dwColor,	char* strText, DWORD dwFlags = 0L);
+	HRESULT DrawTextScaled(FLOAT x, FLOAT y, FLOAT z, FLOAT fXScale, FLOAT fYScale, DWORD dwColor, const char* strText, DWORD dwFlags = 0L);
 	HRESULT GetTextExtent(char* strText, SIZE* pSize);
 	HRESULT InitDeviceObjects(LPDIRECT3DDEVICE8 pd3dDevice);
 	HRESULT RestoreDeviceObjects();
