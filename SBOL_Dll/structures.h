@@ -50,4 +50,58 @@ typedef struct st_adjustints {
 			function(x, y);
 	}
 } ADJUSTINTS;
+typedef struct st_d3dmatrix {
+	float ScaleX;
+	float SkewY;
+	float unknown3;
+	float unknown4;
+	float SkewX;
+	float ScaleY;
+	float unknown7;
+	float unknown8;
+	float unknown9;
+	float unknown10;
+	float ScaleZ;
+	float unknown11;
+	float TransX;
+	float TransY;
+	float unknown14;
+	float W;
+} D3D_MATRIX;
+typedef struct st_swfuipage {
+	char raw_data[4000]; // Orig 4000
+} SWFUIPAGE;
+typedef struct st_swfui {
+	float ScaleX;
+	float SkewX;
+	float TransX;
+	float SkewY;
+	float ScaleY;
+	float TransY;
+	char buf1[92];
+	char is_active;
+	char is_visible;
+	char padding[2];
+	float horizontonal_speed;
+	float vertical_speed;
+	char buf2[4188];
+	int mouse_x;
+	LPDIRECT3DVERTEXBUFFER8 pVertexBuffer;
+	int StartVertex;
+	int mouse_delta_y;
+	LPDIRECT3DDEVICE8 pDevice;
+	char buf3[52];
+	int active_element_count;
+	char input_locked;
+	char padding2[3];
+	char input_buf[224];
+	char ui_renderer_obj[24];
+	SWFUIPAGE pages[23];
+	int page_indices[23];
+} SWFUI;
+struct D3D8UiVertex {
+	float x, y, z, rhw; // rhw implies it's already transformed to screen space
+	DWORD color;
+	float tu, tv;
+};
 #pragma pack()

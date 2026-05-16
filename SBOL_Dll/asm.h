@@ -4,9 +4,18 @@
 #include <Windows.h>
 #include <vector>
 #include <functional>
+#include <string.h>
+#include <sstream>
 #include "dx.h"
 #include <math.h>
 #include "globals.h"
+#include "structures.h"
+
+#ifndef D3DRS_SCISSORTESTENABLE
+#define D3DRS_SCISSORTESTENABLE (D3DRENDERSTATETYPE)174
+#endif
+
+extern LPDIRECT3DDEVICE8 dx;
 
 enum functionType {
 	FT_CALL,
@@ -39,7 +48,9 @@ __asm jmp eax \
 #pragma endregion
 void NOPSpace(unsigned location, unsigned int count);
 void __fastcall createUIElementObject(void* _this, void* edx, int posx, int posy);
+void __fastcall createUIElementObject_43(void* _this, void* edx, int posx, int posy);
 void __fastcall createUIElementObject_AutoScale(void* _this, void* edx, int posx, int posy);
+void __fastcall createUIElementObject_AutoScale_43(void* _this, void* edx, int posx, int posy);
 void __fastcall createUIElementObject_Scale(void* _this, void* edx, int posx, int posy);
 void __fastcall createUIElementObject_Scale_Reposition(void* _this, void* edx, int posx, int posy);
 void __fastcall createUIElementObject_Scale_Reposition_BottomLeft(void* _this, void* edx, int posx, int posy);
@@ -57,16 +68,25 @@ void __fastcall createUIElement_Scale(void* _this, void* edx, float posx, float 
 void __fastcall positionUIElement(void* _this, void* edx, float posx, float posy, int type);
 void __fastcall positionUIElement_Reposition(void* _this, void* edx, float posx, float posy, int type);
 void __fastcall interactionUIElement(void* _this, void* edx, int posx, int posy, int width, int height);
+void __fastcall interactionUIElement_43(void* _this, void* edx, int posx, int posy, int width, int height);
 void __fastcall interactionUIElement_Scale(void* _this, void* edx, int posx, int posy, int width, int height);
 void __fastcall interactionUIElement_Scale_Reposition(void* _this, void* edx, int posx, int posy, int width, int height);
 void __fastcall interactionUIElement_Scale_Reposition_TopLeft(void* _this, void* edx, int posx, int posy, int width, int height);
 void __fastcall interactionUIElement_Scale_Reposition_BottomRight(void* _this, void* edx, int posx, int posy, int width, int height);
 void __fastcall moveUIElement(void* _this, void* edx, int posx, int posy);
+void __fastcall moveUIElement_43(void* _this, void* edx, int posx, int posy);
 void __fastcall moveUIElement_Position(void* _this, void* edx, int posx, int posy);
 void __fastcall uiInteractBoundary(void* _this, void* edx, int posx, int posy, int width, int height);
 void __fastcall createTextbox(void* _this, void* edx, float posx, float posy);
+void __fastcall createTextbox_43(void* _this, void* edx, float posx, float posy);
 void __fastcall createTextbox_Scale_Reposition_TopLeft(void* _this, void* edx, float posx, float posy);
 void __fastcall createTextboxCarat(void* _this, void* edx, int caratpos);
+/* Scales SWF file to 4:3 */
+void __fastcall SwfMatrixConstruct(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatrix, float width, float height, float scale);
+/* Clips SWF anything outside 4:3 */
+void __fastcall SwfDrawPrimitive(void* _this, void* edx, LPDIRECT3DDEVICE8 pDevice, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount);
+/* Adjusts the mouse inputs for the SWF so that they work with the repositoned and sized SWF */
+void __fastcall SwfGetMouseState(void* _this, void* edx, int* pOutX, int* pOutY, int* pOutClickState);
 void adjustfloats(float* x, float* y);
 void adjustfloats43(float* x, float* y);
 void adjustfloatsN(float* x, float* y);
@@ -88,7 +108,7 @@ typedef void(__fastcall* createUIElementObjectFunc)(void* _this, void* edx, int 
 typedef void(__fastcall *createUIElementFunc)(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8);
 typedef void(__fastcall* positionUIElementFunc)(void* _this, void* edx, float posx, float posy, int type);
 typedef void(__fastcall* interactionUIElementFunc)(void* _this, void* edx, int posx, int posy, int width, int height);
-typedef void(__fastcall* PositionInteractionUIFunc)(void* _this, void* edx, int posx, int posy);
+typedef void(__fastcall* positionInteractionUIFunc)(void* _this, void* edx, int posx, int posy);
 void exitFix();
 void __cdecl windowMonitorThread(void* parg);
 void getTireBrakePrice();

@@ -8,6 +8,7 @@
 #define SHARED_SPACE_UNLOCK			0x00000000
 
 #define SCREEN_RATIO_4_3			1.333333333333333f
+#define PIXELS_TO_TWIPS				20.0f
 
 using adjustFloatsFunc = void(float*, float*);
 using adjustIntsFunc = void(int*, int*);

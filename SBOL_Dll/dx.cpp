@@ -64,16 +64,16 @@ void drawBGMString()
 		battleStatus == 6 ||
 		battleStatus == 7) // If not in battle
 	{
-		int posy = 331;
-		int posx = 8;
+		float posy = 331.0f;
+		float posx = 8.0f;
 		auto yOffset = 0.0f;
 
 		if (*(int*)(0x006F4E48) == 2)
-			posy = 464;
+			posy = 464.0f;
 
 		yOffset = -((480.0f - posy) * UIscale);
 		posy = (float)resH + yOffset;
-		posx *= UIscale;
+		posx = posx * UIscale;
 
 		std::stringstream bgmInfo;
 		bgmInfo << "CURRENT TRACK: " << op->GetTrackName();
@@ -102,12 +102,12 @@ void drawPositionString()
 		unsigned short junction = *(unsigned short*)(*(int*)(*(int*)(*(int*)0x006EBE4C + 0x118) + 0x3EC) + 0x18);
 		unsigned short distance = *(unsigned short*)(*(int*)(*(int*)(*(int*)0x006EBE4C + 0x118) + 0x3EC) + 0x1C);
 
-		int posy = 232;
-		int posx = 8;
+		float posy = 232.0f;
+		float posx = 8.0f;
 		auto yOffset = 0.0f;
 
 		if (*(int*)(0x006F4E48) == 2)
-			posy = 448;
+			posy = 448.0f;
 		
 		yOffset = -((480.0f - posy) * UIscale);
 		posy = (float)resH + yOffset;

@@ -222,7 +222,14 @@ ADJUSTINTS adjustIntAddr[]{
 	{ &adjustints, (int*)0x004E184D, (int*)0x004E1854 }, // Mirror position
 };
 
-REPLACEFUNCTION createUIElementObjectAddr[]{
+/*
+	The address point can be used to specify the bytes that need to be nop'd. By default 5 bytes are nop'd.
+	Set 0x01 for 6 bytes, 0x02 for 7 and so on. This value is then masked out when processed;
+	e.g.: 0x02412345 to nop 7 bytes.
+	Setting 0xFF will just replace the function pointer at that address.
+*/
+REPLACEFUNCTION replaceFunctionAddr[]{
+	// Create UI Element
 	{ createUIElementObject, nullptr },
 	//{ createUIElementObject, (int*)0x004263C5 },
 	//{ createUIElementObject, (int*)0x00431529 },
@@ -265,13 +272,13 @@ REPLACEFUNCTION createUIElementObjectAddr[]{
 	//{ createUIElementObject, (int*)0x004A9433 },
 	//{ createUIElementObject, (int*)0x004AB4C0 },
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004ABF85 }, // Course network string
-	{ createUIElementObject, (int*)0x004BC43D }, // Enter garage dialog string
+	{ createUIElementObject_43, (int*)0x004BC43D }, // Enter garage dialog string
 	//{ createUIElementObject, (int*)0x004BD725 },
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5CB5 }, // Persons in course
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5D07 }, // Course Name
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5D7E }, // LV CP String
-	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5DDC }, // Autorun String
-	//{ createUIElementObject, (int*)0x004D5E2B },
+	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5DDC }, // Autorun String while in autopilot
+	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5E2B }, // Autorun String while not in autopilot
 	//{ createUIElementObject, (int*)0x004D5F18 },
 	//{ createUIElementObject, (int*)0x004D8D66 },
 	//{ createUIElementObject, (int*)0x004DC729 },
@@ -285,10 +292,10 @@ REPLACEFUNCTION createUIElementObjectAddr[]{
 	//{ createUIElementObject, (int*)0x004FBB92 },
 	//{ createUIElementObject, (int*)0x004FD1F4 },
 	//{ createUIElementObject, (int*)0x004FD33F },
-	{ createUIElementObject_Scale_Reposition, (int*)0x004FD9EE }, // Chat log text
+	{ createUIElementObject_43, (int*)0x004FD9EE }, // Chat log text
 	//{ createUIElementObject, (int*)0x004FDA26 },
-};
-REPLACEFUNCTION createUIElementAddr[]{
+
+	// Create UI
 	{ createUIElement, nullptr },
 	//{ createUIElement, (int*)0x0042680E }, // ???
 	//{ createUIElement, (int*)0x00426899 }, // ???
@@ -569,9 +576,9 @@ REPLACEFUNCTION createUIElementAddr[]{
 	//{ createUIElement, (int*)0x004B2BEE }, // ???
 	//{ createUIElement, (int*)0x004B553D }, // ???
 	//{ createUIElement, (int*)0x004BC49E }, // ???
-	{ createUIElement, (int*)0x004BC5B2 }, // Enter garage dialog back
-	{ createUIElement, (int*)0x004BC642 }, // Enter garage OK button
-	{ createUIElement, (int*)0x004BC6D7 }, // Enter garage CANCEL button
+	{ createUIElement_43, (int*)0x004BC5B2 }, // Enter garage dialog back
+	{ createUIElement_43, (int*)0x004BC642 }, // Enter garage OK button
+	{ createUIElement_43, (int*)0x004BC6D7 }, // Enter garage CANCEL button
 	//{ createUIElement, (int*)0x004BD197 }, // ???
 	//{ createUIElement, (int*)0x004BD39B }, // ???
 	//{ createUIElement, (int*)0x004BF8D3 }, // ???
@@ -682,10 +689,10 @@ REPLACEFUNCTION createUIElementAddr[]{
 	//{ createUIElement, (int*)0x004E08CC }, // ???
 	//{ createUIElement, (int*)0x004E090C }, // ???
 	//{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F4A27 }, // Addressbook and bottom right buttons scale - Handled by interactionUIElements
-	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F501E }, // Chatbox back right side
-	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F504A }, // Chatbox back left side
-	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F6C8A }, // Chatbox backing
-	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F6CB9 }, // Addressbook backing
+	{ createUIElement_43, (int*)0x004F501E }, // Chatbox back right side
+	{ createUIElement_43, (int*)0x004F504A }, // Chatbox back left side
+	{ createUIElement_43, (int*)0x004F6C8A }, // Chatbox backing
+	{ createUIElement_43, (int*)0x004F6CB9 }, // Addressbook backing
 	//{ createUIElement, (int*)0x004F8084 }, // ???
 	//{ createUIElement, (int*)0x004F809F }, // ???
 	//{ createUIElement, (int*)0x004F8311 }, // ???
@@ -697,7 +704,7 @@ REPLACEFUNCTION createUIElementAddr[]{
 	//{ createUIElement, (int*)0x004F8828 }, // ???
 	//{ createUIElement, (int*)0x004F8840 }, // ???
 	//{ createUIElement, (int*)0x004F8AD9 }, // ???
-	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F8B08 }, // Addressbook input textbox
+	{ createUIElement_43, (int*)0x004F8B08 }, // Addressbook input textbox
 	//{ createUIElement, (int*)0x004FB0D2 }, // ???
 	//{ createUIElement, (int*)0x004FB10C }, // ???
 	//{ createUIElement, (int*)0x004FB1D3 }, // ???
@@ -716,16 +723,16 @@ REPLACEFUNCTION createUIElementAddr[]{
 	//{ createUIElement, (int*)0x004FCA8B }, // ???
 	//{ createUIElement, (int*)0x004FCAAA }, // ???
 	//{ createUIElement, (int*)0x004FCB28 }, // ???
-	{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004FCBD3 }, // Chat and addressbook scrollbar back
+	{ createUIElement_43, (int*)0x004FCBD3 }, // Chat and addressbook scrollbar back
 	//{ createUIElement, (int*)0x004FCE24 }, // ???
 	//{ createUIElement, (int*)0x004FCE3D }, // ???
 	//{ createUIElement, (int*)0x004FD7CB }, // createUIElementObject (Textboxes affected)
 	//{ createUIElement, (int*)0x004FD951 }, // ???
 	//{ createUIElement, (int*)0x004FD9BA }, // ???
 	//{ createUIElement, (int*)0x004FDAE5 }, // ???
-};
-REPLACEFUNCTION positionUIElementAddr[]{
-	{ positionUIElement, nullptr },
+	
+	// Position UI
+	{ nullptr, nullptr },
 	//{ positionUIElement_Reposition, (int*)0x004546FA }, // ???
 	//{ positionUIElement_Reposition, (int*)0x0045F547 }, // ???
 	//{ positionUIElement_Reposition, (int*)0x0045F6C8 }, // ???
@@ -760,45 +767,45 @@ REPLACEFUNCTION positionUIElementAddr[]{
 	//{ positionUIElement_Reposition, (int*)0x004FCC21 }, // ???
 	//{ positionUIElement_Reposition, (int*)0x004FCC30 }, // ???
 	//{ positionUIElement_Reposition, (int*)0x004FDB06 }, // ???
-};
-REPLACEFUNCTION interactionUIElementAddr[]{
-	{ interactionUIElement, nullptr },
-	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004FCDDF }, // Chat scrollbars
-	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004FCA5C }, // ???
-	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004FC99E }, // Srollbar down buttons
-	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004FC87A }, // Scrollbar up buttons
-	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004F87FC }, // Chatbox minimize button
-	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004F8733 }, // ???
-	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004F8640 }, // Chat type buttons
-	{ interactionUIElement_Scale_Reposition_TopLeft, (int*)0x004F8056 }, // ???
-	{ interactionUIElement_Scale_Reposition_BottomRight, (int*)0x004DBD00 }, // Buttom right buttons
-};
-REPLACEFUNCTION moveUIElementAddr[]{
-	{ moveUIElement, nullptr },
-	{ moveUIElement_Position, (int*)0x004F81B6 }, // Chat type buttons
-	{ moveUIElement_Position, (int*)0x004F822A }, // Chat
-	{ moveUIElement_Position, (int*)0x004F8277 }, // Chat
-	{ moveUIElement_Position, (int*)0x004F8916 }, // Chat type buttons
-	{ moveUIElement_Position, (int*)0x004F898A }, // Chat
-	{ moveUIElement_Position, (int*)0x004F89E4 }, // Chat
-	{ moveUIElement_Position, (int*)0x004F8A31 }, // Chat
-	{ moveUIElement_Position, (int*)0x004F8A7E }, // Chat
-	{ moveUIElement_Position, (int*)0x004FC8ED }, // Chat
-	{ moveUIElement_Position, (int*)0x004FCB59 }, // Chat
-	{ moveUIElement_Position, (int*)0x004FCC06 }, // Chat
-};
-REPLACEFUNCTION createTextboxAddr[]{
+	
+	// Interaction UI
 	{ nullptr, nullptr },
-	{ createTextbox, (int*)0x0041714A }, // Login screen
+	{ interactionUIElement_43, (int*)0x004FCDDF }, // Chat scrollbars
+	{ interactionUIElement_43, (int*)0x004FCA5C }, // ???
+	{ interactionUIElement_43, (int*)0x004FC99E }, // Srollbar down buttons
+	{ interactionUIElement_43, (int*)0x004FC87A }, // Scrollbar up buttons
+	{ interactionUIElement_43, (int*)0x004F87FC }, // Chatbox minimize button
+	{ interactionUIElement_43, (int*)0x004F8733 }, // ???
+	{ interactionUIElement_43, (int*)0x004F8640 }, // Chat type buttons
+	{ interactionUIElement_43, (int*)0x004F8056 }, // ???
+	{ interactionUIElement_Scale_Reposition_BottomRight, (int*)0x004DBD00 }, // Buttom right buttons
+	
+	// Move UI
+	{ nullptr, nullptr },
+	{ moveUIElement_43, (int*)0x004F81B6 }, // Chat type buttons
+	{ moveUIElement_43, (int*)0x004F822A }, // Chat
+	{ moveUIElement_43, (int*)0x004F8277 }, // Chat
+	{ moveUIElement_43, (int*)0x004F8916 }, // Chat type buttons
+	{ moveUIElement_43, (int*)0x004F898A }, // Chat
+	{ moveUIElement_43, (int*)0x004F89E4 }, // Chat
+	{ moveUIElement_43, (int*)0x004F8A31 }, // Chat
+	{ moveUIElement_43, (int*)0x004F8A7E }, // Chat
+	{ moveUIElement_43, (int*)0x004FC8ED }, // Chat
+	{ moveUIElement_43, (int*)0x004FCB59 }, // Chat
+	{ moveUIElement_43, (int*)0x004FCC06 }, // Chat
+	
+	// Textbox
+	{ nullptr, nullptr },
+	{ createTextbox_43, (int*)0x0041714A }, // Login screen
 	//{ createTextbox, (int*)0x004758C6 }, // ???
 	//{ createTextbox, (int*)0x00476040 }, // ???
 	//{ createTextbox, (int*)0x004760B9 }, // ???
 	//{ createTextbox, (int*)0x0047A7CE }, // ???
-	{ createTextbox_Scale_Reposition_TopLeft, (int*)0x004F4FC4 }, // Chatbox
-	{ createTextbox_Scale_Reposition_TopLeft, (int*)0x004F52AE }, // Chatbox after chat
-	{ createTextbox_Scale_Reposition_TopLeft, (int*)0x004F9561 }, // Addressbook add
-};
-REPLACEFUNCTION createTextboxCaratAddr[]{
+	{ createTextbox_43, (int*)0x004F4FC4 }, // Chatbox
+	{ createTextbox_43, (int*)0x004F52AE }, // Chatbox after chat
+	{ createTextbox_43, (int*)0x004F9561 }, // Addressbook add
+	
+	// Textbox carat
 	{ nullptr, nullptr },
 	{ createTextboxCarat, (int*)0x004FB48C }, //
 	{ createTextboxCarat, (int*)0x004FB652 }, //
@@ -806,11 +813,19 @@ REPLACEFUNCTION createTextboxCaratAddr[]{
 	{ createTextboxCarat, (int*)0x004FBD16 }, // Login screen and chatbox and addressbook add
 	{ createTextboxCarat, (int*)0x004FBF39 }, //
 	{ createTextboxCarat, (int*)0x004FC0A5 }, //
-};
-REPLACEFUNCTION addressboxTextboxAddr[]{
+	
+	// Addressbook
 	{ nullptr, nullptr },
 	{ addressbookTextbox, (int*)0x004F6C31 },
 	{ addressbookTextbox, (int*)0x004F94BE },
+	
+	// SWF
+	{ nullptr, nullptr },
+	{ SwfMatrixConstruct, (int*)0x00512306 },
+	{ SwfMatrixConstruct, (int*)0x00512468 },
+	{ SwfDrawPrimitive, (int*)0x015125BB },
+	{ SwfDrawPrimitive, (int*)0x0151264B },
+	{ SwfGetMouseState, (int*)0xFF60537C },
 };
 int* repositionAddr[]{
 	// Check - Not text box

@@ -1,6 +1,7 @@
 #pragma once
 #ifndef PATCH_HEADER
 #define PATCH_HEADER
+#define DIRECTINPUT_VERSION			0x0800
 #include <Windows.h>
 #include <process.h>
 #include <dinput.h>
@@ -32,9 +33,6 @@ void setResolution();
 void fixResolutionChoice();
 void windowMonitorThread(void* parg);
 void readRegistry();
-void Log(char type, char* in);
-int debugLog(char *buffer, size_t count, const char *format, va_list argptr);
-int debugIt(const char *format, ...);
 int VerString(char* str, const char* format, ...);
 void __fastcall DxWindow(void* _this, void* edx, int x1, int y1, int x2, int y2);
 void ForceShiftJIS();

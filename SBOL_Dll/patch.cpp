@@ -11,6 +11,7 @@ extern char logItBuf[0x400];
 extern int resW;
 extern int virtualResW;
 extern int resH;
+extern float SWFscale;
 extern float drawDistanceMultiplier;
 extern float UIscale;
 extern int fullScreen;
@@ -20,6 +21,7 @@ extern int itemFileSize;
 extern float UIdividerX;
 extern float UIdividerY;
 extern float UIscaleX;
+extern float UIscaleVirtualX;
 extern float UIscaleY;
 extern int itemUseDialogX;
 extern int itemUseDialogY;
@@ -304,13 +306,12 @@ void patchClient()
 	*(char*)0x0040AEEE = DISCL_BACKGROUND | DISCL_NONEXCLUSIVE;
 
 	// Allow the window to be moved without freezing the game
-	/*
 	*(uint8_t*)0x0041C1CB = 0x8D; // ECX=>local_44,[EBP + -0x40] : Window Message
 	*(uint8_t*)0x0041C1CC = 0x4D;
 	*(uint8_t*)0x0041C1CD = 0xC0;
 	*(uint8_t*)0x0041C1CE = 0x51; // PUSH ECX (Message)
 	insertFunction((int)0x0041C1CF, HandleMessageHook_Ptr, 0x0041C212 - 0x0041C1CF, FT_CALL);
-	*/
+	
 
 	// Add pointer to shared space for communication between dlls
 	*(void**)(SHARED_SPACE_PTR_ADDR) = (void*)&SharedSpace;
@@ -496,39 +497,19 @@ void setResolution()
 	{
 		if (adjustIntAddr[i].function != nullptr) adjustIntAddr[i].AdjustInts();
 	}
-	for (int i = 0; i < sizeof(createUIElementObjectAddr) / sizeof(REPLACEFUNCTION); i++)
+	for (int i = 0; i < sizeof(replaceFunctionAddr) / sizeof(REPLACEFUNCTION); i++)
 	{
-		if (createUIElementObjectAddr[i].address != nullptr) insertFunction((int)createUIElementObjectAddr[i].address, createUIElementObjectAddr[i].function, 5, FT_CALL);
+		if (replaceFunctionAddr[i].address != nullptr)
+		{
+			int nopcount = 5;
+			if ((int)replaceFunctionAddr[i].address & 0xFF000000)
+				nopcount += ((unsigned int)replaceFunctionAddr[i].address >> 24);
+			if (nopcount > 0xFF)
+				setFunction((int)replaceFunctionAddr[i].address & 0x00FFFFFF, replaceFunctionAddr[i].function);
+			else
+				insertFunction((int)replaceFunctionAddr[i].address & 0x00FFFFFF, replaceFunctionAddr[i].function, nopcount, FT_CALL);
+		}
 	}
-	for (int i = 0; i < sizeof(createUIElementAddr) / sizeof(REPLACEFUNCTION); i++)
-	{
-		if (createUIElementAddr[i].address != nullptr) insertFunction((int)createUIElementAddr[i].address, createUIElementAddr[i].function, 5, FT_CALL);
-	}
-	for (int i = 0; i < sizeof(positionUIElementAddr) / sizeof(REPLACEFUNCTION); i++)
-	{
-		if (positionUIElementAddr[i].address != nullptr) insertFunction((int)positionUIElementAddr[i].address, positionUIElementAddr[i].function, 5, FT_CALL);
-	}
-	for (int i = 0; i < sizeof(interactionUIElementAddr) / sizeof(REPLACEFUNCTION); i++)
-	{
-		if (interactionUIElementAddr[i].address != nullptr) insertFunction((int)interactionUIElementAddr[i].address, interactionUIElementAddr[i].function, 5, FT_CALL);
-	}
-	for (int i = 0; i < sizeof(moveUIElementAddr) / sizeof(REPLACEFUNCTION); i++)
-	{
-		if (moveUIElementAddr[i].address != nullptr) insertFunction((int)moveUIElementAddr[i].address, moveUIElementAddr[i].function, 5, FT_CALL);
-	}
-	for (int i = 0; i < sizeof(createTextboxAddr) / sizeof(REPLACEFUNCTION); i++)
-	{
-		if (createTextboxAddr[i].address != nullptr) insertFunction((int)createTextboxAddr[i].address, createTextboxAddr[i].function, 5, FT_CALL);
-	}
-	for (int i = 0; i < sizeof(createTextboxCaratAddr) / sizeof(REPLACEFUNCTION); i++)
-	{
-		if (createTextboxCaratAddr[i].address != nullptr) insertFunction((int)createTextboxCaratAddr[i].address, createTextboxCaratAddr[i].function, 5, FT_CALL);
-	}
-	for (int i = 0; i < sizeof(addressboxTextboxAddr) / sizeof(REPLACEFUNCTION); i++)
-	{
-		if (addressboxTextboxAddr[i].address != nullptr) insertFunction((int)addressboxTextboxAddr[i].address, addressboxTextboxAddr[i].function, 5, FT_CALL);
-	}
-
 	//insertFunction(0x0045F6C8, positionUIElement3, 5, FT_CALL);
 
 	// Battle strings
@@ -559,10 +540,11 @@ void setResolution()
 #pragma endregion
 #pragma region Scaling Patches
 	//insertFunction((int)0x00508470, scaleUIElement, 0x7F, FT_JUMP);
-	UIdividerX = (float)((640.0 / resW) * 20.0);
-	UIdividerY = (float)((480.0 / resH) * 20.0);
-	UIscaleX = (float)((0.05 / 640.0) * resW);
-	UIscaleY = (float)((0.05 / 480.0) * resH);
+	UIdividerX = ((640.0f / (float)resW) * 20.0f);
+	UIdividerY = ((480.0f / (float)resH) * 20.0f);
+	UIscaleX = ((0.05f / 640.0f) * (float)resW);
+	UIscaleVirtualX = ((0.05f / 640.0f) * (float)virtualResW);
+	UIscaleY = ((0.05f / 480.0f) * (float)resH);
 	itemUseDialogX = (resW / 2) - (320 - itemUseDialogX);
 	itemUseDialogY = (resH / 2) - (240 - itemUseDialogY);
 
@@ -571,12 +553,12 @@ void setResolution()
 	//*(float**)0x00416DCE = &UIdividerY;
 
 	// Shadows in Garage effected
-	*(float**)0x004587D3 = &UIdividerX;
-	*(float**)0x004587EE = &UIdividerY;
+	//*(float**)0x004587D3 = &UIscaleVirtualX;
+	//*(float**)0x004587EE = &UIdividerY;
 
 	// UI Selection Position effected (buttons and input boxes)
-	*(float**)0x0051C9B2 = &UIdividerX;
-	*(float**)0x0051C9D3 = &UIdividerY;
+	//*(float**)0x0051C9B2 = &UIscaleVirtualX;
+	//*(float**)0x0051C9D3 = &UIdividerY;
 
 	// Unknown
 	//*(float**)0x005084AA = &UIscaleX;
@@ -595,8 +577,8 @@ void setResolution()
 	//*(float**)0x00511A61 = &UIscaleY;
 
 	// UI affected - Scales title screen
-	*(float**)0x00512332 = &UIscaleX;
-	*(float**)0x0051236F = &UIscaleY;
+	//*(float**)0x00512332 = &UIscaleVirtualX;
+	//*(float**)0x0051236F = &UIscaleY;
 
 	// black screen box
 	*(float**)0x0051249F = &UIscaleX;
@@ -691,6 +673,7 @@ void fixResolutionChoice()
 			resW = supportedResolutions[0][i];
 			resH = supportedResolutions[1][i];
 			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
+			SWFscale = (float)resH / 480.0f;
 			break;
 		}
 		else if (supportedResolutions[0][i] > resW)
@@ -698,6 +681,7 @@ void fixResolutionChoice()
 			resW = supportedResolutions[0][i - 1];
 			resH = supportedResolutions[1][i - 1];
 			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
+			SWFscale = (float)resH / 480.0f;
 			break;
 		}
 		else  if (i == settingCount - 1)
@@ -705,6 +689,7 @@ void fixResolutionChoice()
 			resW = supportedResolutions[0][i];
 			resH = supportedResolutions[1][i];
 			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
+			SWFscale = (float)resH / 480.0f;
 			break;
 		}
 	}
@@ -772,11 +757,13 @@ void readRegistry()
 			if ((resH = value) < 480)
 				resH = 480;
 			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
+			SWFscale = (float)resH / 480.0f;
 		}
 		else
 		{
 			resH = 480;
 			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
+			SWFscale = (float)resH / 480.0f;
 			RegSetValueEx(hKey, TEXT("RES_HEIGHT"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resH), BufferSize);
 		}
 
@@ -864,6 +851,7 @@ void readRegistry()
 		resW = 640;
 		resH = 480;
 		virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
+		SWFscale = (float)resH / 480.0f;
 		fullScreen = 0;
 		drawDistanceMultiplier = 1.0f;
 		skipWarning = 0;
@@ -886,59 +874,6 @@ void readRegistry()
 
 	RegCloseKey(hKey);
 }
-void Log(char type, char* in)
-{
-	char* text = (char*)calloc(1, strlen(in) + 2);
-	if (text == nullptr) return;
-	char logbuf[FILENAME_MAX];
-	char* LOGFILES[]{
-		"type0_",
-		"type1_"
-	};
-
-	SYSTEMTIME rawtime;
-	GetLocalTime(&rawtime);
-	strncpy(text, in, strlen(in) + 2);
-	type %= 2;
-
-	snprintf(logbuf, sizeof(logbuf), "log\\%s%02u%02u%04u.log", LOGFILES[type], rawtime.wMonth, rawtime.wDay, rawtime.wYear);
-	std::fstream logFile(logbuf, std::ios::app | std::ios::ate);
-	if (logFile.is_open())
-	{
-		logFile << text;
-		logFile.close();
-	}
-	free(text);
-}
-int debugLog(char *buffer, size_t count, const char *format, va_list argptr)
-{
-	char* compare = nullptr;
-	if (strlen(buffer) != 0)
-	{
-		compare = (char*)calloc(1, strlen(buffer) + 1);
-		if (compare == nullptr) return 0;
-		strncpy(compare, buffer, strlen(buffer));
-	}
-	int res = vsnprintf(buffer, count, format, argptr);
-	if (compare != nullptr)
-	{
-		if (strcmp(compare, buffer) != 0)
-		{
-			if (buffer[strlen(buffer) - 1] != 0x0A) buffer[strlen(buffer)] = 0x0A;
-			Log(1, buffer);
-		}
-	}
-	if (compare != nullptr) free(compare);
-	return res;
-}
-int debugIt(const char *format, ...)
-{
-	va_list vars;
-	va_start(vars, format);
-	//return debugLog((char*)0x6F7BCC, 0x400, format, vars);
-	return debugLog(&logItBuf[0], 0x400, format, vars);
-	va_end(vars);
-}
 int VerString(char* str, const char* format, ...)
 {
 	return sprintf(str, versionStr, clientVer[0], clientVer[1], clientVer[2], clientVer[3]);
@@ -946,11 +881,6 @@ int VerString(char* str, const char* format, ...)
 
 void __fastcall DxWindow(void* _this, void* edx, int x1, int y1, int x2, int y2)
 {
-	/*
-	std::stringstream ss;
-	ss << "x1: " << x1 << " y1: " << y1 << " x2: " << x2 << " y2: " << y2 << " Return Address: 0x" << std::hex << std::setfill('0') << std::setw(4) << _ReturnAddress() << std::endl;
-	OutputDebugStringA(ss.str().c_str());
-	*/
 	if (x1 == 0 && y1 == 0 && x2 == 640 && y2 == 480)
 	{
 		x2 = resW;

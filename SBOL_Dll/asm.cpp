@@ -4,12 +4,14 @@ extern int resW;
 extern int virtualResW;
 extern int resH;
 extern int fullScreen;
+extern float SWFscale;
 extern int skipWarning;
 extern unsigned char* itemFile;
 extern int itemFileSize;
 extern float UIdividerX;
 extern float UIdividerY;
 extern float UIscaleX;
+extern float UIscaleVirtualX;
 extern float UIscaleY;
 extern float UIscale;
 extern int itemUseDialogX;
@@ -30,7 +32,7 @@ createUIElementObjectFunc createUIElementObjectOrig = (createUIElementObjectFunc
 createUIElementFunc createUIElementOrig = (createUIElementFunc)(0x00404250);
 positionUIElementFunc positionUIElementOrig = (positionUIElementFunc)(0x004042F0);
 interactionUIElementFunc interactionUIElementOrig = (interactionUIElementFunc)(0x004F49E0);
-PositionInteractionUIFunc positionInteractionUIOrig = (PositionInteractionUIFunc)(0x004F48E0);
+positionInteractionUIFunc positionInteractionUIOrig = (positionInteractionUIFunc)(0x004F48E0);
 
 void __fastcall createUIElementObject(void* _this, void* edx, int posx, int posy)
 {
@@ -50,6 +52,27 @@ void __fastcall createUIElementObject(void* _this, void* edx, int posx, int posy
 
 	createUIElementOrig((void *)((int)_this + 0x78), edx, (float)posx, (float)posy, width, height, 0, -1, -1);
 }
+void __fastcall createUIElementObject_43(void* _this, void* edx, int posx, int posy)
+{
+	D3DSURFACE_DESC desc;
+	using GetDescFunc = void(__stdcall*)(void*, int, void*);
+	GetDescFunc GetDesc = *(GetDescFunc*)((**(int**)((int)_this + 0x60)) + 0x38);
+
+	posx = (int)(((float)posx / 640.0f) * (float)virtualResW);
+	posy = (int)(((float)posy / 480.0f) * (float)resH);
+
+	posx += (int)((resW / 2.0f) - ((float)virtualResW / 2.0f));
+
+	*(int*)((int)_this + 0x6C) = posx;
+	*(int*)((int)_this + 0x70) = posy;
+
+	GetDesc(*(int**)((int)_this + 0x60), 0, &desc);
+
+	auto width = (((float)desc.Width / 640.0f) * (float)virtualResW);
+	auto height = (((float)desc.Height / 480.0f) * (float)resH);
+
+	createUIElementOrig((void*)((int)_this + 0x78), edx, (float)posx, (float)posy, width, height, 0, -1, -1);
+}
 void __fastcall createUIElementObject_AutoScale(void* _this, void* edx, int posx, int posy)
 {
 	D3DSURFACE_DESC desc;
@@ -62,6 +85,22 @@ void __fastcall createUIElementObject_AutoScale(void* _this, void* edx, int posx
 	GetDesc(*(int**)((int)_this + 0x60), 0, &desc);
 
 	auto width = (((float)desc.Width / 640.0f) * (float)resW);
+	auto height = (((float)desc.Height / 480.0f) * (float)resH);
+
+	createUIElementOrig((void*)((int)_this + 0x78), edx, (float)posx, (float)posy, width, height, 0, -1, -1);
+}
+void __fastcall createUIElementObject_AutoScale_43(void* _this, void* edx, int posx, int posy)
+{
+	D3DSURFACE_DESC desc;
+	using GetDescFunc = void(__stdcall*)(void*, int, void*);
+	GetDescFunc GetDesc = *(GetDescFunc*)((**(int**)((int)_this + 0x60)) + 0x38);
+
+	*(int*)((int)_this + 0x6C) = posx;
+	*(int*)((int)_this + 0x70) = posy;
+
+	GetDesc(*(int**)((int)_this + 0x60), 0, &desc);
+
+	auto width = (((float)desc.Width / 640.0f) * (float)virtualResW);
 	auto height = (((float)desc.Height / 480.0f) * (float)resH);
 
 	createUIElementOrig((void*)((int)_this + 0x78), edx, (float)posx, (float)posy, width, height, 0, -1, -1);
@@ -231,6 +270,18 @@ void __fastcall interactionUIElement(void* _this, void* edx, int posx, int posy,
 	uiInteractBoundary(_this, edx, posx, posy, width, height);
 	createUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
 }
+void __fastcall interactionUIElement_43(void* _this, void* edx, int posx, int posy, int width, int height)
+{
+	posx = (int)(((float)posx / 640.0f) * (float)virtualResW);
+	posy = (int)(((float)posy / 480.0f) * (float)resH);
+	width = (int)(((float)width / 640.0f) * (float)virtualResW);
+	height = (int)(((float)height / 480.0f) * (float)resH);
+
+	posx += (int)(((float)resW / 2.0f) - ((float)virtualResW / 2.0f));
+
+	uiInteractBoundary(_this, edx, posx, posy, width, height);
+	createUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
+}
 void __fastcall interactionUIElement_Scale(void* _this, void* edx, int posx, int posy, int width, int height)
 {
 	width = (int)((float)width * UIscale);
@@ -281,6 +332,16 @@ void __fastcall moveUIElement(void* _this, void* edx, int posx, int posy)
 	positionInteractionUIOrig(_this, edx, posx, posy);
 	positionUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, 1);
 }
+void __fastcall moveUIElement_43(void* _this, void* edx, int posx, int posy)
+{
+	posx = (int)(((float)posx / 640.0f) * (float)virtualResW);
+	posy = (int)(((float)posy / 480.0f) * (float)resH);
+
+	posx += (int)(((float)resW / 2.0f) - ((float)virtualResW / 2.0f));
+
+	positionInteractionUIOrig(_this, edx, posx, posy);
+	positionUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, 1);
+}
 void __fastcall moveUIElement_Position(void* _this, void* edx, int posx, int posy)
 {
 	posx = (int)((float)posx * UIscale);
@@ -314,6 +375,19 @@ void __fastcall createTextbox(void* _this, void* edx, float posx, float posy)
 	if (handle != NULL)
 		OffsetRgn(handle, (int)posx, (int)posy);
 	createUIElementObject_AutoScale((void*)((int)_this + 0xB3C), edx, (int)posx, (int)posy);
+}
+void __fastcall createTextbox_43(void* _this, void* edx, float posx, float posy)
+{
+	HRGN handle = *(HRGN*)((int)_this + 0xE10);
+
+	posx = (posx / 640.0f) * (float)virtualResW;
+	posy = (posy / 480.0f) * (float)resH;
+
+	posx += ((float)resW / 2.0f) - ((float)virtualResW / 2.0f);
+
+	if (handle != NULL)
+		OffsetRgn(handle, (int)posx, (int)posy);
+	createUIElementObject_AutoScale_43((void*)((int)_this + 0xB3C), edx, (int)posx, (int)posy);
 }
 void __fastcall createTextbox_Scale_Reposition_TopLeft(void* _this, void* edx, float posx, float posy)
 {
@@ -356,17 +430,79 @@ void __fastcall createTextboxCarat(void* _this, void* edx, int caratpos)
 		stringlength = positioninstring;
 	}
 	
-	if(*(int*)0x006EC81C != 0)
+	characterwidth = (characterwidth / 640.0f) * (float)virtualResW;
+	auto calculatedposx = (characterwidth * (float)stringlength) + (float)posx;
+	createUIElement_AutoScale_43(object, edx, calculatedposx, (float)posy, 1.0, (float)height, 0, -1, -1);
+}
+void __fastcall SwfMatrixConstruct(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatrix, float localX, float localY, float layerZ)
+{
+	using matrixMultiplyFunc = void(__stdcall*)(D3D_MATRIX*, float, float, float);
+	matrixMultiplyFunc matrixMultiply = (matrixMultiplyFunc)0x00556B74;
+	using unknownFunc = void(__stdcall*)(D3D_MATRIX*, D3D_MATRIX*, D3D_MATRIX*);
+	unknownFunc unknownfunc = (unknownFunc)0x0055623E;
+	
+	memset(d3dMatrix, 0, sizeof(D3D_MATRIX));
+	D3D_MATRIX stackMatrix = { 0 };
+
+	float scale = (float)resH / 480.0f;
+	float scaledUiWidth = (640.0f * scale);
+	float xOffsetTwips = (((float)resW - scaledUiWidth) / 2.0f) * PIXELS_TO_TWIPS;
+	float adjustedLocalX = localX * scale;
+	float adjustedLocalY = localY * scale;
+
+	d3dMatrix->TransX = (_this->TransX * scale) + xOffsetTwips;
+	d3dMatrix->TransY = (_this->TransY * scale);
+	
+	float screenX = d3dMatrix->TransX + (localX * scale);
+	float uiLeft = xOffsetTwips;
+	float uiRight = xOffsetTwips + (640.0f * PIXELS_TO_TWIPS * scale);
+
+	d3dMatrix->ScaleX = _this->ScaleX;
+	d3dMatrix->ScaleY = _this->ScaleY;
+	d3dMatrix->ScaleZ = 1.0f;
+	d3dMatrix->SkewX = _this->SkewX;
+	d3dMatrix->SkewY = _this->SkewY;
+	d3dMatrix->W = 1.0f;
+
+	stackMatrix.ScaleX = 1.0f;
+	stackMatrix.ScaleY = 1.0f;
+	stackMatrix.ScaleZ = 1.0f;
+	stackMatrix.W = 1.0f;
+
+	matrixMultiply(&stackMatrix, adjustedLocalX, adjustedLocalY, layerZ);
+	unknownfunc(d3dMatrix, d3dMatrix, &stackMatrix);
+}
+void __fastcall SwfDrawPrimitive(void* _this, void* edx, LPDIRECT3DDEVICE8 pDevice, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount)
+{
+	D3DVIEWPORT8 originalViewport;
+	bool viewportModified = false;
+	if (SUCCEEDED(pDevice->GetViewport(&originalViewport)))
 	{
-		characterwidth = characterwidth * UIscale;
-		auto calculatedposx = (characterwidth * (float)stringlength) + (float)posx;
-		createUIElement_Scale(object, edx, calculatedposx, (float)posy, 1.0, (float)height, 0, -1, -1);
+		D3DVIEWPORT8 uiViewport = originalViewport;
+		uiViewport.X = (DWORD)((resW - virtualResW) / 2.0f);
+		uiViewport.Width = (DWORD)virtualResW;
+
+		pDevice->SetViewport(&uiViewport);
+		viewportModified = true;
 	}
-	else
+
+	pDevice->DrawPrimitive(PrimitiveType, StartVertex, PrimitiveCount);
+
+	if (viewportModified)
+		pDevice->SetViewport(&originalViewport);
+}
+void __fastcall SwfGetMouseState(void* _this, void* edx, int* pOutX, int* pOutY, int* pOutClickState)
+{
+	using GetMouseStateFunc = void(__fastcall*)(void*, void*, int*, int*, int*);
+	GetMouseStateFunc GetMouseStateOrig = (GetMouseStateFunc)0x005075D0;
+	GetMouseStateOrig(_this, edx, pOutX, pOutY, pOutClickState);
+
+	if (pOutX != nullptr && pOutY != nullptr)
 	{
-		characterwidth = (characterwidth / 640.0f) * (float)resW;
-		auto calculatedposx = (characterwidth * (float)stringlength) + (float)posx;
-		createUIElement_AutoScale(object, edx, calculatedposx, (float)posy, 1.0, (float)height, 0, -1, -1);
+		float leftWall = (float)(resW - virtualResW) / 2.0f;
+		float shiftedX = (float)(*pOutX) - leftWall;
+		*pOutX = (int)(shiftedX / SWFscale);
+		*pOutY = (int)((float)(*pOutY) / SWFscale);
 	}
 }
 void adjustfloats(float* x, float* y)
