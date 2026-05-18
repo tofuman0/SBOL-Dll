@@ -99,9 +99,9 @@ typedef struct st_swfui {
 	SWFUIPAGE pages[23];
 	int page_indices[23];
 } SWFUI;
-struct D3D8UiVertex {
-	float x, y, z, rhw; // rhw implies it's already transformed to screen space
+struct TransformedVertex {
+	float x, y, z, rhw;
 	DWORD color;
-	float tu, tv;
+	float u, v; // Texture coordinates (adjust this structure if the game uses a different FVF)
 };
 #pragma pack()

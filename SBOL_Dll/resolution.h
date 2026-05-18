@@ -34,7 +34,7 @@ float* resWidthF[]{
 	nullptr,
 	(float*)0x004E601D,
 	//(float*)0x0045CEB0, // Item black back but using createUIElement
-	(float*)0x004BC492, // Garage black back
+	//(float*)0x004BC492, // Garage black back
 	(float*)0x00434957,
 	(float*)0x0045A6FA,
 	//(float*)0x0045B7CB, // Item box but using createUIElement
@@ -95,7 +95,7 @@ int* resHeight[]{
 float* resHeightF[]{
 	nullptr,
 	//(float*)0x0045CEA5, // Item black back but using createUIElement
-	(float*)0x004BC487,	// Garage black back
+	//(float*)0x004BC487,	// Garage black back
 	(float*)0x0043494C,
 	(float*)0x0045A6F5,
 	//(float*)0x0045B7C0, // Item box but using createUIElement
@@ -218,8 +218,8 @@ ADJUSTFLOATS adjustFloatAddr[]{
 ADJUSTINTS adjustIntAddr[]{
 	{ nullptr, nullptr, nullptr },
 	//{ &adjustintsN, (int*)0x00600900, (int*)0x00600904 }, // Tache needle size
-	{ &adjustints, (int*)0x004E185B, (int*)0x004E1862 }, // Mirror size
-	{ &adjustints, (int*)0x004E184D, (int*)0x004E1854 }, // Mirror position
+	{ &adjustints43, (int*)0x004E185B, (int*)0x004E1862 }, // Mirror size
+	{ &adjustints43Center, (int*)0x004E184D, (int*)0x004E1854 }, // Mirror position
 };
 
 /*
@@ -249,14 +249,14 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElementObject, (int*)0x0044FF1D },
 	//{ createUIElementObject, (int*)0x00450342 },
 	//{ createUIElementObject, (int*)0x0045038B },
-	//{ createUIElementObject, (int*)0x0045B705 },
-	//{ createUIElementObject, (int*)0x0045B796 },
-	//{ createUIElementObject, (int*)0x0045BEAD },
-	//{ createUIElementObject, (int*)0x0045BF0A },
-	//{ createUIElementObject, (int*)0x0045D225 },
-	//{ createUIElementObject, (int*)0x0045D27F },
-	//{ createUIElementObject, (int*)0x0045D672 },
-	//{ createUIElementObject, (int*)0x0045D68D },
+	{ createUIElementObject_43, (int*)0x0045B705 }, // Itembox related
+	{ createUIElementObject_43, (int*)0x0045B796 }, // Itembox related
+	{ createUIElementObject_43, (int*)0x0045BEAD }, // Itembox text
+	{ createUIElementObject_43, (int*)0x0045BF0A }, // Itembox text
+	{ createUIElementObject_43, (int*)0x0045D225 }, // Itembox related most likely
+	{ createUIElementObject_43, (int*)0x0045D27F }, // Itembox related most likely
+	{ createUIElementObject_43, (int*)0x0045D672 }, // Itembox text
+	{ createUIElementObject_43, (int*)0x0045D68D }, // Itembox text
 	//{ createUIElementObject, (int*)0x00477C20 },
 	//{ createUIElementObject, (int*)0x00478DE9 },
 	//{ createUIElementObject, (int*)0x00485B1D },
@@ -281,7 +281,7 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5E2B }, // Autorun String while not in autopilot
 	//{ createUIElementObject, (int*)0x004D5F18 },
 	//{ createUIElementObject, (int*)0x004D8D66 },
-	//{ createUIElementObject, (int*)0x004DC729 },
+	{ createUIElementObject_43, (int*)0x004DC729 }, // Wrong way warning text
 	//{ createUIElementObject, (int*)0x004DE74D },
 	//{ createUIElementObject, (int*)0x004DE79B },
 	//{ createUIElementObject, (int*)0x004DE7E9 },
@@ -359,28 +359,28 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElement, (int*)0x0045ABAF }, // ???
 	//{ createUIElement, (int*)0x0045AFC1 }, // ???
 	//{ createUIElement, (int*)0x0045B0B0 }, // ???
-	//{ createUIElement, (int*)0x0045B7D7 }, // ???
-	//{ createUIElement, (int*)0x0045B8E7 }, // ???
-	//{ createUIElement, (int*)0x0045BA5E }, // ???
-	//{ createUIElement, (int*)0x0045BADA }, // ???
-	//{ createUIElement, (int*)0x0045BBB8 }, // ???
-	//{ createUIElement, (int*)0x0045BD30 }, // ???
-	//{ createUIElement, (int*)0x0045BD83 }, // ???
-	//{ createUIElement, (int*)0x0045C250 }, // ???
-	//{ createUIElement, (int*)0x0045C359 }, // ???
-	//{ createUIElement, (int*)0x0045CEBA }, // ???
-	//{ createUIElement, (int*)0x0045D7F1 }, // ???
-	//{ createUIElement, (int*)0x0045D8A0 }, // ???
-	//{ createUIElement, (int*)0x0045D91A }, // ???
-	//{ createUIElement, (int*)0x0045D9C5 }, // ???
-	//{ createUIElement, (int*)0x0045DA41 }, // ???
-	//{ createUIElement, (int*)0x0045DAE3 }, // ???
-	//{ createUIElement, (int*)0x0045DBED }, // ???
-	//{ createUIElement, (int*)0x0045DEEF }, // ???
-	//{ createUIElement, (int*)0x0045E0B3 }, // ???
-	//{ createUIElement, (int*)0x0045E21C }, // ???
-	//{ createUIElement, (int*)0x0045E307 }, // ???
-	//{ createUIElement, (int*)0x0045F367 }, // ???
+	{ createUIElement, (int*)0x0045B7D7 }, // Itembox dim game window box when using
+	{ createUIElement_43, (int*)0x0045B8E7 }, // Itembox use/trash related
+	{ createUIElement_43, (int*)0x0045BA5E }, // Itembox use/trash related
+	{ createUIElement_43, (int*)0x0045BADA }, // Itembox use/trash related
+	{ createUIElement_43, (int*)0x0045BBB8 }, // Itembox use/trash related
+	{ createUIElement_43, (int*)0x0045BD30 }, // Itembox use/trash related
+	{ createUIElement_43, (int*)0x0045BD83 }, // Itembox use/trash related
+	{ createUIElement_43, (int*)0x0045C250 }, // Itembox use/trash related
+	{ createUIElement_43, (int*)0x0045C359 }, // Itembox use/trash related
+	{ createUIElement, (int*)0x0045CEBA }, // Itembox dim game window box
+	{ createUIElement_43, (int*)0x0045D7F1 }, // Itembox related
+	{ createUIElement_43, (int*)0x0045D8A0 }, // Itembox related
+	{ createUIElement_43, (int*)0x0045D91A }, // Itembox related
+	{ createUIElement_43, (int*)0x0045D9C5 }, // Itembox close button back
+	{ createUIElement_43, (int*)0x0045DA41 }, // Itembox related
+	{ createUIElement_43, (int*)0x0045DAE3 }, // Itembox related
+	{ createUIElement_43, (int*)0x0045DBED }, // Itembox item button back
+	{ createUIElement_43, (int*)0x0045DEEF }, // Itembox related
+	{ createUIElement_43, (int*)0x0045E0B3 }, // Itembox related
+	{ createUIElement_43, (int*)0x0045E21C }, // Itembox item button icon
+	{ createUIElement_43, (int*)0x0045E307 }, // Itembox item button label
+	{ createUIElement_43, (int*)0x0045F367 }, // Itembox close button text
 	//{ createUIElement, (int*)0x0046F7AB }, // ???
 	//{ createUIElement, (int*)0x0046F8A7 }, // ???
 	//{ createUIElement, (int*)0x0046F9D1 }, // ???
@@ -477,8 +477,8 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElement, (int*)0x0048D9AF }, // ???
 	//{ createUIElement, (int*)0x0048DAEA }, // ???
 	//{ createUIElement, (int*)0x0048DBB5 }, // ???
-	//{ createUIElement, (int*)0x0048DEF3 }, // ???
-	//{ createUIElement, (int*)0x0048DF7E }, // ???
+	{ createUIElement_43, (int*)0x0048DEF3 }, // Itembox when in shop
+	{ createUIElement_43, (int*)0x0048DF7E }, // Itembox when in shop
 	//{ createUIElement, (int*)0x0048E31E }, // ???
 	//{ createUIElement, (int*)0x004972B1 }, // ???
 	//{ createUIElement, (int*)0x004984C1 }, // ???
@@ -575,17 +575,17 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElement, (int*)0x004B2ABA }, // ???
 	//{ createUIElement, (int*)0x004B2BEE }, // ???
 	//{ createUIElement, (int*)0x004B553D }, // ???
-	//{ createUIElement, (int*)0x004BC49E }, // ???
+	{ createUIElement, (int*)0x004BC49E }, // Enter garage back black box
 	{ createUIElement_43, (int*)0x004BC5B2 }, // Enter garage dialog back
 	{ createUIElement_43, (int*)0x004BC642 }, // Enter garage OK button
 	{ createUIElement_43, (int*)0x004BC6D7 }, // Enter garage CANCEL button
 	//{ createUIElement, (int*)0x004BD197 }, // ???
 	//{ createUIElement, (int*)0x004BD39B }, // ???
 	//{ createUIElement, (int*)0x004BF8D3 }, // ???
-	{ createUIElement, (int*)0x004C1F3B }, // Mirror frame top
-	{ createUIElement, (int*)0x004C1F5C }, // Mirror frame bottom
-	{ createUIElement, (int*)0x004C1F7D }, // Mirror frame left
-	{ createUIElement, (int*)0x004C1FA2 }, // Mirror frame right
+	{ createUIElement_43, (int*)0x004C1F3B }, // Mirror frame top
+	{ createUIElement_43, (int*)0x004C1F5C }, // Mirror frame bottom
+	{ createUIElement_43, (int*)0x004C1F7D }, // Mirror frame left
+	{ createUIElement_43, (int*)0x004C1FA2 }, // Mirror frame right
 	{ createUIElement_AutoScale_Handle, (int*)0x004C3152 }, // Handle string above player car
 	{ createUIElement_AutoScale_TeamName, (int*)0x004C31D1 }, // Team name above handle box
 	{ createUIElement_AutoScale_43, (int*)0x004C3231 }, // Box around player handle
@@ -656,19 +656,19 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElement, (int*)0x004DBD62 }, // Linked to bottom right buttons
 	//{ createUIElement, (int*)0x004DBE40 }, // ???
 	//{ createUIElement, (int*)0x004DBE8F }, // ???
-	//{ createUIElement, (int*)0x004DC6AD }, // ???
-	//{ createUIElement, (int*)0x004DC9D5 }, // ???
-	//{ createUIElement, (int*)0x004DCA3E }, // ???
-	//{ createUIElement, (int*)0x004DD09D }, // ???
-	//{ createUIElement, (int*)0x004DD114 }, // ???
-	//{ createUIElement, (int*)0x004DD18B }, // ???
-	//{ createUIElement, (int*)0x004DD250 }, // ???
-	//{ createUIElement, (int*)0x004DD2DF }, // ???
-	//{ createUIElement, (int*)0x004DD385 }, // ???
-	//{ createUIElement, (int*)0x004DD3FC }, // ???
-	//{ createUIElement, (int*)0x004DD473 }, // ???
-	//{ createUIElement, (int*)0x004DD5AA }, // ???
-	//{ createUIElement, (int*)0x004DD61E }, // ???
+	{ createUIElement_43, (int*)0x004DC6AD }, // Wrong way dialog window (without text)
+	{ createUIElement_43, (int*)0x004DC9D5 }, // Course information dialog left backing that appears when you approach a junction
+	{ createUIElement_43, (int*)0x004DCA3E }, // Course information dialog right backing that appears when you approach a junction
+	{ createUIElement_43, (int*)0x004DD09D }, // Course information dialog foreground that appears when you approach a junction
+	{ createUIElement_43, (int*)0x004DD114 }, // Course information diloag related
+	{ createUIElement_43, (int*)0x004DD18B }, // Course information diloag related
+	{ createUIElement_43, (int*)0x004DD250 }, // Course information diloag related
+	{ createUIElement_43, (int*)0x004DD2DF }, // Course information diloag related
+	{ createUIElement_43, (int*)0x004DD385 }, // Course information diloag related
+	{ createUIElement_43, (int*)0x004DD3FC }, // Course information diloag related
+	{ createUIElement_43, (int*)0x004DD473 }, // Course information diloag related
+	{ createUIElement_43, (int*)0x004DD5AA }, // Course information diloag related
+	{ createUIElement_43, (int*)0x004DD61E }, // Course information diloag related
 	//{ createUIElement, (int*)0x004DDF41 }, // ???
 	//{ createUIElement, (int*)0x004DE45C }, // ???
 	//{ createUIElement, (int*)0x004DE4A2 }, // ???
@@ -695,20 +695,20 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElement_43, (int*)0x004F6CB9 }, // Addressbook backing
 	//{ createUIElement, (int*)0x004F8084 }, // ???
 	//{ createUIElement, (int*)0x004F809F }, // ???
-	//{ createUIElement, (int*)0x004F8311 }, // ???
-	//{ createUIElement, (int*)0x004F8349 }, // ???
+	{ createUIElement_43, (int*)0x004F8311 }, // Chat hide button when in shops
+	{ createUIElement_43, (int*)0x004F8349 }, // Addressbook textbox back while in shops
 	//{ createUIElement, (int*)0x004F866F }, // ???
 	//{ createUIElement, (int*)0x004F868E }, // ???
 	//{ createUIElement, (int*)0x004F875F }, // ???
 	//{ createUIElement, (int*)0x004F8777 }, // ???
 	//{ createUIElement, (int*)0x004F8828 }, // ???
 	//{ createUIElement, (int*)0x004F8840 }, // ???
-	//{ createUIElement, (int*)0x004F8AD9 }, // ???
+	{ createUIElement_43, (int*)0x004F8AD9 }, // Chat window label when chat hidden
 	{ createUIElement_43, (int*)0x004F8B08 }, // Addressbook input textbox
-	//{ createUIElement, (int*)0x004FB0D2 }, // ???
-	//{ createUIElement, (int*)0x004FB10C }, // ???
-	//{ createUIElement, (int*)0x004FB1D3 }, // ???
-	//{ createUIElement, (int*)0x004FB217 }, // ???
+	{ createUIElement_43, (int*)0x004FB0D2 }, // In Create UI String
+	{ createUIElement_43, (int*)0x004FB10C }, // In Create UI String
+	{ createUIElement_43, (int*)0x004FB1D3 }, // In Create UI String
+	{ createUIElement_43, (int*)0x004FB217 }, // In Create UI String
 	//{ createUIElement, (int*)0x004FB8C4 }, // Textbox carat
 	//{ createUIElement, (int*)0x004FB92B }, // ???
 	//{ createUIElement, (int*)0x004FC163 }, // ???
@@ -724,8 +724,8 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElement, (int*)0x004FCAAA }, // ???
 	//{ createUIElement, (int*)0x004FCB28 }, // ???
 	{ createUIElement_43, (int*)0x004FCBD3 }, // Chat and addressbook scrollbar back
-	//{ createUIElement, (int*)0x004FCE24 }, // ???
-	//{ createUIElement, (int*)0x004FCE3D }, // ???
+	//{ createUIElement_43, (int*)0x004FCE24 }, // ???
+	//{ createUIElement_43, (int*)0x004FCE3D }, // ???
 	//{ createUIElement, (int*)0x004FD7CB }, // createUIElementObject (Textboxes affected)
 	//{ createUIElement, (int*)0x004FD951 }, // ???
 	//{ createUIElement, (int*)0x004FD9BA }, // ???
@@ -793,6 +793,11 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ moveUIElement_43, (int*)0x004FC8ED }, // Chat
 	{ moveUIElement_43, (int*)0x004FCB59 }, // Chat
 	{ moveUIElement_43, (int*)0x004FCC06 }, // Chat
+
+	// Place UI
+	//{ placeUIElement, (int*)0x00416DD6 }, // Car shadows in garage
+	//{ placeUIElement, (int*)0x0045862D }, // Car shadows in garage
+	//{ placeUIElement, (int*)0x00458822 }, // Car shadows in garage
 	
 	// Textbox
 	{ nullptr, nullptr },
@@ -821,11 +826,19 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	
 	// SWF
 	{ nullptr, nullptr },
-	{ SwfMatrixConstruct, (int*)0x00512306 },
-	{ SwfMatrixConstruct, (int*)0x00512468 },
+	{ SwfMatrixConstruct_Centered, (int*)0x00512306 }, // Menu UIs
+	{ SwfMatrixConstruct_Centered, (int*)0x00512468 }, // Black boxes
 	{ SwfDrawPrimitive, (int*)0x015125BB },
 	{ SwfDrawPrimitive, (int*)0x0151264B },
 	{ SwfGetMouseState, (int*)0xFF60537C },
+
+	// Misc
+	{ ButtonInteract43, (int*)0x00493086 },
+	{ ButtonInteract43, (int*)0x00493406 },
+	{ ButtonInteract43, (int*)0x0049361B },
+	{ ButtonInteract43, (int*)0x00493b5B },
+	{ ButtonInteract43, (int*)0x004940BC },
+	{ ButtonInteract43, (int*)0x00494189 },	
 };
 int* repositionAddr[]{
 	// Check - Not text box

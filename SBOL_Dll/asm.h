@@ -76,22 +76,33 @@ void __fastcall interactionUIElement_Scale_Reposition_BottomRight(void* _this, v
 void __fastcall moveUIElement(void* _this, void* edx, int posx, int posy);
 void __fastcall moveUIElement_43(void* _this, void* edx, int posx, int posy);
 void __fastcall moveUIElement_Position(void* _this, void* edx, int posx, int posy);
+void __fastcall placeUIElement(void* _this, void* edx, char* uiElementLabel, float width, float height, int param_4);
 void __fastcall uiInteractBoundary(void* _this, void* edx, int posx, int posy, int width, int height);
 void __fastcall createTextbox(void* _this, void* edx, float posx, float posy);
 void __fastcall createTextbox_43(void* _this, void* edx, float posx, float posy);
 void __fastcall createTextbox_Scale_Reposition_TopLeft(void* _this, void* edx, float posx, float posy);
 void __fastcall createTextboxCarat(void* _this, void* edx, int caratpos);
+void __fastcall SwfMatrixConstruct(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatrix, float localX, float localY, float layerZ);
 /* Scales SWF file to 4:3 */
-void __fastcall SwfMatrixConstruct(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatrix, float width, float height, float scale);
+void __fastcall SwfMatrixConstruct_Stretch(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatrix, float width, float height, float scale);
+/* Centers SWF in widescreen resolutions */
+void __fastcall SwfMatrixConstruct_Centered(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatrix, float localX, float localY, float layerZ);
 /* Clips SWF anything outside 4:3 */
 void __fastcall SwfDrawPrimitive(void* _this, void* edx, LPDIRECT3DDEVICE8 pDevice, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount);
+void __fastcall SwfDrawPrimitive_Stretch(void* _this, void* edx, LPDIRECT3DDEVICE8 pDevice, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount);
 /* Adjusts the mouse inputs for the SWF so that they work with the repositoned and sized SWF */
 void __fastcall SwfGetMouseState(void* _this, void* edx, int* pOutX, int* pOutY, int* pOutClickState);
+/* Original button interaction calculations */
+unsigned int __fastcall ButtonInteract(void* _this, void* edx, int MouseX, int MouseY, int Width, int Height);
+/* Button interactions scaled the the increased 4:3 resolution */
+unsigned int __fastcall ButtonInteract43(void* _this, void* edx, int MouseX, int MouseY, int Width, int Height);
 void adjustfloats(float* x, float* y);
 void adjustfloats43(float* x, float* y);
 void adjustfloatsN(float* x, float* y);
 void adjustfloatsNBR(float* x, float* y);
 void adjustints(int* x, int* y);
+void adjustints43(int* x, int* y);
+void adjustints43Center(int* x, int* y);
 void adjustintsN(int* x, int* y);
 void adjustintsNTC(int* x, int* y);
 void __fastcall addressbookTextbox(void* _this, void* edx, int posx, int posy);

@@ -45,6 +45,7 @@ const STRINGENTRY strings[]{
 	{ FALSE, (char*)0x004271D8, logPath },
 	{ FALSE, (char*)0x0044A7D5, logPath },
 	{ FALSE, (char*)0x0044A8B5, logPath },
+	{ FALSE, (char*)0x00656B70, "!!! W R O N G  W A Y !!!"},
 	//{ FALSE, (char*)0x00619848, "                                                                    Processing Log                                      " },
 	//{ FALSE, (char*)0x0061984C, "                                                                   Connecting to server                                 " },
 	//{ FALSE, (char*)0x005BB974, "                                    Login ID OR Password      is blank please enter Login ID          and Password          " },

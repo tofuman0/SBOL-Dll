@@ -12,6 +12,8 @@ extern int resW;
 extern int virtualResW;
 extern int resH;
 extern float SWFscale;
+extern float SWFscaleX;
+extern float SWFscaleY;
 extern float drawDistanceMultiplier;
 extern float UIscale;
 extern int fullScreen;
@@ -533,10 +535,10 @@ void setResolution()
 	*(float*)0x005F404C = (float)resW / (float)resH;
 
 	// Shops and UI Aspects - Looks bad when UI is stretched so will leave it scretched in shops.
-	//*(float*)0x004A4232 = (float)resW / (float)resH;
+	*(float*)0x004A4232 = (float)resW / (float)resH; // Garage and shop car FOV
 	//*(float*)0x004E100F = (float)resW / (float)resH;
 	//*(float*)0x00501928 = (float)resW / (float)resH;
-	//*(float*)0x0050195a = (float)resW / (float)resH;
+	//*(float*)0x0050195A = (float)resW / (float)resH;
 #pragma endregion
 #pragma region Scaling Patches
 	//insertFunction((int)0x00508470, scaleUIElement, 0x7F, FT_JUMP);
@@ -553,7 +555,7 @@ void setResolution()
 	//*(float**)0x00416DCE = &UIdividerY;
 
 	// Shadows in Garage effected
-	//*(float**)0x004587D3 = &UIscaleVirtualX;
+	//*(float**)0x004587D3 = &UIdividerX;
 	//*(float**)0x004587EE = &UIdividerY;
 
 	// UI Selection Position effected (buttons and input boxes)
@@ -576,12 +578,12 @@ void setResolution()
 	//*(float**)0x00511A4B = &UIscaleX;
 	//*(float**)0x00511A61 = &UIscaleY;
 
-	// UI affected - Scales title screen
-	//*(float**)0x00512332 = &UIscaleVirtualX;
-	//*(float**)0x0051236F = &UIscaleY;
-
-	// black screen box
-	*(float**)0x0051249F = &UIscaleX;
+	// UI Menus
+	*(float**)0x00512332 = &UIscaleVirtualX;
+	*(float**)0x0051236F = &UIscaleY;
+	
+	// UI Black boxes
+	*(float**)0x0051249F = &UIscaleVirtualX;
 	*(float**)0x005124D6 = &UIscaleY;
 
 	// Unknown
@@ -673,6 +675,8 @@ void fixResolutionChoice()
 			resW = supportedResolutions[0][i];
 			resH = supportedResolutions[1][i];
 			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
+			SWFscaleX = (float)virtualResW / 640.0f;
+			SWFscaleY = (float)resH / 480.0f;
 			SWFscale = (float)resH / 480.0f;
 			break;
 		}
@@ -681,6 +685,8 @@ void fixResolutionChoice()
 			resW = supportedResolutions[0][i - 1];
 			resH = supportedResolutions[1][i - 1];
 			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
+			SWFscaleX = (float)virtualResW / 640.0f;
+			SWFscaleY = (float)resH / 480.0f;
 			SWFscale = (float)resH / 480.0f;
 			break;
 		}
@@ -689,6 +695,8 @@ void fixResolutionChoice()
 			resW = supportedResolutions[0][i];
 			resH = supportedResolutions[1][i];
 			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
+			SWFscaleX = (float)virtualResW / 640.0f;
+			SWFscaleY = (float)resH / 480.0f;
 			SWFscale = (float)resH / 480.0f;
 			break;
 		}
@@ -757,12 +765,16 @@ void readRegistry()
 			if ((resH = value) < 480)
 				resH = 480;
 			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
+			SWFscaleX = (float)virtualResW / 640.0f;
+			SWFscaleY = (float)resH / 480.0f;
 			SWFscale = (float)resH / 480.0f;
 		}
 		else
 		{
 			resH = 480;
 			virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
+			SWFscaleX = (float)virtualResW / 640.0f;
+			SWFscaleY = (float)resH / 480.0f;
 			SWFscale = (float)resH / 480.0f;
 			RegSetValueEx(hKey, TEXT("RES_HEIGHT"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resH), BufferSize);
 		}
@@ -851,6 +863,8 @@ void readRegistry()
 		resW = 640;
 		resH = 480;
 		virtualResW = (int)((float)resH * SCREEN_RATIO_4_3);
+		SWFscaleX = (float)virtualResW / 640.0f;
+		SWFscaleY = (float)resH / 480.0f;
 		SWFscale = (float)resH / 480.0f;
 		fullScreen = 0;
 		drawDistanceMultiplier = 1.0f;
@@ -957,6 +971,11 @@ void ForceShiftJIS()
 	setFunction(0x0051D501, (void*)&GetTextMetricsAHook_Ptr);
 
 	setFunction(0x004FDF19, (void*)&TextOutAHook_Ptr);
+
+	setFunction(0x004F48CA, (void*)&CreateRectRgnHook_Ptr);
+	setFunction(0x004FC10F, (void*)&CreateRectRgnHook_Ptr);
+	
+	setFunction(0x0040D1EF, (void*)&PtInRegionHook_Ptr);
 
 	*(byte*)0x00408850 = SHIFTJIS_CHARSET;
 	*(byte*)0x0051D4C0 = SHIFTJIS_CHARSET;
@@ -1138,4 +1157,20 @@ BOOL __stdcall TextOutAHook(HDC hdc, int x, int y, LPCSTR lpString, int c)
 		lpString,
 		c);
 	return res;
+}
+
+HRGN __stdcall CreateRectRgnHook(int x1, int y1, int x2, int y2)
+{
+	auto width = x2 - x1;
+	auto height = y2 - y1;
+	return CreateRectRgn(x1, y1, x2, y2);
+}
+
+BOOL __stdcall PtInRegionHook(HRGN hrgn, int x, int y)
+{
+	RECT rect{};
+	GetRgnBox(hrgn, &rect);
+	auto width = rect.right - rect.left;
+	auto height = rect.bottom - rect.top;
+	return PtInRegion(hrgn, x, y);
 }

@@ -5,6 +5,8 @@ extern int virtualResW;
 extern int resH;
 extern int fullScreen;
 extern float SWFscale;
+extern float SWFscaleX;
+extern float SWFscaleY;
 extern int skipWarning;
 extern unsigned char* itemFile;
 extern int itemFileSize;
@@ -350,6 +352,16 @@ void __fastcall moveUIElement_Position(void* _this, void* edx, int posx, int pos
 	positionInteractionUIOrig(_this, edx, posx, posy);
 	positionUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, 1);
 }
+void __fastcall placeUIElement(void* _this, void* edx, char* uiElementLabel, float width, float height, int param_4)
+{
+	using placeUIElementFunc = void(__fastcall*)(void*, void*, char*, float, float, int);
+	placeUIElementFunc placeUIElementOrig = (placeUIElementFunc)0x00416D00;
+
+	float adjustedWidth = ((width / 640.0f) * (float)virtualResW);
+	float adjustedHeight = ((height / 480.0f) * (float)resH);
+
+	placeUIElementOrig(_this, edx, uiElementLabel, adjustedWidth, adjustedHeight, param_4);
+}
 void __fastcall uiInteractBoundary(void* _this, void* edx, int posx, int posy, int width, int height)
 {
 	HRGN hrgn;
@@ -440,22 +452,51 @@ void __fastcall SwfMatrixConstruct(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatri
 	matrixMultiplyFunc matrixMultiply = (matrixMultiplyFunc)0x00556B74;
 	using unknownFunc = void(__stdcall*)(D3D_MATRIX*, D3D_MATRIX*, D3D_MATRIX*);
 	unknownFunc unknownfunc = (unknownFunc)0x0055623E;
+
+	memset(d3dMatrix, 0, sizeof(D3D_MATRIX));
+	D3D_MATRIX stackMatrix = { 0 };
+	
+	stackMatrix.W = 1.0;
+	stackMatrix.ScaleZ = 1.0;
+	stackMatrix.ScaleY = 1.0;
+	stackMatrix.ScaleX = 1.0;
+
+	d3dMatrix->W = 1.0;
+	d3dMatrix->ScaleZ = 1.0;
+	d3dMatrix->ScaleY = 1.0;
+	d3dMatrix->ScaleX = 1.0;
+	
+	d3dMatrix->ScaleX = _this->ScaleX;
+	d3dMatrix->SkewY = _this->SkewY;
+	d3dMatrix->SkewX = _this->SkewX;
+	d3dMatrix->ScaleY = _this->ScaleY;
+	d3dMatrix->TransX = _this->TransX;
+	d3dMatrix->TransY = _this->TransY;
+	
+	matrixMultiply(&stackMatrix, localX, localY, layerZ);
+	unknownfunc(d3dMatrix, d3dMatrix, &stackMatrix);
+}
+void __fastcall SwfMatrixConstruct_Stretch(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatrix, float localX, float localY, float layerZ)
+{
+	using matrixMultiplyFunc = void(__stdcall*)(D3D_MATRIX*, float, float, float);
+	matrixMultiplyFunc matrixMultiply = (matrixMultiplyFunc)0x00556B74;
+	using unknownFunc = void(__stdcall*)(D3D_MATRIX*, D3D_MATRIX*, D3D_MATRIX*);
+	unknownFunc unknownfunc = (unknownFunc)0x0055623E;
 	
 	memset(d3dMatrix, 0, sizeof(D3D_MATRIX));
 	D3D_MATRIX stackMatrix = { 0 };
 
-	float scale = (float)resH / 480.0f;
-	float scaledUiWidth = (640.0f * scale);
+	float scaledUiWidth = (640.0f * SWFscaleY);
 	float xOffsetTwips = (((float)resW - scaledUiWidth) / 2.0f) * PIXELS_TO_TWIPS;
-	float adjustedLocalX = localX * scale;
-	float adjustedLocalY = localY * scale;
+	float adjustedLocalX = localX * SWFscaleY;
+	float adjustedLocalY = localY * SWFscaleY;
 
-	d3dMatrix->TransX = (_this->TransX * scale) + xOffsetTwips;
-	d3dMatrix->TransY = (_this->TransY * scale);
+	d3dMatrix->TransX = (_this->TransX * SWFscaleY) + xOffsetTwips;
+	d3dMatrix->TransY = (_this->TransY * SWFscaleY);
 	
-	float screenX = d3dMatrix->TransX + (localX * scale);
+	float screenX = d3dMatrix->TransX + (localX * SWFscaleY);
 	float uiLeft = xOffsetTwips;
-	float uiRight = xOffsetTwips + (640.0f * PIXELS_TO_TWIPS * scale);
+	float uiRight = xOffsetTwips + (640.0f * PIXELS_TO_TWIPS * SWFscaleY);
 
 	d3dMatrix->ScaleX = _this->ScaleX;
 	d3dMatrix->ScaleY = _this->ScaleY;
@@ -470,6 +511,39 @@ void __fastcall SwfMatrixConstruct(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatri
 	stackMatrix.W = 1.0f;
 
 	matrixMultiply(&stackMatrix, adjustedLocalX, adjustedLocalY, layerZ);
+	unknownfunc(d3dMatrix, d3dMatrix, &stackMatrix);
+}
+void __fastcall SwfMatrixConstruct_Centered(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatrix, float localX, float localY, float layerZ)
+{
+	using matrixMultiplyFunc = void(__stdcall*)(D3D_MATRIX*, float, float, float);
+	matrixMultiplyFunc matrixMultiply = (matrixMultiplyFunc)0x00556B74;
+	using unknownFunc = void(__stdcall*)(D3D_MATRIX*, D3D_MATRIX*, D3D_MATRIX*);
+	unknownFunc unknownfunc = (unknownFunc)0x0055623E;
+
+	memset(d3dMatrix, 0, sizeof(D3D_MATRIX));
+	D3D_MATRIX stackMatrix = { 0 };
+
+	float xOffsetTwips = (((float)resW - (640.0f * SWFscaleY)) / 2.0f) / UIscaleY;
+	
+	stackMatrix.W = 1.0;
+	stackMatrix.ScaleZ = 1.0;
+	stackMatrix.ScaleY = 1.0;
+	stackMatrix.ScaleX = 1.0;
+
+	d3dMatrix->W = 1.0;
+	d3dMatrix->ScaleZ = 1.0;
+	d3dMatrix->ScaleY = 1.0;
+	d3dMatrix->ScaleX = 1.0;
+
+	d3dMatrix->ScaleX = _this->ScaleX;
+	d3dMatrix->SkewY = _this->SkewY;
+	d3dMatrix->SkewX = _this->SkewX;
+	d3dMatrix->ScaleY = _this->ScaleY;
+
+	d3dMatrix->TransX = _this->TransX + xOffsetTwips;
+	d3dMatrix->TransY = _this->TransY;
+
+	matrixMultiply(&stackMatrix, localX, localY, layerZ);
 	unknownfunc(d3dMatrix, d3dMatrix, &stackMatrix);
 }
 void __fastcall SwfDrawPrimitive(void* _this, void* edx, LPDIRECT3DDEVICE8 pDevice, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount)
@@ -491,6 +565,74 @@ void __fastcall SwfDrawPrimitive(void* _this, void* edx, LPDIRECT3DDEVICE8 pDevi
 	if (viewportModified)
 		pDevice->SetViewport(&originalViewport);
 }
+void __fastcall SwfDrawPrimitive_Stretch(void* _this, void* edx, LPDIRECT3DDEVICE8 pDevice, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount)
+{
+	if (PrimitiveCount == 0)
+	{
+		SwfDrawPrimitive(_this, edx, pDevice, PrimitiveType, StartVertex, PrimitiveCount);
+		return;
+	}
+	LPDIRECT3DVERTEXBUFFER8 pStreamData = nullptr;
+	UINT stride = 0;
+	float offsetX = ((float)resW - (640.0f * SWFscaleY)) / 2.0f;
+
+	if (SUCCEEDED(pDevice->GetStreamSource(0, &pStreamData, &stride)))
+	{
+		if (stride == sizeof(TransformedVertex) && pStreamData != nullptr)
+		{
+			BYTE* pVertices = nullptr;
+			if (SUCCEEDED(pStreamData->Lock(0, 0, &pVertices, D3DLOCK_NOOVERWRITE)))
+			{
+				UINT vertexCount = PrimitiveCount * 3; // Assuming triangles; adjust based on PrimitiveType
+				if (PrimitiveType == D3DPT_TRIANGLESTRIP || PrimitiveType == D3DPT_TRIANGLEFAN)
+					vertexCount = PrimitiveCount + 2;
+				
+				TransformedVertex* vertices = (TransformedVertex*)pVertices;
+				for (UINT i = StartVertex; i < (StartVertex + vertexCount); ++i)
+				{
+					vertices[i].x = (vertices[i].x * SWFscaleX) + offsetX;
+					vertices[i].y *= SWFscaleY;
+				}
+				pStreamData->Unlock();
+			}
+		}
+		pStreamData->Release();
+	}
+
+	SwfDrawPrimitive(_this, edx, pDevice, PrimitiveType, StartVertex, PrimitiveCount);
+}
+void __fastcall SwfDrawPrimitive_Stretch_Second(void* _this, void* edx, LPDIRECT3DDEVICE8 pDevice, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount)
+{
+	// 1. Calculate our scaling and offset values
+	float scale = (float)resH / 480.0f;
+	float scaledWidth = 640.0f * scale;
+	float offsetX = ((float)resW - scaledWidth) / 2.0f;
+
+	// 2. Create a transformation matrix that will process on the GPU hardware
+	D3DMATRIX scaleMatrix = {
+		scale,   0.0f,    0.0f, 0.0f,
+		0.0f,    scale,   0.0f, 0.0f,
+		0.0f,    0.0f,    1.0f, 0.0f,
+		offsetX, 0.0f,    0.0f, 1.0f  // Translation happens here
+	};
+
+	// 3. Tell D3D to apply this matrix to the vertices automatically
+	// For XYZRHW vertices, we apply this to the World matrix or Texture matrix 
+	// depending on how the game engine driver processes them.
+	pDevice->SetTransform(D3DTS_WORLD, &scaleMatrix);
+
+	// 4. Draw instantly (GPU handles the math, CPU does zero work)
+	pDevice->DrawPrimitive(PrimitiveType, StartVertex, PrimitiveCount);
+
+	// 5. Restore the Identity matrix so the rest of the game doesn't get distorted
+	D3DMATRIX identityMatrix = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+	pDevice->SetTransform(D3DTS_WORLD, &identityMatrix);
+}
 void __fastcall SwfGetMouseState(void* _this, void* edx, int* pOutX, int* pOutY, int* pOutClickState)
 {
 	using GetMouseStateFunc = void(__fastcall*)(void*, void*, int*, int*, int*);
@@ -504,6 +646,52 @@ void __fastcall SwfGetMouseState(void* _this, void* edx, int* pOutX, int* pOutY,
 		*pOutX = (int)(shiftedX / SWFscale);
 		*pOutY = (int)((float)(*pOutY) / SWFscale);
 	}
+}
+unsigned int __fastcall ButtonInteract(void* _this, void* edx, int MouseX, int MouseY, int Width, int Height)
+{
+	int relativeMouseX;
+	int relativeMouseY;
+
+	if (Width == -1)
+		Width = *(int*)(*(int*)(*(int*)((int)_this + 0x200C) + 100) + 0x08);
+	if (Height == -1)
+		Height = *(int*)(*(int*)(*(int*)((int)_this + 0x200C) + 100) + 0x0C);
+
+	relativeMouseX = MouseX - *(short*)_this;
+	relativeMouseY = MouseY - *(short*)((int)_this + 2);
+
+	if ((((-1 < relativeMouseX) && (relativeMouseX < Width)) && (-1 < relativeMouseY)) && (relativeMouseY < Height))
+	{
+		return (unsigned int)((*(byte*)((int)_this + (relativeMouseX >> 3) + 4 + ((Width + 7) >> 3) * relativeMouseY) & (byte)(1 << ((byte)relativeMouseX & 7))) != 0);
+	}
+	return (unsigned int)_this & 0xFFFFFF00;
+}
+unsigned int __fastcall ButtonInteract43(void* _this, void* edx, int MouseX, int MouseY, int Width, int Height)
+{
+	int relativeMouseX;
+	int relativeMouseY;
+
+	if (Width == -1)
+		Width = *(int*)(*(int*)(*(int*)((int)_this + 0x200C) + 100) + 0x08);
+	if (Height == -1)
+		Height = *(int*)(*(int*)(*(int*)((int)_this + 0x200C) + 100) + 0x0C);
+
+	float scaleX = (float)virtualResW / 640.0f;
+	float scaleY = (float)resH / 480.0f;
+	int scaledWidth = (int)(Width * scaleX);
+	int scaledHeight = (int)(Height * scaleY);
+
+	relativeMouseX = MouseX - *(short*)_this;
+	relativeMouseY = MouseY - *(short*)((int)_this + 2);
+
+	if ((((-1 < relativeMouseX) && (relativeMouseX < scaledWidth)) && (-1 < relativeMouseY)) && (relativeMouseY < scaledHeight))
+	{
+		int unscaledRelativeX = (int)(relativeMouseX / scaleX);
+		int unscaledRelativeY = (int)(relativeMouseY / scaleY);
+
+		return (unsigned int)((*(byte*)((int)_this + (unscaledRelativeX >> 3) + 4 + ((Width + 7) >> 3) * unscaledRelativeY) & (byte)(1 << ((byte)unscaledRelativeX & 7))) != 0);
+	}
+	return (unsigned int)_this & 0xFFFFFF00;
 }
 void adjustfloats(float* x, float* y)
 {
@@ -543,6 +731,23 @@ void adjustints(int* x, int* y)
 {
 	if (x)
 		*x = (int)(((float)*x / 640.0f) * (float)resW);
+	if (y)
+		*y = (int)(((float)*y / 480.0f) * (float)resH);
+}
+void adjustints43(int* x, int* y)
+{
+	if (x)
+		*x = (int)(((float)*x / 640.0f) * ((float)resH * SCREEN_RATIO_4_3));
+	if (y)
+		*y = (int)(((float)*y / 480.0f) * (float)resH);
+}
+void adjustints43Center(int* x, int* y)
+{
+	if (x)
+	{
+		*x = (int)(((float)*x / 640.0f) * ((float)resH * SCREEN_RATIO_4_3));
+		*x += (resW - virtualResW) / 2;
+	}
 	if (y)
 		*y = (int)(((float)*y / 480.0f) * (float)resH);
 }

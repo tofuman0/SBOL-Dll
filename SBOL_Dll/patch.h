@@ -61,4 +61,8 @@ void __stdcall HandleMessages(LPMSG lpMsg);
 constexpr void* HandleMessageHook_Ptr = (void*)(&HandleMessages);
 BOOL __stdcall TextOutAHook(HDC hdc, int x, int y, LPCSTR lpString, int c);
 constexpr void* TextOutAHook_Ptr = (void*)(&TextOutAHook);
+HRGN __stdcall CreateRectRgnHook(int x1, int y1, int x2, int y2);
+constexpr void* CreateRectRgnHook_Ptr = (void*)(&CreateRectRgnHook);
+BOOL __stdcall PtInRegionHook(HRGN hrgn, int x, int y);
+constexpr void* PtInRegionHook_Ptr = (void*)(&PtInRegionHook);
 #endif

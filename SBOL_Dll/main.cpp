@@ -16,6 +16,8 @@ char logItBuf[0x400];
 int resW = 640;
 int virtualResW = 640;
 int resH = 480;
+float SWFscaleX = (float)virtualResW / 640.0f;
+float SWFscaleY = (float)resH / 480.0f;
 float SWFscale = (float)resH / 480.0f;
 float drawDistanceMultiplier = 1.0f;
 int fullScreen = 0;
