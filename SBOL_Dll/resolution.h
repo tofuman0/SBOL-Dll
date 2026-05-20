@@ -193,6 +193,7 @@ ADJUSTFLOATS adjustFloatAddr[]{
 	{ nullptr, nullptr, nullptr },
 	{ &adjustfloatsNBR, (float*)0x005F36F8, (float*)0x005F36F4 }, // Tacho needle
 	{ &adjustfloatsN, (float*)0x005F36F0, (float*)0x005F36EC }, // Tacho needle pivot point
+	//{ &adjustfloatsN, (float*)0x004D68FF, (float*)0x004D690F }, // Car arrow on navimap pivot point - Not needed if viewport is being resized.
 	{ adjustfloats43, (float*)0x005EEB2C, nullptr }, // Handle offsets related
 	{ adjustfloats43, (float*)0x005EEB30, nullptr }, // Handle offsets related
 	{ adjustfloats43, (float*)0x005EEB34, nullptr }, // Handle offsets related
@@ -220,6 +221,7 @@ ADJUSTINTS adjustIntAddr[]{
 	//{ &adjustintsN, (int*)0x00600900, (int*)0x00600904 }, // Tache needle size
 	{ &adjustints43, (int*)0x004E185B, (int*)0x004E1862 }, // Mirror size
 	{ &adjustints43Center, (int*)0x004E184D, (int*)0x004E1854 }, // Mirror position
+	//{ &adjustbytesN, (int*)0x004D6A1D, (int*)0x004D6A20 }, // Car arrow offset (they are bytes). Not needed if viewport is being resized
 };
 
 /*
@@ -288,12 +290,12 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElementObject, (int*)0x004DE839 },
 	//{ createUIElementObject, (int*)0x004DE8C1 },
 	//{ createUIElementObject, (int*)0x004DE90E },
-	//{ createUIElementObject, (int*)0x004FBB54 }, // Textbox input
+	{ createUIElementObject_AutoScale_43, (int*)0x004FBB54 }, // Addressbook textbox input
 	//{ createUIElementObject, (int*)0x004FBB92 },
 	//{ createUIElementObject, (int*)0x004FD1F4 },
 	//{ createUIElementObject, (int*)0x004FD33F },
 	{ createUIElementObject_43, (int*)0x004FD9EE }, // Chat log text
-	//{ createUIElementObject, (int*)0x004FDA26 },
+	//{ createUIElementObject, (int*)0x004FDA26 }, // Addressbook text box
 
 	// Create UI
 	{ createUIElement, nullptr },
@@ -468,18 +470,18 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElement, (int*)0x0048BEF8 }, // ???
 	//{ createUIElement, (int*)0x0048BF9E }, // ???
 	//{ createUIElement, (int*)0x0048C090 }, // ???
-	//{ createUIElement, (int*)0x0048C98C }, // ???
-	//{ createUIElement, (int*)0x0048C9F7 }, // ???
-	//{ createUIElement, (int*)0x0048CF3F }, // ???
-	//{ createUIElement, (int*)0x0048D1A4 }, // ???
-	//{ createUIElement, (int*)0x0048D2B9 }, // ???
-	//{ createUIElement, (int*)0x0048D696 }, // ???
-	//{ createUIElement, (int*)0x0048D9AF }, // ???
-	//{ createUIElement, (int*)0x0048DAEA }, // ???
-	//{ createUIElement, (int*)0x0048DBB5 }, // ???
+	{ createUIElement_43, (int*)0x0048C98C }, // Battle win/lose texture
+	{ createUIElement_43, (int*)0x0048C9F7 }, // Battle win/lose texture
+	{ createUIElement_43, (int*)0x0048CF3F }, // Battle Result Value Labels
+	{ createUIElement_43, (int*)0x0048D1A4 }, // Battle Result Value Labels
+	{ createUIElement_43, (int*)0x0048D2B9 }, // Battle Result Value Labels	
+	{ createUIElement_43, (int*)0x0048D696 }, // Battle Exp Percent Bar
+	{ createUIElement_43, (int*)0x0048D9AF }, // Battle Something probably so will leave it enabled
+	{ createUIElement_43, (int*)0x0048DAEA }, // Battle Something probably so will leave it enabled
+	{ createUIElement_43, (int*)0x0048DBB5 }, // Battle Something probably so will leave it enabled
 	{ createUIElement_43, (int*)0x0048DEF3 }, // Itembox when in shop
 	{ createUIElement_43, (int*)0x0048DF7E }, // Itembox when in shop
-	//{ createUIElement, (int*)0x0048E31E }, // ???
+	{ createUIElement_43, (int*)0x0048E31E }, // Battle Result Dialog 
 	//{ createUIElement, (int*)0x004972B1 }, // ???
 	//{ createUIElement, (int*)0x004984C1 }, // ???
 	//{ createUIElement, (int*)0x0049932E }, // ???
@@ -581,7 +583,7 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElement_43, (int*)0x004BC6D7 }, // Enter garage CANCEL button
 	//{ createUIElement, (int*)0x004BD197 }, // ???
 	//{ createUIElement, (int*)0x004BD39B }, // ???
-	//{ createUIElement, (int*)0x004BF8D3 }, // ???
+	{ createUIElement_43, (int*)0x004BF8D3 }, // Warning screen
 	{ createUIElement_43, (int*)0x004C1F3B }, // Mirror frame top
 	{ createUIElement_43, (int*)0x004C1F5C }, // Mirror frame bottom
 	{ createUIElement_43, (int*)0x004C1F7D }, // Mirror frame left
@@ -627,16 +629,16 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElement_AutoScale_43, (int*)0x004C419D }, // Handle box related
 	{ createUIElement_AutoScale_43, (int*)0x004C4200 }, // Handle box related
 	{ createUIElement_AutoScale_43, (int*)0x004C4263 }, // Handle box related
-	//{ createUIElement, (int*)0x004D2D1A }, // ???
-	//{ createUIElement, (int*)0x004D59A7 }, // ???
-	//{ createUIElement, (int*)0x004D59E8 }, // ???
-	//{ createUIElement_Scale, (int*)0x004D5A11 }, // car arrows on navimap (rival and player)
-	//{ createUIElement, (int*)0x004D5AF2 }, // ???
-	//{ createUIElement, (int*)0x004D5B3B }, // ???
-	//{ createUIElement, (int*)0x004D5B7B }, // ???
+	//{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D2D1A }, // ???
+	//{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D59A7 }, // ???
+	//{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D59E8 }, // ???
+	//{ createUIElement_Scale, (int*)0x004D5A11 }, // car arrows on navimap (rival and player) - Position is centered in navimap so no point trying to move it. Not needed if resizing viewport.
+	//{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D5AF2 }, // ???
+	//{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D5B3B }, // ???
+	//{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D5B7B }, // ???
 	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D5BAC }, // "NORMAL MAP" above navi box
 	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D5BFB }, // "WIDE MAP" above navi box
-	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D5C4A }, // navi box
+	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004D5C4A }, // navimap box
 	//{ createUIElement, (int*)0x004D5E9B }, // ???
 	//{ createUIElement_Scale, (int*)0x004D8842 }, // Naimap road
 	//{ createUIElement, (int*)0x004D8DCF }, // ???
@@ -670,25 +672,26 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElement_43, (int*)0x004DD5AA }, // Course information diloag related
 	{ createUIElement_43, (int*)0x004DD61E }, // Course information diloag related
 	//{ createUIElement, (int*)0x004DDF41 }, // ???
-	//{ createUIElement, (int*)0x004DE45C }, // ???
-	//{ createUIElement, (int*)0x004DE4A2 }, // ???
-	//{ createUIElement, (int*)0x004DE4EE }, // ???
-	//{ createUIElement, (int*)0x004DE5C6 }, // ???
-	//{ createUIElement, (int*)0x004DE68F }, // ???
-	//{ createUIElement, (int*)0x004DE6EC }, // ???
-	//{ createUIElement, (int*)0x004DF110 }, // ???
-	//{ createUIElement, (int*)0x004DF15D }, // ???
-	//{ createUIElement, (int*)0x004DF2EE }, // ???
-	//{ createUIElement, (int*)0x004DF3B9 }, // ???
-	//{ createUIElement, (int*)0x004DF41C }, // ???
-	//{ createUIElement, (int*)0x004DF74E }, // ???
-	//{ createUIElement, (int*)0x004DF94B }, // ???
+	{ createUIElement_43, (int*)0x004DE45C }, // Battle related
+	{ createUIElement_43, (int*)0x004DE4A2 }, // Battle related
+	{ createUIElement_43, (int*)0x004DE4EE }, // Battle related
+	{ createUIElement_43, (int*)0x004DE5C6 }, // Battle related
+	{ createUIElement_43, (int*)0x004DE68F }, // Battle related
+	{ createUIElement_43, (int*)0x004DE6EC }, // Battle related
+	{ createUIElement_43, (int*)0x004DF110 }, // Battle related
+	{ createUIElement_43, (int*)0x004DF15D }, // Battle related
+	{ createUIElement_43, (int*)0x004DF2EE }, // Battle related
+	{ createUIElement_43, (int*)0x004DF3B9 }, // Battle related
+	{ createUIElement_43, (int*)0x004DF41C }, // Battle related
+	{ createUIElement_43, (int*)0x004DF74E }, // Battle related
+	{ createUIElement_43, (int*)0x004DF94B }, // Battle cancel
 	//{ createUIElement, (int*)0x004E075B }, // ???
-	//{ createUIElement, (int*)0x004E07A2 }, // ???
+	//{ createUIElement_Scale, (int*)0x004E07A2 }, // Car arrows on navimap - Not needed when viewport is resized
+	//{ createUIElement_Scale, (int*)0x004E07A2 }, // Car arrows on navimap - Not needed when viewport is resized
 	//{ createUIElement, (int*)0x004E0883 }, // ??? 
 	//{ createUIElement, (int*)0x004E08CC }, // ???
 	//{ createUIElement, (int*)0x004E090C }, // ???
-	//{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F4A27 }, // Addressbook and bottom right buttons scale - Handled by interactionUIElements
+	//{ createUIElement_Scale_Reposition_TopLeft, (int*)0x004F4A27 }, // Addressbook and bottom right buttons scale - Handled by interactionUIElement
 	{ createUIElement_43, (int*)0x004F501E }, // Chatbox back right side
 	{ createUIElement_43, (int*)0x004F504A }, // Chatbox back left side
 	{ createUIElement_43, (int*)0x004F6C8A }, // Chatbox backing
@@ -704,7 +707,7 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElement, (int*)0x004F8828 }, // ???
 	//{ createUIElement, (int*)0x004F8840 }, // ???
 	{ createUIElement_43, (int*)0x004F8AD9 }, // Chat window label when chat hidden
-	{ createUIElement_43, (int*)0x004F8B08 }, // Addressbook input textbox
+	{ createUIElement_43, (int*)0x004F8B08 }, // Addressbook input textbox back
 	{ createUIElement_43, (int*)0x004FB0D2 }, // In Create UI String
 	{ createUIElement_43, (int*)0x004FB10C }, // In Create UI String
 	{ createUIElement_43, (int*)0x004FB1D3 }, // In Create UI String
@@ -727,46 +730,46 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElement_43, (int*)0x004FCE24 }, // ???
 	//{ createUIElement_43, (int*)0x004FCE3D }, // ???
 	//{ createUIElement, (int*)0x004FD7CB }, // createUIElementObject (Textboxes affected)
-	//{ createUIElement, (int*)0x004FD951 }, // ???
-	//{ createUIElement, (int*)0x004FD9BA }, // ???
-	//{ createUIElement, (int*)0x004FDAE5 }, // ???
+	//{ createUIElement_AutoScale_43, (int*)0x004FD951 }, // ???
+	{ createUIElement_AutoScale_43, (int*)0x004FD9BA }, // Addressbook selection
+	{ createUIElement_AutoScale_43, (int*)0x004FDAE5 }, // In setUIElement - Needed for addressbook add textbox flashing backing.
 	
 	// Position UI
 	{ nullptr, nullptr },
-	//{ positionUIElement_Reposition, (int*)0x004546FA }, // ???
-	//{ positionUIElement_Reposition, (int*)0x0045F547 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x0045F6C8 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004755E6 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004756CF }, // ???
-	//{ positionUIElement_Reposition, (int*)0x0047575B }, // ???
-	//{ positionUIElement_Reposition, (int*)0x00475835 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x00492EE9 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004A93FF }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004A9B9F }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F4A59 }, // All chat area buttons Handled by MoveUIElement
-	//{ positionUIElement_Reposition, (int*)0x004F81DD }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F81F0 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F8240 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F8256 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F828D }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F82A3 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F893D }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F8950 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F89A5 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F89BB }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F89FA }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F8A10 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F8A47 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F8A5D }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F8A94 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004F8AAA }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004FC914 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004FC92B }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004FCB80 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004FCB93 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004FCC21 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004FCC30 }, // ???
-	//{ positionUIElement_Reposition, (int*)0x004FDB06 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004546FA }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x0045F547 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x0045F6C8 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004755E6 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004756CF }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x0047575B }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x00475835 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x00492EE9 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004A93FF }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004A9B9F }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F4A59 }, // All chat area buttons Handled by MoveUIElement
+	//{ positionUIElement_Reposition_43, (int*)0x004F81DD }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F81F0 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F8240 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F8256 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F828D }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F82A3 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F893D }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F8950 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F89A5 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F89BB }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F89FA }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F8A10 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F8A47 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F8A5D }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F8A94 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004F8AAA }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004FC914 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004FC92B }, // ???
+	{ positionUIElement_Reposition_43, (int*)0x004FCB80 }, // Chat addressbook scrollbar
+	{ positionUIElement_Reposition_43, (int*)0x004FCB93 }, // Chat addressbook scrollbar
+	//{ positionUIElement_Reposition_43, (int*)0x004FCC21 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004FCC30 }, // ???
+	//{ positionUIElement_Reposition_43, (int*)0x004FDB06 }, // In setUIElement
 	
 	// Interaction UI
 	{ nullptr, nullptr },
@@ -775,7 +778,7 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ interactionUIElement_43, (int*)0x004FC99E }, // Srollbar down buttons
 	{ interactionUIElement_43, (int*)0x004FC87A }, // Scrollbar up buttons
 	{ interactionUIElement_43, (int*)0x004F87FC }, // Chatbox minimize button
-	{ interactionUIElement_43, (int*)0x004F8733 }, // ???
+	{ interactionUIElement_43, (int*)0x004F8733 }, // Chatbox maximize button
 	{ interactionUIElement_43, (int*)0x004F8640 }, // Chat type buttons
 	{ interactionUIElement_43, (int*)0x004F8056 }, // ???
 	{ interactionUIElement_Scale_Reposition_BottomRight, (int*)0x004DBD00 }, // Buttom right buttons
@@ -791,8 +794,12 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ moveUIElement_43, (int*)0x004F8A31 }, // Chat
 	{ moveUIElement_43, (int*)0x004F8A7E }, // Chat
 	{ moveUIElement_43, (int*)0x004FC8ED }, // Chat
-	{ moveUIElement_43, (int*)0x004FCB59 }, // Chat
-	{ moveUIElement_43, (int*)0x004FCC06 }, // Chat
+	{ moveUIElement_43, (int*)0x004FCB59 }, // Chat addressbook scrollbar button up
+	{ moveUIElement_43, (int*)0x004FCC06 }, // Chat addressbook scrollbar button down
+
+	// Position UI
+	//{ positionInteractionUI, (int*)0x004F4A3F }, // Move UI
+	{ positionInteractionUI, (int*)0x004FD9E5 }, // Chat history
 
 	// Place UI
 	//{ placeUIElement, (int*)0x00416DD6 }, // Car shadows in garage
@@ -808,7 +815,7 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createTextbox, (int*)0x0047A7CE }, // ???
 	{ createTextbox_43, (int*)0x004F4FC4 }, // Chatbox
 	{ createTextbox_43, (int*)0x004F52AE }, // Chatbox after chat
-	{ createTextbox_43, (int*)0x004F9561 }, // Addressbook add
+	//{ createTextbox_43, (int*)0x004F9561 }, // Addressbook add
 	
 	// Textbox carat
 	{ nullptr, nullptr },
@@ -821,8 +828,14 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	
 	// Addressbook
 	{ nullptr, nullptr },
-	{ addressbookTextbox, (int*)0x004F6C31 },
-	{ addressbookTextbox, (int*)0x004F94BE },
+	{ addressbookArea, (int*)0x004F6C31 },
+	{ addressbookArea, (int*)0x004F94BE },
+	{ addAddressbookEntry, (int*)0x004FCC53 },
+	//{ addAddressbookEntry, (int*)0xFF4FCC81 },
+	{ addAddressbookEntry, (int*)0x004FCCB0 },
+	{ addAddressbookEntry, (int*)0x004FCCD4 },
+	{ addAddressbookEntry, (int*)0x004FCD13 },
+	{ addAddressbookEntry, (int*)0x004FCD33 },
 	
 	// SWF
 	{ nullptr, nullptr },
@@ -838,7 +851,23 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ ButtonInteract43, (int*)0x0049361B },
 	{ ButtonInteract43, (int*)0x00493b5B },
 	{ ButtonInteract43, (int*)0x004940BC },
-	{ ButtonInteract43, (int*)0x00494189 },	
+	{ ButtonInteract43, (int*)0x00494189 },
+	{ gameCreateRectRgn, (int*)0x004FB302 },
+	//{ setRect1, (int*)0x004FDf2E },
+	//{ setRect1, (int*)0x004FDf45 },		
+	//{ setRect2, (int*)0x0051DA8C },
+	//{ setRect2, (int*)0x0051DAC2 },
+
+	// Direct X
+	//{ SetViewport, (int*)0x004A625B }, // ???
+	//{ SetViewport, (int*)0x004A68EA }, // Window
+	{ SetViewport_Scale_Reposition_BottomLeft, (int*)0x004D8501 }, // Navimap
+	//{ SetViewport, (int*)0x004D8E6D }, // Window
+	//{ SetViewport, (int*)0x004E0DB8 }, // ???
+	//{ SetViewport, (int*)0x004E1C08 }, // ???
+	//{ SetViewport, (int*)0x004E1E15 }, // ???
+	//{ SetViewport, (int*)0x004E920F }, // ???
+	//{ SetViewport, (int*)0x004E937A }, // ???
 };
 int* repositionAddr[]{
 	// Check - Not text box

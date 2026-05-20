@@ -11,10 +11,6 @@
 #include "globals.h"
 #include "structures.h"
 
-#ifndef D3DRS_SCISSORTESTENABLE
-#define D3DRS_SCISSORTESTENABLE (D3DRENDERSTATETYPE)174
-#endif
-
 extern LPDIRECT3DDEVICE8 dx;
 
 enum functionType {
@@ -67,6 +63,7 @@ void __fastcall createUIElement_AutoScale_TeamName(void* _this, void* edx, float
 void __fastcall createUIElement_Scale(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8);
 void __fastcall positionUIElement(void* _this, void* edx, float posx, float posy, int type);
 void __fastcall positionUIElement_Reposition(void* _this, void* edx, float posx, float posy, int type);
+void __fastcall positionUIElement_Reposition_43(void* _this, void* edx, float posx, float posy, int type);
 void __fastcall interactionUIElement(void* _this, void* edx, int posx, int posy, int width, int height);
 void __fastcall interactionUIElement_43(void* _this, void* edx, int posx, int posy, int width, int height);
 void __fastcall interactionUIElement_Scale(void* _this, void* edx, int posx, int posy, int width, int height);
@@ -76,8 +73,11 @@ void __fastcall interactionUIElement_Scale_Reposition_BottomRight(void* _this, v
 void __fastcall moveUIElement(void* _this, void* edx, int posx, int posy);
 void __fastcall moveUIElement_43(void* _this, void* edx, int posx, int posy);
 void __fastcall moveUIElement_Position(void* _this, void* edx, int posx, int posy);
+void __fastcall positionInteractionUI(void* _this, void* edx, int posx, int posy);
 void __fastcall placeUIElement(void* _this, void* edx, char* uiElementLabel, float width, float height, int param_4);
 void __fastcall uiInteractBoundary(void* _this, void* edx, int posx, int posy, int width, int height);
+void __fastcall uiSetInteractArea(void* _this, void* edx, int posx, int posy, int width, int height);
+void __fastcall uiSetInteractArea_43(void* _this, void* edx, int posx, int posy, int width, int height);
 void __fastcall createTextbox(void* _this, void* edx, float posx, float posy);
 void __fastcall createTextbox_43(void* _this, void* edx, float posx, float posy);
 void __fastcall createTextbox_Scale_Reposition_TopLeft(void* _this, void* edx, float posx, float posy);
@@ -105,7 +105,14 @@ void adjustints43(int* x, int* y);
 void adjustints43Center(int* x, int* y);
 void adjustintsN(int* x, int* y);
 void adjustintsNTC(int* x, int* y);
-void __fastcall addressbookTextbox(void* _this, void* edx, int posx, int posy);
+void adjustbytesN(int* x, int* y);
+void __fastcall addressbookArea(void* _this, void* edx, int posx, int posy);
+void __fastcall addAddressbookEntry(void* object, void* edx);
+void __cdecl SetViewport(D3DVIEWPORT8* pViewport);
+void __cdecl SetViewport_Scale_Reposition_BottomLeft(D3DVIEWPORT8* pViewport);
+void __fastcall gameCreateRectRgn(void* _this, void* edx, int posx, int posy, int width, int height);
+void __fastcall setRect1(void* _this, void* edx, int param_1, int param_2, int param_3);
+void __fastcall setRect2(void* _this, void* edx, int param_1, int param_2, int param_3);
 void positionUIElement2();
 void positionUIElement3();
 void adjustUI();
@@ -130,9 +137,6 @@ void adjustInts(int* x, int* y);
 void adjustXAxisValue(int* x);
 void insertFunction(int addrPtr, void* function, int nopCount, functionType ft);
 void setFunction(int addrPtr, void* function);
-//void Log(char type, char* in);
-//int debugLog(char *buffer, size_t count, const char *format, va_list argptr);
-//int debugIt(const char *format, ...);
 int notFullScreenMode();
 int skipBootWarning();
 void setTexturePositions();

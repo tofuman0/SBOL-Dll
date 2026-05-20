@@ -63,7 +63,7 @@ void __fastcall createUIElementObject_43(void* _this, void* edx, int posx, int p
 	posx = (int)(((float)posx / 640.0f) * (float)virtualResW);
 	posy = (int)(((float)posy / 480.0f) * (float)resH);
 
-	posx += (int)((resW / 2.0f) - ((float)virtualResW / 2.0f));
+	posx += (int)((resW - virtualResW) / 2);
 
 	*(int*)((int)_this + 0x6C) = posx;
 	*(int*)((int)_this + 0x70) = posy;
@@ -175,7 +175,7 @@ void __fastcall createUIElement_43(void* _this, void* edx, float posx, float pos
 	width = (width / 640.0f) * (float)virtualResW;
 	height = (height / 480.0f) * (float)resH;
 	
-	posx += (resW / 2.0f) - ((float)virtualResW / 2.0f);
+	posx += (float)((resW - virtualResW) / 2);
 
 	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
 }
@@ -262,6 +262,13 @@ void __fastcall positionUIElement_Reposition(void* _this, void* edx, float posx,
 	posy = posy * UIscale; 
 	positionUIElementOrig(_this, edx, posx, posy, type);
 }
+void __fastcall positionUIElement_Reposition_43(void* _this, void* edx, float posx, float posy, int type)
+{
+	posx = ((float)posx / 640.0f) * (float)virtualResW;
+	posy = ((float)posy / 480.0f) * (float)resH;
+	posx += ((float)resW - (float)virtualResW) / 2.0f;
+	positionUIElementOrig(_this, edx, posx, posy, type);
+}
 void __fastcall interactionUIElement(void* _this, void* edx, int posx, int posy, int width, int height)
 {
 	posx = (int)(((float)posx / 640.0f) * (float)resW);
@@ -279,7 +286,7 @@ void __fastcall interactionUIElement_43(void* _this, void* edx, int posx, int po
 	width = (int)(((float)width / 640.0f) * (float)virtualResW);
 	height = (int)(((float)height / 480.0f) * (float)resH);
 
-	posx += (int)(((float)resW / 2.0f) - ((float)virtualResW / 2.0f));
+	posx += (int)(((float)resW - (float)virtualResW) / 2.0f);
 
 	uiInteractBoundary(_this, edx, posx, posy, width, height);
 	createUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
@@ -339,7 +346,7 @@ void __fastcall moveUIElement_43(void* _this, void* edx, int posx, int posy)
 	posx = (int)(((float)posx / 640.0f) * (float)virtualResW);
 	posy = (int)(((float)posy / 480.0f) * (float)resH);
 
-	posx += (int)(((float)resW / 2.0f) - ((float)virtualResW / 2.0f));
+	posx += (int)(((float)resW - (float)virtualResW) / 2.0f);
 
 	positionInteractionUIOrig(_this, edx, posx, posy);
 	positionUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, 1);
@@ -351,6 +358,13 @@ void __fastcall moveUIElement_Position(void* _this, void* edx, int posx, int pos
 
 	positionInteractionUIOrig(_this, edx, posx, posy);
 	positionUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, 1);
+}
+void __fastcall positionInteractionUI(void* _this, void* edx, int posx, int posy)
+{
+	int oldX = *(int*)((int)_this + 0x10);
+	int oldY = *(int*)((int)_this + 0x14);
+	adjustints43Center(&posx, &posy);
+	positionInteractionUIOrig(_this, edx, posx, posy);
 }
 void __fastcall placeUIElement(void* _this, void* edx, char* uiElementLabel, float width, float height, int param_4)
 {
@@ -365,10 +379,10 @@ void __fastcall placeUIElement(void* _this, void* edx, char* uiElementLabel, flo
 void __fastcall uiInteractBoundary(void* _this, void* edx, int posx, int posy, int width, int height)
 {
 	HRGN hrgn;
-	*(int*)((int)_this + 0x1c) = height;
-	*(int*)((int)_this + 0x18) = width;
 	*(int*)((int)_this + 0x10) = posx;
 	*(int*)((int)_this + 0x14) = posy;
+	*(int*)((int)_this + 0x18) = width;
+	*(int*)((int)_this + 0x1c) = height;
 	hrgn = CreateRectRgn(posx, posy, width + posx, height + posy);
 	if (*(HGDIOBJ*)((int)_this + 4) != NULL) {
 		DeleteObject(*(HGDIOBJ*)((int)_this + 4));
@@ -376,6 +390,35 @@ void __fastcall uiInteractBoundary(void* _this, void* edx, int posx, int posy, i
 	}
 	else
 		*(HRGN*)((int)_this + 4) = hrgn;
+}
+void __fastcall uiSetInteractArea(void* _this, void* edx, int posx, int posy, int width, int height)
+{
+	using setUIElementFunc = void(__fastcall*)(void*);
+	setUIElementFunc setUIElement = (setUIElementFunc)0x004FDAA0;
+
+	int calculatedWidth = *(int*)((int)_this + 0x38);
+	int calculatedHeight = *(int*)((int)_this + 0x3C);
+
+	uiInteractBoundary((void*)((int)_this + 0xD8), edx, posx, posy, calculatedWidth, calculatedWidth);
+	createUIElementObjectOrig(_this, edx, posx, posy);
+	setUIElement(_this);
+	return;
+}
+void __fastcall uiSetInteractArea_43(void* _this, void* edx, int posx, int posy, int width, int height)
+{
+	using setUIElementFunc = void(__fastcall*)(void*);
+	setUIElementFunc setUIElement = (setUIElementFunc)0x004FDAA0;
+
+	auto scaleValueX = [](int a) { return ((int)(((float)a / 640.0f) * ((float)resH * SCREEN_RATIO_4_3))) + ((resW - virtualResW) / 2); };
+	auto scaleValueY = [](int a) { return (int)(((float)a / 480.0f) * (float)resH);	};
+
+	int calculatedWidth = scaleValueX(*(int*)((int)_this + 0x38));
+	int calculatedHeight = scaleValueY(*(int*)((int)_this + 0x3C));
+
+	uiInteractBoundary((void*)((int)_this + 0xD8), edx, posx, posy, calculatedWidth, calculatedHeight);
+	createUIElementObjectOrig(_this, edx, posx, posy);
+	setUIElement(_this);
+	return;
 }
 void __fastcall createTextbox(void* _this, void* edx, float posx, float posy)
 {
@@ -395,7 +438,7 @@ void __fastcall createTextbox_43(void* _this, void* edx, float posx, float posy)
 	posx = (posx / 640.0f) * (float)virtualResW;
 	posy = (posy / 480.0f) * (float)resH;
 
-	posx += ((float)resW / 2.0f) - ((float)virtualResW / 2.0f);
+	posx += (float)((resW - virtualResW) / 2);
 
 	if (handle != NULL)
 		OffsetRgn(handle, (int)posx, (int)posy);
@@ -415,7 +458,6 @@ void __fastcall createTextbox_Scale_Reposition_TopLeft(void* _this, void* edx, f
 void __fastcall createTextboxCarat(void* _this, void* edx, int caratpos)
 {
 	using UnknownFunc = void(__fastcall*)(void*);
-	using UnknownFunc2 = int(*)();
 	UnknownFunc unknownfunction = *(UnknownFunc*)0x004FB790;
 	
 	int positioninstring;
@@ -601,38 +643,6 @@ void __fastcall SwfDrawPrimitive_Stretch(void* _this, void* edx, LPDIRECT3DDEVIC
 
 	SwfDrawPrimitive(_this, edx, pDevice, PrimitiveType, StartVertex, PrimitiveCount);
 }
-void __fastcall SwfDrawPrimitive_Stretch_Second(void* _this, void* edx, LPDIRECT3DDEVICE8 pDevice, D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount)
-{
-	// 1. Calculate our scaling and offset values
-	float scale = (float)resH / 480.0f;
-	float scaledWidth = 640.0f * scale;
-	float offsetX = ((float)resW - scaledWidth) / 2.0f;
-
-	// 2. Create a transformation matrix that will process on the GPU hardware
-	D3DMATRIX scaleMatrix = {
-		scale,   0.0f,    0.0f, 0.0f,
-		0.0f,    scale,   0.0f, 0.0f,
-		0.0f,    0.0f,    1.0f, 0.0f,
-		offsetX, 0.0f,    0.0f, 1.0f  // Translation happens here
-	};
-
-	// 3. Tell D3D to apply this matrix to the vertices automatically
-	// For XYZRHW vertices, we apply this to the World matrix or Texture matrix 
-	// depending on how the game engine driver processes them.
-	pDevice->SetTransform(D3DTS_WORLD, &scaleMatrix);
-
-	// 4. Draw instantly (GPU handles the math, CPU does zero work)
-	pDevice->DrawPrimitive(PrimitiveType, StartVertex, PrimitiveCount);
-
-	// 5. Restore the Identity matrix so the rest of the game doesn't get distorted
-	D3DMATRIX identityMatrix = {
-		1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
-	pDevice->SetTransform(D3DTS_WORLD, &identityMatrix);
-}
 void __fastcall SwfGetMouseState(void* _this, void* edx, int* pOutX, int* pOutY, int* pOutClickState)
 {
 	using GetMouseStateFunc = void(__fastcall*)(void*, void*, int*, int*, int*);
@@ -765,37 +775,144 @@ void adjustintsNTC(int* x, int* y)
 	if (y)
 		*y = (int)((float)*y * UIscale);
 }
-void __fastcall addressbookTextbox(void* _this, void* edx, int posx, int posy)
+void adjustbytesN(int* x, int* y)
 {
-	using uiInteractBoundaryFunc = void(__fastcall*)(void*, void*, int, int, int, int);
-	using unknownFunc = void(__fastcall*)(void*, void*, int, int);
+	if (x)
+		*(byte*)x = (byte)((float)*(byte*)x * UIscale);
+	if (y)
+		*(byte*)y = (byte)((float)*(byte*)y * UIscale);
+}
+void __fastcall addressbookArea(void* _this, void* edx, int posx, int posy)
+{
+	using scrollbarFunc = void(__fastcall*)(void*, void*, int, int);
 	using textboxFunc = void(__fastcall*)(void*, void*, float, float);
 	using setInteractAreaFunc = void(__fastcall*)(void*, void*, int, int, int, int);
-	uiInteractBoundaryFunc uiInteractBoundary = (uiInteractBoundaryFunc)0x004F48A0;
-	unknownFunc unknown = (unknownFunc)0x004FCB40;
+	scrollbarFunc scrollbar = (scrollbarFunc)0x004FCB40;
 	textboxFunc textbox = (textboxFunc)0x004FBB10;
 	setInteractAreaFunc setInteractArea = (setInteractAreaFunc)0x004FDA00;
 
-	int* objectPosx = (int*)((int)_this + 0xAD94);
-	int* objectPosy = (int*)((int)_this + 0xAD98);
-	int* objectWidth = (int*)((int)_this + 0xAD9C);
-	int* objectHeight = (int*)((int)_this + 0xADA0);
+	int* interactObjectPosx = (int*)((int)_this + 0xAD94);
+	int* interactObjectPosy = (int*)((int)_this + 0xAD98);
+	int* interactObjectWidth = (int*)((int)_this + 0xAD9C);
+	int* interactObjectHeight = (int*)((int)_this + 0xADA0);
 	void* interactObject = (void*)((int)_this + 0xADA4);
-	void* unknownObject = (void*)((int)_this + 0xA75C);
+	void* scrollbarObject = (void*)((int)_this + 0xA75C);
 	void* textboxObject = (void*)((int)_this + 0x97C4);
 	void* interactAreaObject = (void*)((int)_this + 0xA5EC);
 
-	auto scaleValue = [](int a) { return (int)((float)a * UIscale); };
-	auto scaleValueF = [](float a) { return a * UIscale; };
+	int* interactAreaWidth = (int*)((int)interactAreaObject + 0x38);
+	int* interactAreaHeight = (int*)((int)interactAreaObject + 0x3C);
 
-	*objectPosx = posx + scaleValue(479);
-	*objectPosy = posy + scaleValue(25);
-	uiInteractBoundary(interactObject, edx, scaleValue(482), scaleValue(25), *objectWidth, *objectHeight);
-	unknown(unknownObject, edx, 623, 25);
-	textbox(textboxObject, edx, scaleValueF(487.0f), scaleValueF(3.0f));
-	setInteractArea(interactAreaObject, edx, scaleValue(487), scaleValue(3), scaleValue(128), scaleValue(16));
+	auto scaleValueX = [](int a) { return ((int)(((float)a / 640.0f) * ((float)resH * SCREEN_RATIO_4_3))) + ((resW - virtualResW) / 2); };
+	auto scaleValueY = [](int a) { return (int)(((float)a / 480.0f) * (float)resH);	};
+	auto scaleValueFX = [](float a) { return (((a / 640.0f) * ((float)resH * SCREEN_RATIO_4_3))) + (float)((resW - virtualResW) / 2); };
+	auto scaleValueFY = [](float a) { return ((a / 480.0f) * (float)resH); };
+
+	*interactObjectPosx = posx + 479;
+	*interactObjectPosy = posy + 25;
+	uiInteractBoundary(interactObject, edx, scaleValueX(482), scaleValueY(25), *interactObjectWidth, *interactObjectHeight);
+	scrollbar(scrollbarObject, edx, 623, 25); // Scroll bar - Scaled using the other functions so will leave it default.
+	textbox(textboxObject, edx, scaleValueFX(487.0f), scaleValueFY(3.0f));
+	uiSetInteractArea_43(interactAreaObject, edx, scaleValueX(487), scaleValueY(3), 128, 16);
 }
+void __fastcall addAddressbookEntry(void* object, void* edx)
+{
+	int width;
+	int posx;
+	int posy;
+	int height;
 
+	posy = (*(int*)((int)object + 0x608) - *(int*)((int)object + 0x610)) -  *(int*)((int)object + 0x604);
+	if (posy < 1) {
+		posy = 0;
+	}
+	else {
+		posy = ((*(int*)((int)object + 0x614) - *(int*)((int)object + 0x620)) * *(int*)((int)object + 0x60c)) / posy;
+	}
+	height = *(int*)((int)object + 0x614) - *(int*)((int)object + 0x620);
+	if (height < posy) {
+		posy = height;
+	}
+
+	posx = *(int*)((int)object + 0x618);
+	posy = *(int*)((int)object + 0x61C) + posy;
+	width = *(int*)(*(int*)((int)object + 0x55C) + 0x08);
+	height = *(int*)(*(int*)((int)object + 0x55C) + 0x0C);
+	
+	interactionUIElement_43((void*)((int)object + 0x3d0), edx, posx, posy, width, height);
+	createUIElement_43((void*)((int)object + 0x494), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
+	createUIElement_43((void*)((int)object + 0x4f8), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
+
+	adjustints43Center(&posx, &posy);
+	adjustints43(&width, &height);
+
+	auto pPosx = (int*)((int)object + 0x3C0);
+	auto pPosy = (int*)((int)object + 0x3C4);
+	auto pWidth = (int*)((int)object + 0x3C8);
+	auto pHeight = (int*)((int)object + 0x3CC);
+
+	*pPosx = posx;
+	*pPosy = posy;
+	*pWidth = width;
+	*pHeight = height;
+}
+void __cdecl SetViewport(D3DVIEWPORT8* pViewport)
+{
+	D3DVIEWPORT8* NavimapViewport = (D3DVIEWPORT8*)0x006E1D20;
+	NavimapViewport->X = pViewport->X;
+	NavimapViewport->Y = pViewport->Y;
+	NavimapViewport->Width = pViewport->Width;
+	NavimapViewport->Height = pViewport->Height;
+	NavimapViewport->MinZ = pViewport->MinZ;
+	NavimapViewport->MaxZ = pViewport->MaxZ;
+	dx->SetViewport(pViewport);
+}
+void __cdecl SetViewport_Scale_Reposition_BottomLeft(D3DVIEWPORT8* pViewport)
+{
+	D3DVIEWPORT8* NavimapViewport = (D3DVIEWPORT8*)0x006E1D20;
+	auto yOffset = -(int)((480.0f - (float)pViewport->Y) * UIscale);
+	pViewport->Width = (int)((float)pViewport->Width * UIscale);
+	pViewport->Height = (int)((float)pViewport->Height * UIscale);
+	pViewport->X = (int)((float)pViewport->X * UIscale);
+	pViewport->Y = resH + yOffset;
+	NavimapViewport->X = pViewport->X;
+	NavimapViewport->Y = pViewport->Y;
+	NavimapViewport->Width = pViewport->Width;
+	NavimapViewport->Height = pViewport->Height;
+	NavimapViewport->MinZ = pViewport->MinZ;
+	NavimapViewport->MaxZ = pViewport->MaxZ;
+	dx->SetViewport(pViewport);
+}
+void __fastcall gameCreateRectRgn(void* _this, void* edx, int posx, int posy, int width, int height)
+{
+	HRGN hgrn;
+
+	if (*(HGDIOBJ*)((int)_this + 0xe10) != (HGDIOBJ)0x0) {
+		DeleteObject(*(HGDIOBJ*)((int)_this + 0xe10));
+	}
+	hgrn = CreateRectRgn(posx, posy, width + posx, height + posy);
+	*(HRGN*)((int)_this + 0xe10) = hgrn;
+}
+void __fastcall setRect1(void* _this, void* edx, int param_1, int param_2, int param_3)
+{
+	using SetRectFunc = void(__fastcall*)(void*, void*, int, int, int);
+	SetRectFunc SetRectFunc1 = (SetRectFunc)0x004FE090;
+	int* left = (int*)((int)_this + 0x58);
+	int* top = (int*)((int)_this + 0x5C);
+	int* right = (int*)((int)_this + 0x14);
+	int* bottom = (int*)((int)_this + 0x44);
+	SetRectFunc1(_this, edx, param_1, param_2, param_3);
+}
+void __fastcall setRect2(void* _this, void* edx, int param_1, int param_2, int param_3)
+{
+	using SetRectFunc = void(__fastcall*)(void*, void*, int, int, int);
+	SetRectFunc SetRectFunc2 = (SetRectFunc)0x0051DAD0;
+	int* left = (int*)((int)_this + 0x58);
+	int* top = (int*)((int)_this + 0x5C);
+	int* right = (int*)((int)_this + 0x14);
+	int* bottom = (int*)((int)_this + 0x44);
+	SetRectFunc2(_this, edx, param_1, param_2, param_3);
+}
 void __declspec(naked) positionUIElement2()
 {
 	__asm {

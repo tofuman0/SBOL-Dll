@@ -361,16 +361,28 @@ void setStrings()
 	for (int i = 0; i < sizeof(itemIDMid) / sizeof(int*); i++)				*(int*)(itemIDMid[i]) = (int)(&itemDetails) + ((2035 * 12) + 8);
 	for (int i = 0; i < sizeof(itemIDMid2) / sizeof(int*); i++)				*(int*)(itemIDMid2[i]) = (int)(&itemDetails) + (2072 * 12);
 
-	/*
 	for (int i = 0; i < sizeof(replaceStrings) / sizeof(STRINGREPLACEENTRY); i++)
 	{
-	if (replaceStrings[i].ptr)
-	{
-	memcpy(replaceStrings[i].ptr, replaceStrings[i].str, strlen(replaceStrings[i].str));
-	*(char*)(replaceStrings[i].ptr + strlen(replaceStrings[i].str)) = 0;
+		if (replaceStrings[i].ptr)
+		{
+			if (replaceStrings[i].strlen == 0)
+			{
+				memcpy(replaceStrings[i].ptr, replaceStrings[i].str, strlen(replaceStrings[i].str));
+				*(char*)(replaceStrings[i].ptr + strlen(replaceStrings[i].str)) = 0;
+			}
+			else
+			{
+				int len = strlen(replaceStrings[i].str);
+				if (len >= replaceStrings[i].strlen)
+					len = replaceStrings[i].strlen - 1;
+				memcpy(replaceStrings[i].ptr, replaceStrings[i].str, len);
+				while (len < replaceStrings[i].strlen)
+				{
+					*(char*)(replaceStrings[i].ptr + len++) = '\0';
+				}
+			}
+		}
 	}
-	}
-	*/
 	*(const char**)0x00695674 = CHAT_SEPARATOR;
 	
 	//CreateFontA Size overrides
@@ -520,7 +532,6 @@ void setResolution()
 	insertFunction(0x004DE7E9, placeStringRightAlign, 5, FT_CALL);
 	insertFunction(0x004DE839, placeStringRightAlign, 5, FT_CALL);
 
-
 	//for (int i = 0; i < sizeof(repositionIntAddr) / sizeof(int); i++)
 	//{
 	//	insertFunction((int)repositionIntAddr[i], logPositionUIElement, 5, FT_CALL);
@@ -578,11 +589,11 @@ void setResolution()
 	//*(float**)0x00511A4B = &UIscaleX;
 	//*(float**)0x00511A61 = &UIscaleY;
 
-	// UI Menus
+	// UI GameSWF Menus
 	*(float**)0x00512332 = &UIscaleVirtualX;
 	*(float**)0x0051236F = &UIscaleY;
 	
-	// UI Black boxes
+	// UI GameSWF Black boxes
 	*(float**)0x0051249F = &UIscaleVirtualX;
 	*(float**)0x005124D6 = &UIscaleY;
 
