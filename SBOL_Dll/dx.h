@@ -8,3 +8,5 @@
 HRESULT __stdcall directxCustom();
 void drawBGMString();
 void drawPositionString();
+/* Hook inside course loop for custom strings 0x004D94F1 */
+void __cdecl endScene();

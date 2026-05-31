@@ -868,6 +868,9 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ SetViewport, (int*)0x004E1E15 }, // ???
 	//{ SetViewport, (int*)0x004E920F }, // ???
 	//{ SetViewport, (int*)0x004E937A }, // ???
+	//{ endScene, (int*)0x0941BEAA }, // End scene (Top layer)
+	{ endScene, (int*)0x094C769C }, // End scene (under loading)
+	{ endScene, (int*)0x044C8A10 }, // End scene (inside car)
 };
 int* repositionAddr[]{
 	// Check - Not text box

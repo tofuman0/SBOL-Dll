@@ -65,4 +65,8 @@ HRGN __stdcall CreateRectRgnHook(int x1, int y1, int x2, int y2);
 constexpr void* CreateRectRgnHook_Ptr = (void*)(&CreateRectRgnHook);
 BOOL __stdcall PtInRegionHook(HRGN hrgn, int x, int y);
 constexpr void* PtInRegionHook_Ptr = (void*)(&PtInRegionHook);
+
+// Packets
+void __fastcall packetHandle04001400(void* _this, void* edx, void* mps);
+void __fastcall Packet0482(void* _this, void* edx, void* mps);
 #endif

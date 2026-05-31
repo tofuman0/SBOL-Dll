@@ -290,8 +290,8 @@ void patchClient()
 	*(char*)0x004D5D46 = 24;
 
 	// Custom DirectX Stuff
-	insertFunction((int)0x004C769C, directxCustom, 14, FT_CALL); // Outside Car
-	insertFunction((int)0x004C8A12, directxCustom, 7, FT_CALL); // Inside Car
+	//insertFunction((int)0x004C769C, directxCustom, 14, FT_CALL); // Outside Car
+	//insertFunction((int)0x004C8A12, directxCustom, 7, FT_CALL); // Inside Car
 	insertFunction(0x004D94F1, DrawStrings, 5, FT_CALL);
 
 	// Direct Input
@@ -319,6 +319,17 @@ void patchClient()
 	*(void**)(SHARED_SPACE_PTR_ADDR) = (void*)&SharedSpace;
 
 #pragma region Custom Packets and alterations
+	// 0x0480 / 0x1480 - Packet handling
+	setFunction((int)0x00449ABA, packetHandle04001400);
+	setFunction((int)0x00449AEB, packetHandle04001400);
+
+	// 0x0482 - Enter rival shop
+	NOPSpace(0x0044A707, 0x19);
+	*(uint8_t*)0x0044A707 = 0x56; // PUSH ESI
+	*(uint8_t*)0x0044A708 = 0x8B; // MOV ECX,EDI
+	*(uint8_t*)0x0044A709 = 0xCF; // MOV ECX,EDI
+	insertFunction((int)0x0044A70A, Packet0482, 5, FT_CALL);
+	
 
 #pragma endregion
 }
@@ -1184,4 +1195,64 @@ BOOL __stdcall PtInRegionHook(HRGN hrgn, int x, int y)
 	auto width = rect.right - rect.left;
 	auto height = rect.bottom - rect.top;
 	return PtInRegion(hrgn, x, y);
+}
+
+void __fastcall Packet0482(void* _this, void* edx, void* mps)
+{
+	using mpsLockFunc = void* (__fastcall*)(void*, void*);
+	using mpsUnlockFunc = void* (__fastcall*)(void*, void*);
+	using readUInt32Func = void*(__fastcall*)(void*, void*, int*);
+	mpsLockFunc mpsLock = (mpsLockFunc)0x00591700;
+	mpsLockFunc mpsUnlock = (mpsLockFunc)0x00591750;
+	void* mpsPacket = mpsLock(mps, edx);
+	int shopType = 0;
+	readUInt32Func readUInt32 = *(readUInt32Func*)(*(int*)mpsPacket + 0x1C);
+	
+	readUInt32(mpsPacket, edx, &shopType);
+	mpsUnlock(mps,edx);
+
+	*(float*)(0x006F4F38 + 0x128C) = 1.0f;
+	*(uint16_t*)(0x006F4F38 + 0x1284) = 0xffff;
+	*(uint16_t*)(0x006F4F38 + 0x1286) = 0xffff;
+	*(uint8_t*)(0x006F4F38 + 0x1288) = 0;
+	*(uint8_t*)(0x006F4F38 + 0x1290) = 0;
+
+	*(uint32_t*)0x006F64C0 = shopType;
+
+	using WarpToScreenFunc = void* (__fastcall*)(void*, void*, int, int);
+	WarpToScreenFunc WarpToScreen = (WarpToScreenFunc)0x004272F0;
+	WarpToScreen(*(void**)0x006EBDD0, edx, 0x14, 0x1A);
+}
+
+void __fastcall packetHandle04001400(void* _this, void* edx, void* mps)
+{
+	using PACKET_IN_0400_0700_1400Func = void* (__fastcall*)(void*, void*, void*);
+	PACKET_IN_0400_0700_1400Func PACKET_IN_0400_0700_1400 = (PACKET_IN_0400_0700_1400Func)0x0044A6C0;
+	using PACKET_IN_148XFunc = void* (__fastcall*)(void*, void*, void*);
+	PACKET_IN_148XFunc PACKET_IN_1480 = (PACKET_IN_148XFunc)0x004EBF40;
+	PACKET_IN_148XFunc PACKET_IN_1481 = (PACKET_IN_148XFunc)0x004EC1A0;
+	PACKET_IN_148XFunc PACKET_IN_1482 = (PACKET_IN_148XFunc)0x004EBFC0;
+	PACKET_IN_148XFunc PACKET_IN_1483 = (PACKET_IN_148XFunc)0x004EC090;
+	PACKET_IN_148XFunc PACKET_IN_1484 = (PACKET_IN_148XFunc)0x004EC270;
+
+	uint16_t pType = *(uint16_t*)((int)mps + 6);
+	if (pType == 0x0480)
+	{
+		*(void**)((int)_this + 0x2650) = PACKET_IN_0400_0700_1400;
+		*(int*)((int)_this + 0x2654) = 0;
+		PACKET_IN_0400_0700_1400(_this, edx, mps);
+	}
+	else if (pType == 0x0482)
+		Packet0482(_this, edx, mps);
+	else if (pType == 0x1480)
+		PACKET_IN_1480((void*)0x006EE3DC, edx, mps);
+	else if (pType == 0x1481)
+		PACKET_IN_1481((void*)0x006EE3DC, edx, mps);
+	else if (pType == 0x1482)
+		PACKET_IN_1482((void*)0x006EE3DC, edx, mps);
+	else if (pType == 0x1483)
+		PACKET_IN_1483((void*)0x006EE3DC, edx, mps);
+	else if (pType == 0x1484)
+		PACKET_IN_1484((void*)0x006EE3DC, edx, mps);
+	return;
 }
