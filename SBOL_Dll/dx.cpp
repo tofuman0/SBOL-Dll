@@ -50,8 +50,8 @@ HRESULT __stdcall directxCustom()
 			{
 				drawPositionString();
 			}
-			drawStrings = false;
 #endif
+			drawStrings = false;
 		}
 		return dx->EndScene();
 	}
@@ -80,8 +80,9 @@ void drawBGMString()
 			std::stringstream bgmInfo;
 			bgmInfo << "CURRENT TRACK: " << op->GetTrackName();
 			HRESULT hr = S_OK;
+			BGMTrackFont->SetFontFlags(D3DFONT_ZENABLE);
 			if (BGMTrackFont->CheckDevice() == S_OK)
-				hr = BGMTrackFont->DrawTextScaled(posx, posy, 1.0f, UIscale, UIscale, 0xFFBBBB99, bgmInfo.str().c_str(), 0);
+				hr = BGMTrackFont->DrawTextScaled(posx, posy, 0.01f, UIscale, UIscale, 0xFFBBBB99, bgmInfo.str().c_str(), 0);
 #ifdef _DEBUG
 			if (hr != S_OK)
 			{
@@ -121,8 +122,9 @@ void drawPositionString()
 			std::stringstream posInfo;
 			posInfo << "POSITION: " << std::hex << std::uppercase << std::setfill('0') << std::setw(4) << location1 << ":" << std::setw(4) << junction << ":" << std::setw(4) << distance;
 			HRESULT hr = S_OK;
+			PositionFont->SetFontFlags(D3DFONT_ZENABLE);
 			if (PositionFont->CheckDevice() == S_OK)
-				hr = PositionFont->DrawTextScaled(posx, posy, 1.0f, UIscale, UIscale, 0xFFBBBB99, posInfo.str().c_str(), 0);
+				hr = PositionFont->DrawTextScaled(posx, posy, 0.01f, UIscale, UIscale, 0xFFBBBB99, posInfo.str().c_str(), 0);
 			if (hr != S_OK)
 			{
 				std::stringstream ss;

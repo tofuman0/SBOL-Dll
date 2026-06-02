@@ -48,5 +48,6 @@ public:
 	HRESULT RestoreDeviceObjects();
 	HRESULT InvalidateDeviceObjects();
 	HRESULT DeleteDeviceObjects();
+	void SetFontFlags(DWORD flags) { m_dwFontFlags |= flags; }
 };
 
