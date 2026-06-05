@@ -13,6 +13,14 @@
 char clientVer[4] = { 2, 3, 1, 'b' };
 char logItBuf[0x400];
 
+char* windowTitle = "SB Online";
+char* defaultIP = "127.0.0.1\0\0\0\0\0\0\0";
+char* defaultServerName = "TEST SERVER";
+char* clientName = "SBClient.exe";
+char* versionStr = "Ver%d.%02d.%02db";
+char* sysinfoPath = "log\\sysinfo.txt";
+char* logPath = "log\\log%02d%02d.txt";
+
 int resW = 640;
 int virtualResW = 640;
 int resH = 480;
@@ -32,6 +40,7 @@ float UIscaleY = 0.05f;
 float UIscale = 0.75f;
 int itemUseDialogX = 56;
 int itemUseDialogY = 80;
+ITEMDETAILENTRY* itemDetailsJson = nullptr;
 
 SHAREDSPACE SharedSpace;
 
@@ -118,7 +127,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		setResolution();
 		setDrawDistance();
 		patchClient();
-		
+		//PrintItems();
+		//SaveItemsStrings();
 		// Load offline DLL
 		HINSTANCE hOfflineDLL = LoadLibraryEx(L"offline.dll", NULL, LOAD_LIBRARY_SEARCH_APPLICATION_DIR);
 		if (hOfflineDLL == NULL)

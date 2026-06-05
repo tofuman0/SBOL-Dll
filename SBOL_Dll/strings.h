@@ -1,33 +1,13 @@
 ﻿#pragma once
-char* windowTitle = "SB Online";
-char* defaultIP = "127.0.0.1\0\0\0\0\0\0\0";
-char* defaultServerName = "TEST SERVER";
-char* clientName = "SBClient.exe";
-char* versionStr = "Ver%d.%02d.%02db";
-char* sysinfoPath = "log\\sysinfo.txt";
-char* logPath = "log\\log%02d%02d.txt";
+#include "structures.h"
 
-typedef struct stringEntry {
-	int mutli;
-	char* ptr;
-	char* str;
-} STRINGENTRY;
-typedef struct stringReplaceEntry {
-	stringReplaceEntry(char* setptr, char* setstr) { ptr = setptr; str = setstr; strlen = 0; }
-	stringReplaceEntry(char* setptr, char* setstr, int setstrlen) { ptr = setptr; str = setstr; strlen = setstrlen; }
-	char* ptr;
-	char* str;
-	int strlen;
-} STRINGREPLACEENTRY;
-typedef struct itemDetailsEntry {
-	int itemid;
-	char* name;
-	char* description;
-} ITEMDETAILENTRY;
-typedef struct itemSprite {
-	int itemid;
-	int sprite;
-} ITEMSPRITE;
+extern char* windowTitle;
+extern char* defaultIP;
+extern char* defaultServerName;
+extern char* clientName;
+extern char* versionStr;
+extern char* sysinfoPath;
+extern char* logPath;
 
 const STRINGENTRY strings[]{
 	{ FALSE, (char*)0x0041C1B9, sysinfoPath },
@@ -594,6 +574,11 @@ const ITEMSPRITE itemSpritesBig[]{
 	{ 2270, 36 },
 	{ 2271, 37 },
 };
+
+const ITEMDETAILENTRY* itemDetailsInternal1 = (ITEMDETAILENTRY*)0x005C34E8;
+const ITEMDETAILENTRY* itemDetailsInternal2 = (ITEMDETAILENTRY*)0x005CE868;
+extern ITEMDETAILENTRY* itemDetailsJson;
+
 const ITEMDETAILENTRY itemDetails[]{
 	{ 0, (char*)(0x0063684C), (char*)(0x0063682C) },
 	{ 1, (char*)(0x0063684C), (char*)(0x00636808) },
@@ -2727,7 +2712,7 @@ const ITEMDETAILENTRY itemDetails[]{
 	{ 2223, (char*)(0x00636910), (char*)(0x006368D0) },
 	{ 2269, (char*)(0x006368C4), (char*)(0x00636894) },
 	{ 2270, (char*)(0x00636884), (char*)(0x00636858) },
-	{ 2271, "Sign New",	    "New Signs from Tofuman" },
+	//{ 2271, "Sign New",	    "New Signs from Tofuman" },
 };
 
 const char* CHAT_SEPARATOR = ": ";

@@ -1,4 +1,8 @@
 #include <windows.h>
+#include <iomanip>
+#include <algorithm>
+#include <iostream>
+#include <string>
 #include "patch.h"
 #include "globals.h"
 #include "structures.h"
@@ -364,13 +368,22 @@ void setStrings()
 		}
 	}
 
+	ITEMDETAILENTRY* items = nullptr;
+	int itemsCount = sizeof(itemDetails) / sizeof(ITEMDETAILENTRY);
+	itemDetailsJson = LoadItemStrings("data\\items.json", &itemsCount);
+
+	if (itemDetailsJson)
+		items = itemDetailsJson;
+	else
+		items = (ITEMDETAILENTRY*)&itemDetails;
+
 	// Item Descriptions brought table into DLL so I can add more
-	for (int i = 0; i < sizeof(itemIDNumber) / sizeof(int*); i++)			*(int*)(itemIDNumber[i]) = (int)&itemDetails;
-	for (int i = 0; i < sizeof(itemIDName) / sizeof(int*); i++)				*(int*)(itemIDName[i]) = (int)(&itemDetails) + 4;
-	for (int i = 0; i < sizeof(itemIDDescription) / sizeof(int*); i++)		*(int*)(itemIDDescription[i]) = (int)(&itemDetails) + 8;
-	for (int i = 0; i < sizeof(itemIDEnd) / sizeof(int*); i++)				*(int*)(itemIDEnd[i]) = (int)(&itemDetails) + sizeof(itemDetails);
-	for (int i = 0; i < sizeof(itemIDMid) / sizeof(int*); i++)				*(int*)(itemIDMid[i]) = (int)(&itemDetails) + ((2035 * 12) + 8);
-	for (int i = 0; i < sizeof(itemIDMid2) / sizeof(int*); i++)				*(int*)(itemIDMid2[i]) = (int)(&itemDetails) + (2072 * 12);
+	for (int i = 0; i < sizeof(itemIDNumber) / sizeof(int*); i++)			*(int*)(itemIDNumber[i]) = (int)items;
+	for (int i = 0; i < sizeof(itemIDName) / sizeof(int*); i++)				*(int*)(itemIDName[i]) = (int)(items) + 4;
+	for (int i = 0; i < sizeof(itemIDDescription) / sizeof(int*); i++)		*(int*)(itemIDDescription[i]) = (int)(items) + 8;
+	for (int i = 0; i < sizeof(itemIDEnd) / sizeof(int*); i++)				*(int*)(itemIDEnd[i]) = (int)(&itemDetails) + (itemsCount * sizeof(ITEMDETAILENTRY));
+	for (int i = 0; i < sizeof(itemIDMid) / sizeof(int*); i++)				*(int*)(itemIDMid[i]) = (int)(&items) + ((2035 * 12) + 8);
+	for (int i = 0; i < sizeof(itemIDMid2) / sizeof(int*); i++)				*(int*)(itemIDMid2[i]) = (int)(&items) + (2072 * 12);
 
 	for (int i = 0; i < sizeof(replaceStrings) / sizeof(STRINGREPLACEENTRY); i++)
 	{
@@ -1001,6 +1014,96 @@ void ForceShiftJIS()
 
 	*(byte*)0x00408850 = SHIFTJIS_CHARSET;
 	*(byte*)0x0051D4C0 = SHIFTJIS_CHARSET;
+}
+void PrintItems()
+{
+	std::stringstream ss;
+	for (int i = 0; i < sizeof(itemDetails) / sizeof(ITEMDETAILENTRY); i++)
+	{
+		std::string name = itemDetails[i].name;
+		std::replace(name.begin(), name.end(), ' ', '_');
+		std::string desc = itemDetails[i].description;
+		std::replace(desc.begin(), desc.end(), ' ', '_');
+		ss << name << "_" << desc;
+		ss << " = 0x" << std::setw(4) << std::setfill('0') << std::uppercase << std::hex << itemDetails[i].itemid << "," << std::endl;
+		/*
+		ss << itemDetails[i].name;
+		int namelen = strnlen(itemDetails[i].name, 64);
+		for (int j = 0; j < 64 - namelen; j++)
+			ss << " ";
+		ss << " " << itemDetails[i].description;
+		int desclen = strnlen(itemDetails[i].description, 128);
+		for (int j = 0; j < 128 - desclen; j++)
+			ss << " ";
+		ss << " = 0x" << std::setw(4) << std::setfill('0') << std::uppercase << std::hex << itemDetails[i].itemid << "," << std::endl;
+		*/
+	}
+	OutputDebugStringA(ss.str().c_str());
+}
+void SaveItemsStrings()
+{
+	std::ofstream fs("items.json", std::ios::out | std::ios::binary);
+	if (!fs.is_open()) return;
+	fs << "{" << "\r\n";
+	fs << "\t\"items\" : \r\n\t[\r\n";
+	auto itemcount = 2132; // sizeof(itemDetails) / sizeof(ITEMDETAILENTRY);
+	const ITEMDETAILENTRY* items = itemDetailsInternal2;
+	for (int i = 0; i < itemcount; i++)
+	{
+		std::string name = items[i].name;
+		name.erase(std::remove(name.begin(), name.end(), '\t'), name.end());
+		name = "\"" + name + "\", ";
+		std::string desc = items[i].description;
+		desc.erase(std::remove(desc.begin(), desc.end(), '\t'), desc.end());
+		fs << "\t\t[ " << std::right << std::setfill(' ') << std::setw(4) << items[i].itemid << ", " << std::left << std::setfill(' ') << std::setw(64) << name << "\"" << desc << "\" ]";
+		if (i + 1 == itemcount)
+			fs << "\r\n";
+		else
+			fs << ",\r\n";
+	}
+	fs << "\t]\r\n}";
+	fs.close();
+}
+ITEMDETAILENTRY* LoadItemStrings(const char* filename, int* count)
+{
+	try
+	{
+		nlohmann::json itemstringsjson;
+		std::ifstream file(filename);
+		if (!file.is_open())
+			return nullptr;
+		file >> itemstringsjson;
+		const auto& items_array = itemstringsjson["items"];
+		int stringcount = items_array.size();
+
+		ITEMDETAILENTRY* items = (ITEMDETAILENTRY*)malloc(stringcount * sizeof(ITEMDETAILENTRY));
+		if (items)
+		{
+			int namelen = 0;
+			int desclen = 0;
+			for (int i = 0; i < stringcount; i++)
+			{
+				namelen = strnlen(items_array[i][1].get<std::string>().c_str(), 64);
+				desclen = strnlen(items_array[i][2].get<std::string>().c_str(), 128);
+				char* name = (char*)calloc(namelen + 1, 1);
+				char* desc = (char*)calloc(desclen + 1, 1);
+				memcpy(name, items_array[i][1].get<std::string>().c_str(), namelen);
+				memcpy(desc, items_array[i][2].get<std::string>().c_str(), desclen);
+				items[i].itemid = items_array[i][0];
+				items[i].name = name;
+				items[i].description = desc;
+			}
+		}
+		*count = stringcount;
+		return items;
+	}
+	catch (std::exception e)
+	{
+		std::stringstream ss;
+		ss << "Failed to load " << filename << ". Exception: " << e.what() << std::endl;
+		OutputDebugStringA(ss.str().c_str());
+		return nullptr;
+	}
 }
 int __cdecl GetSupportedResolution(int deviceid, int unknown2, int width, int height, int unknown3)
 {

@@ -3,6 +3,27 @@
 #include "globals.h"
 
 #pragma pack(1)
+typedef struct stringEntry {
+	int mutli;
+	char* ptr;
+	char* str;
+} STRINGENTRY;
+typedef struct stringReplaceEntry {
+	stringReplaceEntry(char* setptr, char* setstr) { ptr = setptr; str = setstr; strlen = 0; }
+	stringReplaceEntry(char* setptr, char* setstr, int setstrlen) { ptr = setptr; str = setstr; strlen = setstrlen; }
+	char* ptr;
+	char* str;
+	int strlen;
+} STRINGREPLACEENTRY;
+typedef struct itemDetailsEntry {
+	int itemid;
+	char* name;
+	char* description;
+} ITEMDETAILENTRY;
+typedef struct itemSprite {
+	int itemid;
+	int sprite;
+} ITEMSPRITE;
 typedef struct st_SharedSpace {
 	typedef struct st_Entity {
 		bool IsMasterLocked() { return (master == SHARED_SPACE_LOCK); }

@@ -15,11 +15,13 @@
 #include <mbctype.h>
 #include <debugapi.h>
 #include <iomanip>
+#include <exception>
 #include "asm.h"
 #include "bgm.h"
 #include "dx.h"
 #include "DXFont.h"
 #include "OggPlayer.h"
+#include <nlohmann/json.hpp>
 
 extern DXFont* BGMTrackFont;
 extern DXFont* PositionFont;
@@ -36,6 +38,9 @@ void readRegistry();
 int VerString(char* str, const char* format, ...);
 void __fastcall DxWindow(void* _this, void* edx, int x1, int y1, int x2, int y2);
 void ForceShiftJIS();
+void PrintItems();
+void SaveItemsStrings();
+ITEMDETAILENTRY* LoadItemStrings(const char* filename, int* count = nullptr);
 
 int __cdecl GetSupportedResolution(int deviceid, int unknown2, int width, int height, int unknown3);
 void __cdecl DrawStrings(void*, void*, int);
