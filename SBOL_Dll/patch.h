@@ -2,26 +2,26 @@
 #ifndef PATCH_HEADER
 #define PATCH_HEADER
 #define DIRECTINPUT_VERSION			0x0800
-#include <Windows.h>
-#include <process.h>
-#include <dinput.h>
-#include <Psapi.h>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <locale>
-#include <clocale>
-#include <mbctype.h>
-#include <debugapi.h>
-#include <iomanip>
-#include <exception>
 #include "asm.h"
 #include "bgm.h"
 #include "dx.h"
 #include "DXFont.h"
 #include "OggPlayer.h"
+#include <clocale>
+#include <debugapi.h>
+#include <dinput.h>
+#include <exception>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <locale>
+#include <mbctype.h>
 #include <nlohmann/json.hpp>
+#include <process.h>
+#include <Psapi.h>
+#include <sstream>
+#include <string>
+#include <Windows.h>
 
 extern DXFont* BGMTrackFont;
 extern DXFont* PositionFont;
@@ -41,6 +41,9 @@ void ForceShiftJIS();
 void PrintItems();
 void SaveItemsStrings();
 ITEMDETAILENTRY* LoadItemStrings(const char* filename, int* count = nullptr);
+void escapeInPlace(std::string& str);
+void SaveStrings();
+void ReplaceStrings(const char* filename);
 
 int __cdecl GetSupportedResolution(int deviceid, int unknown2, int width, int height, int unknown3);
 void __cdecl DrawStrings(void*, void*, int);

@@ -91,6 +91,13 @@ unsigned int isClosed = 0;
 // DINPUT Values
 char deadZonePercent = 5;
 
+std::string to_lower(std::string str) {
+	std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) {
+		return std::tolower(c);
+		});
+	return str;
+}
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
 	// Load Item data from DLL
@@ -116,7 +123,20 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 	case DLL_PROCESS_ATTACH:
 	{
 		//_CrtSetBreakAlloc(1074);
-
+		LPSTR rawCommandLine = GetCommandLineA();
+		std::string cmdLine(rawCommandLine);
+		std::string cmdLineLower = to_lower(cmdLine);
+		if (cmdLineLower.find("-exportitems") != std::string::npos || cmdLineLower.find("/exportitems") != std::string::npos)
+		{
+			SaveItemsStrings();
+			exit(0);
+		}
+		if (cmdLineLower.find("-exportstrings") != std::string::npos || cmdLineLower.find("/exportstrings") != std::string::npos)
+		{
+			SaveStrings();
+			exit(0);
+		}
+		
 		readRegistry();
 		if (op == nullptr) {
 			op = new OggPlayer(30, shuffleBGM ? true : false);
@@ -127,8 +147,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		setResolution();
 		setDrawDistance();
 		patchClient();
+
+		// Used to create enum list for items
 		//PrintItems();
-		//SaveItemsStrings();
+		
 		// Load offline DLL
 		HINSTANCE hOfflineDLL = LoadLibraryEx(L"offline.dll", NULL, LOAD_LIBRARY_SEARCH_APPLICATION_DIR);
 		if (hOfflineDLL == NULL)

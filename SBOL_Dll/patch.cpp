@@ -1,8 +1,6 @@
 #include <windows.h>
 #include <iomanip>
 #include <algorithm>
-#include <iostream>
-#include <string>
 #include "patch.h"
 #include "globals.h"
 #include "structures.h"
@@ -367,6 +365,8 @@ void setStrings()
 				*(char**)strings[i].ptr = strings[i].str;
 		}
 	}
+
+	ReplaceStrings("data\\strings.json");
 
 	ITEMDETAILENTRY* items = nullptr;
 	int itemsCount = sizeof(itemDetails) / sizeof(ITEMDETAILENTRY);
@@ -1075,7 +1075,8 @@ ITEMDETAILENTRY* LoadItemStrings(const char* filename, int* count)
 		file >> itemstringsjson;
 		const auto& items_array = itemstringsjson["items"];
 		int stringcount = items_array.size();
-
+		if (stringcount < 2132)
+			return nullptr;
 		ITEMDETAILENTRY* items = (ITEMDETAILENTRY*)malloc(stringcount * sizeof(ITEMDETAILENTRY));
 		if (items)
 		{
@@ -1103,6 +1104,73 @@ ITEMDETAILENTRY* LoadItemStrings(const char* filename, int* count)
 		ss << "Failed to load " << filename << ". Exception: " << e.what() << std::endl;
 		OutputDebugStringA(ss.str().c_str());
 		return nullptr;
+	}
+}
+void escapeInPlace(std::string& str) {
+	size_t pos = 0;
+	while ((pos = str.find_first_of("\r\n\t", pos)) != std::string::npos) {
+		switch (str[pos]) {
+		case '\r': str.replace(pos, 1, "\\r"); break;
+		case '\n': str.replace(pos, 1, "\\n"); break;
+		case '\t': str.replace(pos, 1, "\\t"); break;
+		}
+		pos += 2; // Move past the newly inserted "\\" and the character
+	}
+}
+void SaveStrings()
+{
+	std::ofstream fs("strings.json", std::ios::out | std::ios::binary);
+	if (!fs.is_open()) return;
+	fs << "{" << "\r\n";
+	fs << "\t\"strings\" : \r\n\t[\r\n";
+	auto stringcount = (sizeof(stringaddresses) / sizeof(STATICSTRING));
+	const STATICSTRING* strings = stringaddresses;
+	for (int i = 0; i < stringcount; i++)
+	{
+		std::string string = strings[i].ptr;
+		escapeInPlace(string);
+		string = "\"" + string + "\"";
+		fs << "\t\t[ " << i << ", " << string << " ]";
+		if (i + 1 == stringcount)
+			fs << "\r\n";
+		else
+			fs << ",\r\n";
+	}
+	fs << "\t]\r\n}";
+	fs.close();
+}
+void ReplaceStrings(const char* filename)
+{
+	try
+	{
+		nlohmann::json stringsjson;
+		std::ifstream file(filename);
+		if (!file.is_open())
+			return;
+		file >> stringsjson;
+		const auto& string_array = stringsjson["strings"];
+		int stringcount = string_array.size();
+		
+		for (int i = 0; i < stringcount; i++)
+		{
+			int idx = string_array[i][0].get<int>();
+			if (idx >= (sizeof(stringaddresses) / sizeof(STATICSTRING)) || idx < 0)
+				continue;
+			std::string string = string_array[i][1].get<std::string>();
+			int limit = stringaddresses[idx].limit;
+			char* stringaddress = stringaddresses[idx].ptr;
+
+			int stringlen = strnlen(string.c_str(), limit -1);
+			memcpy(stringaddress, string.c_str(), stringlen);
+			stringaddress[stringlen] = '\0';
+		}
+	}
+	catch (std::exception e)
+	{
+		std::stringstream ss;
+		ss << "Failed to load " << filename << ". Exception: " << e.what() << std::endl;
+		OutputDebugStringA(ss.str().c_str());
+		return;
 	}
 }
 int __cdecl GetSupportedResolution(int deviceid, int unknown2, int width, int height, int unknown3)

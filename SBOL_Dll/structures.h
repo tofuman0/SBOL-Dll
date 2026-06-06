@@ -8,6 +8,10 @@ typedef struct stringEntry {
 	char* ptr;
 	char* str;
 } STRINGENTRY;
+typedef struct staticString {
+	char* ptr;
+	int limit;
+} STATICSTRING;
 typedef struct stringReplaceEntry {
 	stringReplaceEntry(char* setptr, char* setstr) { ptr = setptr; str = setstr; strlen = 0; }
 	stringReplaceEntry(char* setptr, char* setstr, int setstrlen) { ptr = setptr; str = setstr; strlen = setstrlen; }
