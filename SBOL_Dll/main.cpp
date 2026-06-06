@@ -40,6 +40,7 @@ float UIscaleY = 0.05f;
 float UIscale = 0.75f;
 int itemUseDialogX = 56;
 int itemUseDialogY = 80;
+std::string language = "en";
 ITEMDETAILENTRY* itemDetailsJson = nullptr;
 
 SHAREDSPACE SharedSpace;
@@ -134,6 +135,16 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		if (cmdLineLower.find("-exportstrings") != std::string::npos || cmdLineLower.find("/exportstrings") != std::string::npos)
 		{
 			SaveStrings();
+			exit(0);
+		}
+		if (cmdLineLower.find("-exportrivals") != std::string::npos || cmdLineLower.find("/exportrivals") != std::string::npos)
+		{
+			SaveRivalStrings();
+			exit(0);
+		}
+		if (cmdLineLower.find("-exportallstrings") != std::string::npos || cmdLineLower.find("/exportallstrings") != std::string::npos)
+		{
+			SaveAllStrings();
 			exit(0);
 		}
 		

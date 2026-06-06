@@ -25,6 +25,7 @@
 
 extern DXFont* BGMTrackFont;
 extern DXFont* PositionFont;
+extern std::string language;
 
 void patchClient();
 int notFullScreenMode();
@@ -41,9 +42,13 @@ void ForceShiftJIS();
 void PrintItems();
 void SaveItemsStrings();
 ITEMDETAILENTRY* LoadItemStrings(const char* filename, int* count = nullptr);
-void escapeInPlace(std::string& str);
+void removeEscape(std::string& str);
+void addEscape(std::string& str);
 void SaveStrings();
 void ReplaceStrings(const char* filename);
+void SaveRivalStrings();
+void ReplaceRivalStrings(const char* filename);
+void SaveAllStrings();
 
 int __cdecl GetSupportedResolution(int deviceid, int unknown2, int width, int height, int unknown3);
 void __cdecl DrawStrings(void*, void*, int);

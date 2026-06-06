@@ -98,7 +98,7 @@ void OggPlayer::OpenPlaylist(int _playlist)
 		playlists[_playlist].trackCount > 0) {
 		playingPlaylist = true;
 		currentPlaylist = _playlist;
-		srand(time(NULL));
+		srand((unsigned int)time(NULL));
 		currentPlaylistTrack = (shufflePlaylist ? (rand() % playlists[_playlist].trackCount) : 0);
 	}
 }

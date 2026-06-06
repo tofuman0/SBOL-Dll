@@ -365,12 +365,14 @@ void setStrings()
 				*(char**)strings[i].ptr = strings[i].str;
 		}
 	}
+	std::string languagefilepath = "data\\lang-" + language + ".json";
 
-	ReplaceStrings("data\\strings.json");
+	ReplaceStrings(languagefilepath.c_str());
+	ReplaceRivalStrings(languagefilepath.c_str());
 
 	ITEMDETAILENTRY* items = nullptr;
 	int itemsCount = sizeof(itemDetails) / sizeof(ITEMDETAILENTRY);
-	itemDetailsJson = LoadItemStrings("data\\items.json", &itemsCount);
+	itemDetailsJson = LoadItemStrings(languagefilepath.c_str(), &itemsCount);
 
 	if (itemDetailsJson)
 		items = itemDetailsJson;
@@ -776,14 +778,15 @@ void __cdecl windowMonitorThread(void* parg)
 }
 void readRegistry()
 {
-	DWORD value;
+	DWORD value = 0;
+	char strvalue[256]{};
 	DWORD BufferSize = 4;
 	HKEY hKey;
 
-	if (RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Genki\\SBOL"), 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
+	if (RegOpenKeyExA(HKEY_CURRENT_USER, ("Software\\Genki\\SBOL"), 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
 	{
 		BufferSize = sizeof(DWORD);
-		if (RegQueryValueEx(hKey, TEXT("RES_WIDTH"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
+		if (RegQueryValueExA(hKey, ("RES_WIDTH"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
 		{
 			if ((resW = value) < 640)
 				resW = 640;
@@ -791,11 +794,11 @@ void readRegistry()
 		else
 		{
 			resW = 640;
-			RegSetValueEx(hKey, TEXT("RES_WIDTH"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resW), BufferSize);
+			RegSetValueExA(hKey, ("RES_WIDTH"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resW), BufferSize);
 		}
 
 		BufferSize = sizeof(DWORD);
-		if (RegQueryValueEx(hKey, TEXT("RES_HEIGHT"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
+		if (RegQueryValueExA(hKey, ("RES_HEIGHT"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
 		{
 			if ((resH = value) < 480)
 				resH = 480;
@@ -811,22 +814,22 @@ void readRegistry()
 			SWFscaleX = (float)virtualResW / 640.0f;
 			SWFscaleY = (float)resH / 480.0f;
 			SWFscale = (float)resH / 480.0f;
-			RegSetValueEx(hKey, TEXT("RES_HEIGHT"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resH), BufferSize);
+			RegSetValueExA(hKey, ("RES_HEIGHT"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resH), BufferSize);
 		}
 
 		BufferSize = sizeof(DWORD);
-		if (RegQueryValueEx(hKey, TEXT("FULLSCREEN"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
+		if (RegQueryValueExA(hKey, ("FULLSCREEN"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
 		{
 			fullScreen = value ? 1 : 0;
 		}
 		else
 		{
 			fullScreen = 0;
-			RegSetValueEx(hKey, TEXT("FULLSCREEN"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&fullScreen), BufferSize);
+			RegSetValueExA(hKey, ("FULLSCREEN"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&fullScreen), BufferSize);
 		}
 
 		BufferSize = sizeof(DWORD);
-		if (RegQueryValueEx(hKey, TEXT("DRAWDISTANCE"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
+		if (RegQueryValueExA(hKey, ("DRAWDISTANCE"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
 		{
 			drawDistanceMultiplier = ((float)(*(int*)&value) / 100.0f);
 			if (drawDistanceMultiplier > 2.0f || drawDistanceMultiplier < 0.05f)
@@ -836,11 +839,11 @@ void readRegistry()
 		{
 			drawDistanceMultiplier = 1.0f;
 			int drawdistance = 100;
-			RegSetValueEx(hKey, TEXT("DRAWDISTANCE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&drawdistance), BufferSize);
+			RegSetValueExA(hKey, ("DRAWDISTANCE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&drawdistance), BufferSize);
 		}
 
 		BufferSize = sizeof(DWORD);
-		if (RegQueryValueEx(hKey, TEXT("UISCALE"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
+		if (RegQueryValueExA(hKey, ("UISCALE"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
 		{
 			UIscale = ((float)(*(int*)&value) / 100.0f);
 			if (UIscale == 0.0f)
@@ -850,45 +853,61 @@ void readRegistry()
 		{
 			UIscale = 1.0f;
 			int uiscale = 100;
-			RegSetValueEx(hKey, TEXT("UISCALE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&uiscale), BufferSize);
+			RegSetValueExA(hKey, ("UISCALE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&uiscale), BufferSize);
 		}
 
 		BufferSize = sizeof(DWORD);
-		if (RegQueryValueEx(hKey, TEXT("SKIPWARNING"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
+		if (RegQueryValueExA(hKey, ("SKIPWARNING"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
 		{
 			skipWarning = value ? 1 : 0;
 		}
 		else
 		{
 			skipWarning = 0;
-			RegSetValueEx(hKey, TEXT("SKIPWARNING"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&skipWarning), BufferSize);
+			RegSetValueExA(hKey, ("SKIPWARNING"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&skipWarning), BufferSize);
 		}
 
 		BufferSize = sizeof(DWORD);
-		if (RegQueryValueEx(hKey, TEXT("SHUFFLEBGM"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
+		if (RegQueryValueExA(hKey, ("SHUFFLEBGM"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
 		{
 			shuffleBGM = value ? 1 : 0;
 		}
 		else
 		{
 			shuffleBGM = 0;
-			RegSetValueEx(hKey, TEXT("SHUFFLEBGM"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&shuffleBGM), BufferSize);
+			RegSetValueExA(hKey, ("SHUFFLEBGM"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&shuffleBGM), BufferSize);
 		}
 
 		BufferSize = sizeof(DWORD);
-		if (RegQueryValueEx(hKey, TEXT("AXIS_DEADZONE"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
+		if (RegQueryValueExA(hKey, ("AXIS_DEADZONE"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
 		{
 			deadZonePercent = static_cast<char>(value);
 			if (deadZonePercent < 0 || deadZonePercent > 100)
 			{
 				deadZonePercent = 5;
-				RegSetValueEx(hKey, TEXT("AXIS_DEADZONE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&deadZonePercent), BufferSize);
+				RegSetValueExA(hKey, ("AXIS_DEADZONE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&deadZonePercent), BufferSize);
 			}
 		}
 		else
 		{
 			deadZonePercent = 5;
-			RegSetValueEx(hKey, TEXT("AXIS_DEADZONE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&deadZonePercent), BufferSize);
+			RegSetValueExA(hKey, ("AXIS_DEADZONE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&deadZonePercent), BufferSize);
+		}
+
+		BufferSize = sizeof(strvalue);
+		if (RegGetValueA(HKEY_CURRENT_USER, ("Software\\Genki\\SBOL"), ("LANGUAGE"), RRF_RT_REG_SZ, NULL, strvalue, &BufferSize) == ERROR_SUCCESS)
+		{
+			language = strvalue;
+			if (language.size() != 2)
+			{
+				language = "en";
+				RegSetValueExA(hKey, ("LANGUAGE"), 0, REG_SZ, (LPBYTE)language.c_str(), language.size() + 0);
+			}
+		}
+		else
+		{
+			language = "en";
+			RegSetValueExA(hKey, ("LANGUAGE"), 0, REG_SZ, (LPBYTE)language.c_str(), language.size() + 1);
 		}
 	}
 	else
@@ -906,18 +925,20 @@ void readRegistry()
 		skipWarning = 0;
 		shuffleBGM = 0;
 		deadZonePercent = 5;
+		language = "en";
 
-		if (RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Genki\\SBOL"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS)
+		if (RegCreateKeyExA(HKEY_CURRENT_USER, ("Software\\Genki\\SBOL"), 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS)
 		{
 			BufferSize = sizeof(DWORD);
-			RegSetValueEx(hKey, TEXT("RES_WIDTH"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resW), BufferSize);
-			RegSetValueEx(hKey, TEXT("RES_HEIGHT"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resH), BufferSize);
-			RegSetValueEx(hKey, TEXT("FULLSCREEN"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&fullScreen), BufferSize);
-			RegSetValueEx(hKey, TEXT("DRAWDISTANCE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&drawdistance), BufferSize);
-			RegSetValueEx(hKey, TEXT("UISCALE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&uiscale), BufferSize);
-			RegSetValueEx(hKey, TEXT("SKIPWARNING"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&skipWarning), BufferSize);
-			RegSetValueEx(hKey, TEXT("SHUFFLEBGM"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&shuffleBGM), BufferSize);
-			RegSetValueEx(hKey, TEXT("AXIS_DEADZONE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&deadZonePercent), BufferSize);
+			RegSetValueExA(hKey, ("RES_WIDTH"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resW), BufferSize);
+			RegSetValueExA(hKey, ("RES_HEIGHT"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&resH), BufferSize);
+			RegSetValueExA(hKey, ("FULLSCREEN"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&fullScreen), BufferSize);
+			RegSetValueExA(hKey, ("DRAWDISTANCE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&drawdistance), BufferSize);
+			RegSetValueExA(hKey, ("UISCALE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&uiscale), BufferSize);
+			RegSetValueExA(hKey, ("SKIPWARNING"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&skipWarning), BufferSize);
+			RegSetValueExA(hKey, ("SHUFFLEBGM"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&shuffleBGM), BufferSize);
+			RegSetValueExA(hKey, ("AXIS_DEADZONE"), 0, REG_DWORD, reinterpret_cast<LPBYTE>(&deadZonePercent), BufferSize);
+			RegSetValueExA(hKey, ("LANGUAGE"), 0, REG_SZ, (LPBYTE)language.c_str(), language.size());
 		}
 	}
 
@@ -1073,6 +1094,7 @@ ITEMDETAILENTRY* LoadItemStrings(const char* filename, int* count)
 		if (!file.is_open())
 			return nullptr;
 		file >> itemstringsjson;
+		file.close();
 		const auto& items_array = itemstringsjson["items"];
 		int stringcount = items_array.size();
 		if (stringcount < 2132)
@@ -1088,6 +1110,8 @@ ITEMDETAILENTRY* LoadItemStrings(const char* filename, int* count)
 				desclen = strnlen(items_array[i][2].get<std::string>().c_str(), 128);
 				char* name = (char*)calloc(namelen + 1, 1);
 				char* desc = (char*)calloc(desclen + 1, 1);
+				if (!name || !desc)
+					continue;
 				memcpy(name, items_array[i][1].get<std::string>().c_str(), namelen);
 				memcpy(desc, items_array[i][2].get<std::string>().c_str(), desclen);
 				items[i].itemid = items_array[i][0];
@@ -1106,7 +1130,7 @@ ITEMDETAILENTRY* LoadItemStrings(const char* filename, int* count)
 		return nullptr;
 	}
 }
-void escapeInPlace(std::string& str) {
+void removeEscape(std::string& str) {
 	size_t pos = 0;
 	while ((pos = str.find_first_of("\r\n\t", pos)) != std::string::npos) {
 		switch (str[pos]) {
@@ -1117,6 +1141,17 @@ void escapeInPlace(std::string& str) {
 		pos += 2; // Move past the newly inserted "\\" and the character
 	}
 }
+void addEscape(std::string& str) {
+	size_t pos = 0;
+	while ((pos = str.find_first_of("\\", pos)) != std::string::npos) {
+		switch (str[pos]) {
+		case '\\r': str.replace(pos, 2, "\r"); break;
+		case '\\n': str.replace(pos, 2, "\n"); break;
+		case '\\t': str.replace(pos, 2, "\t"); break;
+		}
+		pos += 1;
+	}
+}
 void SaveStrings()
 {
 	std::ofstream fs("strings.json", std::ios::out | std::ios::binary);
@@ -1125,10 +1160,10 @@ void SaveStrings()
 	fs << "\t\"strings\" : \r\n\t[\r\n";
 	auto stringcount = (sizeof(stringaddresses) / sizeof(STATICSTRING));
 	const STATICSTRING* strings = stringaddresses;
-	for (int i = 0; i < stringcount; i++)
+	for (unsigned int i = 0; i < stringcount; i++)
 	{
 		std::string string = strings[i].ptr;
-		escapeInPlace(string);
+		removeEscape(string);
 		string = "\"" + string + "\"";
 		fs << "\t\t[ " << i << ", " << string << " ]";
 		if (i + 1 == stringcount)
@@ -1148,6 +1183,7 @@ void ReplaceStrings(const char* filename)
 		if (!file.is_open())
 			return;
 		file >> stringsjson;
+		file.close();
 		const auto& string_array = stringsjson["strings"];
 		int stringcount = string_array.size();
 		
@@ -1157,6 +1193,7 @@ void ReplaceStrings(const char* filename)
 			if (idx >= (sizeof(stringaddresses) / sizeof(STATICSTRING)) || idx < 0)
 				continue;
 			std::string string = string_array[i][1].get<std::string>();
+			addEscape(string);
 			int limit = stringaddresses[idx].limit;
 			char* stringaddress = stringaddresses[idx].ptr;
 
@@ -1172,6 +1209,182 @@ void ReplaceStrings(const char* filename)
 		OutputDebugStringA(ss.str().c_str());
 		return;
 	}
+}
+void SaveRivalStrings()
+{
+	std::ofstream fs("rivals.json", std::ios::out | std::ios::binary);
+	if (!fs.is_open()) return;
+	fs << "{" << "\r\n";
+	fs << "\t\"teamnames\" : \r\n\t[\r\n";
+
+	char** teamnames = (char**)rivalTeamNameTable;
+	char** handles = (char**)rivalHandleTable;
+	int i = 0;
+	while (*teamnames != nullptr)
+	{
+		std::string teamname = *teamnames;
+		removeEscape(teamname);
+		teamname = "\"" + teamname + "\"";
+		fs << "\t\t[ " << i << ", " << teamname << " ]";
+		if (*(teamnames + 1) == nullptr)
+			fs << "\r\n";
+		else
+			fs << ",\r\n";
+		i++;
+		teamnames++;
+	}
+	i = 0;
+	fs << "\t],\r\n";
+	fs << "\t\"teamhandles\" : \r\n\t[\r\n";
+	while (*handles != nullptr)
+	{
+		std::string handle = *handles;
+		removeEscape(handle);
+		handle = "\"" + handle + "\"";
+		fs << "\t\t[ " << i << ", " << handle << " ]";
+		if (*(handles + 1) == nullptr)
+			fs << "\r\n";
+		else
+			fs << ",\r\n";
+		i++;
+		handles++;
+	}
+	fs << "\t]\r\n}";
+	fs.close();
+}
+void ReplaceRivalStrings(const char* filename)
+{
+	try
+	{
+		char** teamnames = (char**)rivalTeamNameTable;
+		char** handles = (char**)rivalHandleTable;
+
+		nlohmann::json stringsjson;
+		std::ifstream file(filename);
+		if (!file.is_open())
+			return;
+		file >> stringsjson;
+		file.close();
+		const auto& teamnames_array = stringsjson["teamnames"];
+		int teamnamecount = teamnames_array.size();
+
+		for (int i = 0; i < teamnamecount; i++)
+		{
+			int idx = teamnames_array[i][0].get<int>();
+			if (idx >= 45 || idx < 0)
+				continue;
+			std::string teamname = teamnames_array[i][1].get<std::string>();
+			addEscape(teamname);
+			char* teamnameptr = (char*)calloc(teamname.size() + 1, 1);
+			if (teamnameptr)
+			{
+				memcpy(teamnameptr, (char*)teamname.c_str(), teamname.size());
+				teamnames[idx] = teamnameptr;
+			}
+		}
+
+		const auto& teamhandles_array = stringsjson["teamhandles"];
+		int teamhandlecount = teamhandles_array.size();
+
+		for (int i = 0; i < teamhandlecount; i++)
+		{
+			int idx = teamhandles_array[i][0].get<int>();
+			if (idx >= 336 || idx < 0)
+				continue;
+			std::string handle = teamhandles_array[i][1].get<std::string>();
+			addEscape(handle);
+			char* teamhandleptr = (char*)calloc(handle.size() + 1, 1);
+			if (teamhandleptr)
+			{
+				memcpy(teamhandleptr, handle.c_str(), handle.size());
+				handles[idx] = teamhandleptr;
+			}
+		}
+	}
+	catch (std::exception e)
+	{
+		std::stringstream ss;
+		ss << "Failed to load " << filename << ". Exception: " << e.what() << std::endl;
+		OutputDebugStringA(ss.str().c_str());
+		return;
+	}
+}
+void SaveAllStrings()
+{
+	std::ofstream fs("lang-jp.json", std::ios::out | std::ios::binary);
+	if (!fs.is_open()) return;
+	fs << "{" << "\r\n";
+
+	fs << "\t\"items\" : \r\n\t[\r\n";
+	auto itemcount = 2132; // sizeof(itemDetails) / sizeof(ITEMDETAILENTRY);
+	const ITEMDETAILENTRY* items = itemDetailsInternal2;
+	for (int i = 0; i < itemcount; i++)
+	{
+		std::string name = items[i].name;
+		name.erase(std::remove(name.begin(), name.end(), '\t'), name.end());
+		name = "\"" + name + "\", ";
+		std::string desc = items[i].description;
+		desc.erase(std::remove(desc.begin(), desc.end(), '\t'), desc.end());
+		fs << "\t\t[ " << std::right << std::setfill(' ') << std::setw(4) << items[i].itemid << ", " << std::left << std::setfill(' ') << std::setw(64) << name << "\"" << desc << "\" ]";
+		if (i + 1 == itemcount)
+			fs << "\r\n";
+		else
+			fs << ",\r\n";
+	}
+	fs << "\t],\r\n";
+
+	fs << "\t\"strings\" : \r\n\t[\r\n";
+	auto stringcount = (sizeof(stringaddresses) / sizeof(STATICSTRING));
+	const STATICSTRING* strings = stringaddresses;
+	for (unsigned int i = 0; i < stringcount; i++)
+	{
+		std::string string = strings[i].ptr;
+		removeEscape(string);
+		string = "\"" + string + "\"";
+		fs << "\t\t[ " << i << ", " << string << " ]";
+		if (i + 1 == stringcount)
+			fs << "\r\n";
+		else
+			fs << ",\r\n";
+	}
+	fs << "\t],\r\n";
+
+	fs << "\t\"teamnames\" : \r\n\t[\r\n";
+	char** teamnames = (char**)rivalTeamNameTable;
+	char** handles = (char**)rivalHandleTable;
+	int i = 0;
+	while (*teamnames != nullptr)
+	{
+		std::string teamname = *teamnames;
+		removeEscape(teamname);
+		teamname = "\"" + teamname + "\"";
+		fs << "\t\t[ " << i << ", " << teamname << " ]";
+		if (*(teamnames + 1) == nullptr)
+			fs << "\r\n";
+		else
+			fs << ",\r\n";
+		i++;
+		teamnames++;
+	}
+	i = 0;
+	fs << "\t],\r\n";
+	fs << "\t\"teamhandles\" : \r\n\t[\r\n";
+	while (*handles != nullptr)
+	{
+		std::string handle = *handles;
+		removeEscape(handle);
+		handle = "\"" + handle + "\"";
+		fs << "\t\t[ " << i << ", " << handle << " ]";
+		if (*(handles + 1) == nullptr)
+			fs << "\r\n";
+		else
+			fs << ",\r\n";
+		i++;
+		handles++;
+	}
+
+	fs << "\t]\r\n}";
+	fs.close();
 }
 int __cdecl GetSupportedResolution(int deviceid, int unknown2, int width, int height, int unknown3)
 {
