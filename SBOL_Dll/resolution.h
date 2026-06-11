@@ -284,10 +284,10 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElementObject, (int*)0x004D5F18 },
 	//{ createUIElementObject, (int*)0x004D8D66 },
 	{ createUIElementObject_43, (int*)0x004DC729 }, // Wrong way warning text
-	//{ createUIElementObject, (int*)0x004DE74D },
-	//{ createUIElementObject, (int*)0x004DE79B },
-	//{ createUIElementObject, (int*)0x004DE7E9 },
-	//{ createUIElementObject, (int*)0x004DE839 },
+	{ createUIElementObject_43, (int*)0x004DE74D }, // Battle String Player Team
+	{ createUIElementObject_43, (int*)0x004DE79B }, // Battle String Player Handle
+	{ createUIElementObject_43, (int*)0x004DE7E9 }, // Battle String Rival Team
+	{ createUIElementObject_43, (int*)0x004DE839 }, // Battle String Rival Handle
 	//{ createUIElementObject, (int*)0x004DE8C1 },
 	//{ createUIElementObject, (int*)0x004DE90E },
 	{ createUIElementObject_AutoScale_43, (int*)0x004FBB54 }, // Addressbook textbox input
@@ -383,93 +383,93 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElement_43, (int*)0x0045E21C }, // Itembox item button icon
 	{ createUIElement_43, (int*)0x0045E307 }, // Itembox item button label
 	{ createUIElement_43, (int*)0x0045F367 }, // Itembox close button text
-	//{ createUIElement, (int*)0x0046F7AB }, // ???
-	//{ createUIElement, (int*)0x0046F8A7 }, // ???
-	//{ createUIElement, (int*)0x0046F9D1 }, // ???
-	//{ createUIElement, (int*)0x0046FF20 }, // ???
-	//{ createUIElement, (int*)0x00470056 }, // ???
-	//{ createUIElement, (int*)0x00470197 }, // ???
-	//{ createUIElement, (int*)0x0047023C }, // ???
-	//{ createUIElement, (int*)0x00470C20 }, // ???
-	//{ createUIElement, (int*)0x00470D43 }, // ???
-	//{ createUIElement, (int*)0x00470DE0 }, // ???
-	//{ createUIElement, (int*)0x00470EBF }, // ???
-	//{ createUIElement, (int*)0x00470FA5 }, // ???
-	//{ createUIElement, (int*)0x004710B6 }, // ???
-	//{ createUIElement, (int*)0x004711B1 }, // ???
-	//{ createUIElement, (int*)0x00471265 }, // ???
-	//{ createUIElement, (int*)0x004712FA }, // ???
-	//{ createUIElement, (int*)0x00471363 }, // ???
-	//{ createUIElement, (int*)0x00471406 }, // ???
-	//{ createUIElement, (int*)0x004714D3 }, // ???
-	//{ createUIElement, (int*)0x0047154B }, // ???
-	//{ createUIElement, (int*)0x004715B5 }, // ???
-	//{ createUIElement, (int*)0x0047161E }, // ???
-	//{ createUIElement, (int*)0x00471687 }, // ???
-	//{ createUIElement, (int*)0x0047548C }, // ???
-	//{ createUIElement, (int*)0x00475A4C }, // ???
-	//{ createUIElement, (int*)0x00475AB7 }, // ???
-	//{ createUIElement, (int*)0x00475B81 }, // ???
-	//{ createUIElement, (int*)0x00475C42 }, // ???
-	//{ createUIElement, (int*)0x00475D0F }, // ???
-	//{ createUIElement, (int*)0x00475DBD }, // ???
-	//{ createUIElement, (int*)0x00477847 }, // ???
-	//{ createUIElement, (int*)0x004778BF }, // ???
-	//{ createUIElement, (int*)0x00477962 }, // ???
-	//{ createUIElement, (int*)0x00477A07 }, // ???
-	//{ createUIElement, (int*)0x00477AC4 }, // ???
-	//{ createUIElement, (int*)0x00477B93 }, // ???
-	//{ createUIElement, (int*)0x00478A99 }, // ???
-	//{ createUIElement, (int*)0x00478B2A }, // ???
-	//{ createUIElement, (int*)0x00478BD1 }, // ???
-	//{ createUIElement, (int*)0x00478D5C }, // ???
-	//{ createUIElement, (int*)0x00478E90 }, // ???
-	//{ createUIElement, (int*)0x0047A5A0 }, // ???
-	//{ createUIElement, (int*)0x0047A648 }, // ???
-	//{ createUIElement, (int*)0x0047A6FB }, // ???
-	//{ createUIElement, (int*)0x0047A8B6 }, // ???
-	//{ createUIElement, (int*)0x0047B3C2 }, // ???
-	//{ createUIElement, (int*)0x0047B4AA }, // ???
-	//{ createUIElement, (int*)0x0047B5B5 }, // ???
-	//{ createUIElement, (int*)0x0047B656 }, // ???
-	//{ createUIElement, (int*)0x0047E02C }, // ???
-	//{ createUIElement, (int*)0x0047E0C5 }, // ???
-	//{ createUIElement, (int*)0x0047E16D }, // ???
-	//{ createUIElement, (int*)0x0047E29F }, // ???
-	//{ createUIElement, (int*)0x004848E8 }, // ???
-	//{ createUIElement, (int*)0x00484A1D }, // ???
-	//{ createUIElement, (int*)0x00484B55 }, // ???
-	//{ createUIElement, (int*)0x00484C88 }, // ???
-	//{ createUIElement, (int*)0x00484DDA }, // ???
-	//{ createUIElement, (int*)0x00484EC5 }, // ???
-	//{ createUIElement, (int*)0x00484FAE }, // ???
-	//{ createUIElement, (int*)0x0048501C }, // ???
-	//{ createUIElement, (int*)0x00485189 }, // ???
-	//{ createUIElement, (int*)0x004851D1 }, // ???
-	//{ createUIElement, (int*)0x00485A58 }, // ???
-	//{ createUIElement, (int*)0x00485B9C }, // ???
-	//{ createUIElement, (int*)0x004869BA }, // ???
-	//{ createUIElement, (int*)0x00486CBC }, // ???
-	//{ createUIElement, (int*)0x00486D72 }, // ???
-	//{ createUIElement, (int*)0x004880AF }, // ???
-	//{ createUIElement, (int*)0x00488ABD }, // ???
-	//{ createUIElement, (int*)0x004895A5 }, // ???
-	//{ createUIElement, (int*)0x00489642 }, // ???
-	//{ createUIElement, (int*)0x004896F3 }, // ???
-	//{ createUIElement, (int*)0x00489824 }, // ???
-	//{ createUIElement, (int*)0x0048A27C }, // ???
-	//{ createUIElement, (int*)0x0048A3A2 }, // ???
-	//{ createUIElement, (int*)0x0048A461 }, // ???
-	//{ createUIElement, (int*)0x0048A55B }, // ???
-	//{ createUIElement, (int*)0x0048A601 }, // ???
-	//{ createUIElement, (int*)0x0048A6B0 }, // ???
-	//{ createUIElement, (int*)0x0048A78C }, // ???
-	//{ createUIElement, (int*)0x0048B87F }, // ???
-	//{ createUIElement, (int*)0x0048B96B }, // ???
-	//{ createUIElement, (int*)0x0048BE71 }, // ???
-	//{ createUIElement, (int*)0x0048BEF8 }, // ???
-	//{ createUIElement, (int*)0x0048BF9E }, // ???
-	//{ createUIElement, (int*)0x0048C090 }, // ???
+	//{ createUIElement_43, (int*)0x0046F7AB }, // ???
+	//{ createUIElement_43, (int*)0x0046F8A7 }, // ???
+	//{ createUIElement_43, (int*)0x0046F9D1 }, // ???
+	//{ createUIElement_43, (int*)0x0046FF20 }, // ???
+	//{ createUIElement_43, (int*)0x00470056 }, // ???
+	//{ createUIElement_43, (int*)0x00470197 }, // ???
+	//{ createUIElement_43, (int*)0x0047023C }, // ???
+	//{ createUIElement_43, (int*)0x00470C20 }, // ???
+	//{ createUIElement_43, (int*)0x00470D43 }, // ???
+	//{ createUIElement_43, (int*)0x00470DE0 }, // ???
+	//{ createUIElement_43, (int*)0x00470EBF }, // ???
+	//{ createUIElement_43, (int*)0x00470FA5 }, // ???
+	//{ createUIElement_43, (int*)0x004710B6 }, // ???
+	//{ createUIElement_43, (int*)0x004711B1 }, // ???
+	//{ createUIElement_43, (int*)0x00471265 }, // ???
+	//{ createUIElement_43, (int*)0x004712FA }, // ???
+	//{ createUIElement_43, (int*)0x00471363 }, // ???
+	//{ createUIElement_43, (int*)0x00471406 }, // ???
+	//{ createUIElement_43, (int*)0x004714D3 }, // ???
+	//{ createUIElement_43, (int*)0x0047154B }, // ???
+	//{ createUIElement_43, (int*)0x004715B5 }, // ???
+	//{ createUIElement_43, (int*)0x0047161E }, // ???
+	//{ createUIElement_43, (int*)0x00471687 }, // ???
+	//{ createUIElement_43, (int*)0x0047548C }, // ???
+	//{ createUIElement_43, (int*)0x00475A4C }, // ???
+	//{ createUIElement_43, (int*)0x00475AB7 }, // ???
+	//{ createUIElement_43, (int*)0x00475B81 }, // ???
+	//{ createUIElement_43, (int*)0x00475C42 }, // ???
+	//{ createUIElement_43, (int*)0x00475D0F }, // ???
+	//{ createUIElement_43, (int*)0x00475DBD }, // ???
+	//{ createUIElement_43, (int*)0x00477847 }, // ???
+	//{ createUIElement_43, (int*)0x004778BF }, // ???
+	//{ createUIElement_43, (int*)0x00477962 }, // ???
+	//{ createUIElement_43, (int*)0x00477A07 }, // ???
+	//{ createUIElement_43, (int*)0x00477AC4 }, // ???
+	//{ createUIElement_43, (int*)0x00477B93 }, // ???
+	//{ createUIElement_43, (int*)0x00478A99 }, // ???
+	//{ createUIElement_43, (int*)0x00478B2A }, // ???
+	//{ createUIElement_43, (int*)0x00478BD1 }, // ???
+	//{ createUIElement_43, (int*)0x00478D5C }, // ???
+	//{ createUIElement_43, (int*)0x00478E90 }, // ???
+	//{ createUIElement_43, (int*)0x0047A5A0 }, // ???
+	//{ createUIElement_43, (int*)0x0047A648 }, // ???
+	//{ createUIElement_43, (int*)0x0047A6FB }, // ???
+	//{ createUIElement_43, (int*)0x0047A8B6 }, // ???
+	//{ createUIElement_43, (int*)0x0047B3C2 }, // ???
+	//{ createUIElement_43, (int*)0x0047B4AA }, // ???
+	//{ createUIElement_43, (int*)0x0047B5B5 }, // ???
+	//{ createUIElement_43, (int*)0x0047B656 }, // ???
+	//{ createUIElement_43, (int*)0x0047E02C }, // ???
+	//{ createUIElement_43, (int*)0x0047E0C5 }, // ???
+	//{ createUIElement_43, (int*)0x0047E16D }, // ???
+	//{ createUIElement_43, (int*)0x0047E29F }, // ???
+	//{ createUIElement_43, (int*)0x004848E8 }, // ???
+	//{ createUIElement_43, (int*)0x00484A1D }, // ???
+	//{ createUIElement_43, (int*)0x00484B55 }, // ???
+	//{ createUIElement_43, (int*)0x00484C88 }, // ???
+	//{ createUIElement_43, (int*)0x00484DDA }, // ???
+	//{ createUIElement_43, (int*)0x00484EC5 }, // ???
+	//{ createUIElement_43, (int*)0x00484FAE }, // ???
+	//{ createUIElement_43, (int*)0x0048501C }, // ???
+	//{ createUIElement_43, (int*)0x00485189 }, // ???
+	//{ createUIElement_43, (int*)0x004851D1 }, // ???
+	//{ createUIElement_43, (int*)0x00485A58 }, // ???
+	//{ createUIElement_43, (int*)0x00485B9C }, // ???
+	//{ createUIElement_43, (int*)0x004869BA }, // ???
+	//{ createUIElement_43, (int*)0x00486CBC }, // ???
+	//{ createUIElement_43, (int*)0x00486D72 }, // ???
+	//{ createUIElement_43, (int*)0x004880AF }, // ???
+	//{ createUIElement_43, (int*)0x00488ABD }, // ???
+	//{ createUIElement_43, (int*)0x004895A5 }, // ???
+	//{ createUIElement_43, (int*)0x00489642 }, // ???
+	//{ createUIElement_43, (int*)0x004896F3 }, // ???
+	//{ createUIElement_43, (int*)0x00489824 }, // ???
+	//{ createUIElement_43, (int*)0x0048A27C }, // ???
+	//{ createUIElement_43, (int*)0x0048A3A2 }, // ???
+	//{ createUIElement_43, (int*)0x0048A461 }, // ???
+	//{ createUIElement_43, (int*)0x0048A55B }, // ???
+	//{ createUIElement_43, (int*)0x0048A601 }, // ???
+	//{ createUIElement_43, (int*)0x0048A6B0 }, // ???
+	//{ createUIElement_43, (int*)0x0048A78C }, // ???
+	//{ createUIElement_43, (int*)0x0048B87F }, // ???
+	//{ createUIElement_43, (int*)0x0048B96B }, // ???
+	//{ createUIElement_43, (int*)0x0048BE71 }, // ???
+	//{ createUIElement_43, (int*)0x0048BEF8 }, // ???
+	//{ createUIElement_43, (int*)0x0048BF9E }, // ???
+	//{ createUIElement_43, (int*)0x0048C090 }, // ???
 	{ createUIElement_43, (int*)0x0048C98C }, // Battle win/lose texture
 	{ createUIElement_43, (int*)0x0048C9F7 }, // Battle win/lose texture
 	{ createUIElement_43, (int*)0x0048CF3F }, // Battle Result Value Labels
@@ -482,101 +482,101 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElement_43, (int*)0x0048DEF3 }, // Itembox when in shop
 	{ createUIElement_43, (int*)0x0048DF7E }, // Itembox when in shop
 	{ createUIElement_43, (int*)0x0048E31E }, // Battle Result Dialog 
-	//{ createUIElement, (int*)0x004972B1 }, // ???
-	//{ createUIElement, (int*)0x004984C1 }, // ???
-	//{ createUIElement, (int*)0x0049932E }, // ???
-	//{ createUIElement, (int*)0x0049957A }, // ???
-	//{ createUIElement, (int*)0x0049A119 }, // ???
-	//{ createUIElement, (int*)0x0049A258 }, // ???
-	//{ createUIElement, (int*)0x0049A3C3 }, // ???
-	//{ createUIElement, (int*)0x0049A463 }, // ???
-	//{ createUIElement, (int*)0x0049B3FD }, // ???
-	//{ createUIElement, (int*)0x0049B590 }, // ???
-	//{ createUIElement, (int*)0x0049B6D1 }, // ???
-	//{ createUIElement, (int*)0x0049B942 }, // ???
-	//{ createUIElement, (int*)0x0049B9B7 }, // ???
-	//{ createUIElement, (int*)0x0049C7AB }, // ???
-	//{ createUIElement, (int*)0x0049C8CE }, // ???
-	//{ createUIElement, (int*)0x0049C9D6 }, // ???
-	//{ createUIElement, (int*)0x0049CAF7 }, // ???
-	//{ createUIElement, (int*)0x0049CBA2 }, // ???
-	//{ createUIElement, (int*)0x0049CC59 }, // ???
-	//{ createUIElement, (int*)0x0049D2E1 }, // ???
-	//{ createUIElement, (int*)0x0049D404 }, // ???
-	//{ createUIElement, (int*)0x0049D518 }, // ???
-	//{ createUIElement, (int*)0x0049D666 }, // ???
-	//{ createUIElement, (int*)0x0049D6F3 }, // ???
-	//{ createUIElement, (int*)0x0049DE4E }, // ???
-	//{ createUIElement, (int*)0x0049DF4F }, // ???
-	//{ createUIElement, (int*)0x0049E064 }, // ???
-	//{ createUIElement, (int*)0x0049E108 }, // ???
-	//{ createUIElement, (int*)0x0049E705 }, // ???
-	//{ createUIElement, (int*)0x0049E84D }, // ???
-	//{ createUIElement, (int*)0x0049E9C9 }, // ???
-	//{ createUIElement, (int*)0x0049EA41 }, // ???
-	//{ createUIElement, (int*)0x0049EAB8 }, // ???
-	//{ createUIElement, (int*)0x0049EB2C }, // ???
-	//{ createUIElement, (int*)0x0049EBE4 }, // ???
-	//{ createUIElement, (int*)0x0049F44B }, // ???
-	//{ createUIElement, (int*)0x0049F536 }, // ???
-	//{ createUIElement, (int*)0x0049F61F }, // ???
-	//{ createUIElement, (int*)0x0049FC4C }, // ???
-	//{ createUIElement, (int*)0x0049FD33 }, // ???
-	//{ createUIElement, (int*)0x0049FDEB }, // ???
-	//{ createUIElement, (int*)0x0049FF37 }, // ???
-	//{ createUIElement, (int*)0x0049FF9C }, // ???
-	//{ createUIElement, (int*)0x004A00DB }, // ???
-	//{ createUIElement, (int*)0x004A0149 }, // ???
-	//{ createUIElement, (int*)0x004A02C0 }, // ???
-	//{ createUIElement, (int*)0x004A034C }, // ???
-	//{ createUIElement, (int*)0x004A03FB }, // ???
-	//{ createUIElement, (int*)0x004A0DAF }, // ???
-	//{ createUIElement, (int*)0x004A0E94 }, // ???
-	//{ createUIElement, (int*)0x004A0F77 }, // ???
-	//{ createUIElement, (int*)0x004A1094 }, // ???
-	//{ createUIElement, (int*)0x004A1912 }, // ???
-	//{ createUIElement, (int*)0x004A1BE7 }, // ???
-	//{ createUIElement, (int*)0x004A1C60 }, // ???
-	//{ createUIElement, (int*)0x004A1DC6 }, // ???
-	//{ createUIElement, (int*)0x004A1E39 }, // ???
-	//{ createUIElement, (int*)0x004A1EB7 }, // ???
-	//{ createUIElement, (int*)0x004A1F9E }, // ???
-	//{ createUIElement, (int*)0x004A2043 }, // ???
-	//{ createUIElement, (int*)0x004A9017 }, // ???
-	//{ createUIElement, (int*)0x004A9618 }, // ???
-	//{ createUIElement, (int*)0x004A968B }, // ???
-	//{ createUIElement, (int*)0x004A970F }, // ???
-	//{ createUIElement, (int*)0x004A9A05 }, // ???
-	//{ createUIElement, (int*)0x004AA269 }, // ???
-	//{ createUIElement, (int*)0x004AA296 }, // ???
-	//{ createUIElement, (int*)0x004AA327 }, // ???
-	//{ createUIElement, (int*)0x004AA358 }, // ???
-	//{ createUIElement, (int*)0x004AA5A8 }, // ???
-	//{ createUIElement, (int*)0x004AA5D5 }, // ???
-	//{ createUIElement, (int*)0x004AA646 }, // ???
-	//{ createUIElement, (int*)0x004AA687 }, // ???
-	//{ createUIElement, (int*)0x004AA7CF }, // ???
-	//{ createUIElement, (int*)0x004AB082 }, // ???
-	//{ createUIElement, (int*)0x004AB450 }, // ???
-	//{ createUIElement, (int*)0x004ADFD8 }, // ???
-	//{ createUIElement, (int*)0x004AE08E }, // ???
-	//{ createUIElement, (int*)0x004B16D7 }, // ???
-	//{ createUIElement, (int*)0x004B180F }, // ???
-	//{ createUIElement, (int*)0x004B196B }, // ???
-	//{ createUIElement, (int*)0x004B1AA0 }, // ???
-	//{ createUIElement, (int*)0x004B1BE6 }, // ???
-	//{ createUIElement, (int*)0x004B1D55 }, // ???
-	//{ createUIElement, (int*)0x004B1EBB }, // ???
-	//{ createUIElement, (int*)0x004B201C }, // ???
-	//{ createUIElement, (int*)0x004B2150 }, // ???
-	//{ createUIElement, (int*)0x004B2284 }, // ???
-	//{ createUIElement, (int*)0x004B24EC }, // ???
-	//{ createUIElement, (int*)0x004B2697 }, // ???
-	//{ createUIElement, (int*)0x004B27E8 }, // ???
-	//{ createUIElement, (int*)0x004B2972 }, // ???
-	//{ createUIElement, (int*)0x004B2ABA }, // ???
-	//{ createUIElement, (int*)0x004B2BEE }, // ???
-	//{ createUIElement, (int*)0x004B553D }, // ???
+	//{ createUIElement_43, (int*)0x004972B1 }, // ???
+	//{ createUIElement_43, (int*)0x004984C1 }, // ???
+	//{ createUIElement_43, (int*)0x0049932E }, // ???
+	//{ createUIElement_43, (int*)0x0049957A }, // ???
+	//{ createUIElement_43, (int*)0x0049A119 }, // ???
+	//{ createUIElement_43, (int*)0x0049A258 }, // ???
+	//{ createUIElement_43, (int*)0x0049A3C3 }, // ???
+	//{ createUIElement_43, (int*)0x0049A463 }, // ???
+	//{ createUIElement_43, (int*)0x0049B3FD }, // ???
+	//{ createUIElement_43, (int*)0x0049B590 }, // ???
+	//{ createUIElement_43, (int*)0x0049B6D1 }, // ???
+	//{ createUIElement_43, (int*)0x0049B942 }, // ???
+	//{ createUIElement_43, (int*)0x0049B9B7 }, // ???
+	//{ createUIElement_43, (int*)0x0049C7AB }, // ???
+	//{ createUIElement_43, (int*)0x0049C8CE }, // ???
+	//{ createUIElement_43, (int*)0x0049C9D6 }, // ???
+	//{ createUIElement_43, (int*)0x0049CAF7 }, // ???
+	//{ createUIElement_43, (int*)0x0049CBA2 }, // ???
+	//{ createUIElement_43, (int*)0x0049CC59 }, // ???
+	//{ createUIElement_43, (int*)0x0049D2E1 }, // ???
+	//{ createUIElement_43, (int*)0x0049D404 }, // ???
+	//{ createUIElement_43, (int*)0x0049D518 }, // ???
+	//{ createUIElement_43, (int*)0x0049D666 }, // ???
+	//{ createUIElement_43, (int*)0x0049D6F3 }, // ???
+	//{ createUIElement_43, (int*)0x0049DE4E }, // ???
+	//{ createUIElement_43, (int*)0x0049DF4F }, // ???
+	//{ createUIElement_43, (int*)0x0049E064 }, // ???
+	//{ createUIElement_43, (int*)0x0049E108 }, // ???
+	//{ createUIElement_43, (int*)0x0049E705 }, // ???
+	//{ createUIElement_43, (int*)0x0049E84D }, // ???
+	//{ createUIElement_43, (int*)0x0049E9C9 }, // ???
+	//{ createUIElement_43, (int*)0x0049EA41 }, // ???
+	//{ createUIElement_43, (int*)0x0049EAB8 }, // ???
+	//{ createUIElement_43, (int*)0x0049EB2C }, // ???
+	//{ createUIElement_43, (int*)0x0049EBE4 }, // ???
+	//{ createUIElement_43, (int*)0x0049F44B }, // ???
+	//{ createUIElement_43, (int*)0x0049F536 }, // ???
+	//{ createUIElement_43, (int*)0x0049F61F }, // ???
+	//{ createUIElement_43, (int*)0x0049FC4C }, // ???
+	//{ createUIElement_43, (int*)0x0049FD33 }, // ???
+	//{ createUIElement_43, (int*)0x0049FDEB }, // ???
+	//{ createUIElement_43, (int*)0x0049FF37 }, // ???
+	//{ createUIElement_43, (int*)0x0049FF9C }, // ???
+	//{ createUIElement_43, (int*)0x004A00DB }, // ???
+	//{ createUIElement_43, (int*)0x004A0149 }, // ???
+	//{ createUIElement_43, (int*)0x004A02C0 }, // ???
+	//{ createUIElement_43, (int*)0x004A034C }, // ???
+	//{ createUIElement_43, (int*)0x004A03FB }, // ???
+	//{ createUIElement_43, (int*)0x004A0DAF }, // ???
+	//{ createUIElement_43, (int*)0x004A0E94 }, // ???
+	//{ createUIElement_43, (int*)0x004A0F77 }, // ???
+	//{ createUIElement_43, (int*)0x004A1094 }, // ???
+	//{ createUIElement_43, (int*)0x004A1912 }, // ???
+	//{ createUIElement_43, (int*)0x004A1BE7 }, // ???
+	//{ createUIElement_43, (int*)0x004A1C60 }, // ???
+	//{ createUIElement_43, (int*)0x004A1DC6 }, // ???
+	//{ createUIElement_43, (int*)0x004A1E39 }, // ???
+	//{ createUIElement_43, (int*)0x004A1EB7 }, // ???
+	//{ createUIElement_43, (int*)0x004A1F9E }, // ???
+	//{ createUIElement_43, (int*)0x004A2043 }, // ???
+	//{ createUIElement_43, (int*)0x004A9017 }, // ???
+	//{ createUIElement_43, (int*)0x004A9618 }, // ???
+	//{ createUIElement_43, (int*)0x004A968B }, // ???
+	//{ createUIElement_43, (int*)0x004A970F }, // ???
+	//{ createUIElement_43, (int*)0x004A9A05 }, // ???
+	{ createUIElement_43, (int*)0x004AA269 }, // Battle end text
+	{ createUIElement_43, (int*)0x004AA296 }, // Battle end related
+	{ createUIElement_43, (int*)0x004AA327 }, // Battle end related
+	{ createUIElement_43, (int*)0x004AA358 }, // Battle end related
+	//{ createUIElement_43, (int*)0x004AA5A8 }, // ???
+	//{ createUIElement_43, (int*)0x004AA5D5 }, // ???
+	//{ createUIElement_43, (int*)0x004AA646 }, // ???
+	//{ createUIElement_43, (int*)0x004AA687 }, // ???
+	{ createUIElement_43, (int*)0x004AA7CF }, // Battle end + symbols
+	//{ createUIElement_43, (int*)0x004AB082 }, // ???
+	//{ createUIElement_43, (int*)0x004AB450 }, // ???
+	//{ createUIElement_43, (int*)0x004ADFD8 }, // ???
+	//{ createUIElement_43, (int*)0x004AE08E }, // ???
+	//{ createUIElement_43, (int*)0x004B16D7 }, // ???
+	//{ createUIElement_43, (int*)0x004B180F }, // ???
+	//{ createUIElement_43, (int*)0x004B196B }, // ???
+	//{ createUIElement_43, (int*)0x004B1AA0 }, // ???
+	//{ createUIElement_43, (int*)0x004B1BE6 }, // ???
+	//{ createUIElement_43, (int*)0x004B1D55 }, // ???
+	//{ createUIElement_43, (int*)0x004B1EBB }, // ???
+	//{ createUIElement_43, (int*)0x004B201C }, // ???
+	//{ createUIElement_43, (int*)0x004B2150 }, // ???
+	//{ createUIElement_43, (int*)0x004B2284 }, // ???
+	//{ createUIElement_43, (int*)0x004B24EC }, // ???
+	//{ createUIElement_43, (int*)0x004B2697 }, // ???
+	//{ createUIElement_43, (int*)0x004B27E8 }, // ???
+	//{ createUIElement_43, (int*)0x004B2972 }, // ???
+	//{ createUIElement_43, (int*)0x004B2ABA }, // ???
+	//{ createUIElement_43, (int*)0x004B2BEE }, // ???
+	//{ createUIElement_43, (int*)0x004B553D }, // ???
 	{ createUIElement, (int*)0x004BC49E }, // Enter garage back black box
 	{ createUIElement_43, (int*)0x004BC5B2 }, // Enter garage dialog back
 	{ createUIElement_43, (int*)0x004BC642 }, // Enter garage OK button
@@ -662,16 +662,16 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElement_43, (int*)0x004DC9D5 }, // Course information dialog left backing that appears when you approach a junction
 	{ createUIElement_43, (int*)0x004DCA3E }, // Course information dialog right backing that appears when you approach a junction
 	{ createUIElement_43, (int*)0x004DD09D }, // Course information dialog foreground that appears when you approach a junction
-	{ createUIElement_43, (int*)0x004DD114 }, // Course information diloag related
-	{ createUIElement_43, (int*)0x004DD18B }, // Course information diloag related
-	{ createUIElement_43, (int*)0x004DD250 }, // Course information diloag related
-	{ createUIElement_43, (int*)0x004DD2DF }, // Course information diloag related
-	{ createUIElement_43, (int*)0x004DD385 }, // Course information diloag related
-	{ createUIElement_43, (int*)0x004DD3FC }, // Course information diloag related
-	{ createUIElement_43, (int*)0x004DD473 }, // Course information diloag related
-	{ createUIElement_43, (int*)0x004DD5AA }, // Course information diloag related
-	{ createUIElement_43, (int*)0x004DD61E }, // Course information diloag related
-	//{ createUIElement, (int*)0x004DDF41 }, // ???
+	{ createUIElement_43, (int*)0x004DD114 }, // Course information dialog related
+	{ createUIElement_43, (int*)0x004DD18B }, // Course information dialog related
+	{ createUIElement_43, (int*)0x004DD250 }, // Course information dialog related
+	{ createUIElement_43, (int*)0x004DD2DF }, // Course information dialog related
+	{ createUIElement_43, (int*)0x004DD385 }, // Course information dialog related
+	{ createUIElement_43, (int*)0x004DD3FC }, // Course information dialog related
+	{ createUIElement_43, (int*)0x004DD473 }, // Course information dialog related
+	{ createUIElement_43, (int*)0x004DD5AA }, // Course information dialog related
+	{ createUIElement_43, (int*)0x004DD61E }, // Course information dialog related
+	//{ createUIElement_43, (int*)0x004DDF41 }, // ???
 	{ createUIElement_43, (int*)0x004DE45C }, // Battle related
 	{ createUIElement_43, (int*)0x004DE4A2 }, // Battle related
 	{ createUIElement_43, (int*)0x004DE4EE }, // Battle related

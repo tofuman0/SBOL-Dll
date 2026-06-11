@@ -28,9 +28,6 @@
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="item.dat" />
-    <None Include="items.json">
-      <Filter>Resources</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">

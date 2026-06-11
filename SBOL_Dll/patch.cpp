@@ -383,9 +383,9 @@ void setStrings()
 	for (int i = 0; i < sizeof(itemIDNumber) / sizeof(int*); i++)			*(int*)(itemIDNumber[i]) = (int)items;
 	for (int i = 0; i < sizeof(itemIDName) / sizeof(int*); i++)				*(int*)(itemIDName[i]) = (int)(items) + 4;
 	for (int i = 0; i < sizeof(itemIDDescription) / sizeof(int*); i++)		*(int*)(itemIDDescription[i]) = (int)(items) + 8;
-	for (int i = 0; i < sizeof(itemIDEnd) / sizeof(int*); i++)				*(int*)(itemIDEnd[i]) = (int)(&itemDetails) + (itemsCount * sizeof(ITEMDETAILENTRY));
-	for (int i = 0; i < sizeof(itemIDMid) / sizeof(int*); i++)				*(int*)(itemIDMid[i]) = (int)(&items) + ((2035 * 12) + 8);
-	for (int i = 0; i < sizeof(itemIDMid2) / sizeof(int*); i++)				*(int*)(itemIDMid2[i]) = (int)(&items) + (2072 * 12);
+	for (int i = 0; i < sizeof(itemIDEnd) / sizeof(int*); i++)				*(int*)(itemIDEnd[i]) = (int)(items) + (itemsCount * sizeof(ITEMDETAILENTRY));
+	for (int i = 0; i < sizeof(itemIDMid) / sizeof(int*); i++)				*(int*)(itemIDMid[i]) = (int)(items) + ((2035 * 12) + 8);
+	for (int i = 0; i < sizeof(itemIDMid2) / sizeof(int*); i++)				*(int*)(itemIDMid2[i]) = (int)(items) + (2072 * 12);
 
 	for (int i = 0; i < sizeof(replaceStrings) / sizeof(STRINGREPLACEENTRY); i++)
 	{
@@ -551,12 +551,6 @@ void setResolution()
 		}
 	}
 	//insertFunction(0x0045F6C8, positionUIElement3, 5, FT_CALL);
-
-	// Battle strings
-	insertFunction(0x004DE74D, placeStringLeftAlign, 5, FT_CALL);
-	insertFunction(0x004DE79B, placeStringLeftAlign, 5, FT_CALL);
-	insertFunction(0x004DE7E9, placeStringRightAlign, 5, FT_CALL);
-	insertFunction(0x004DE839, placeStringRightAlign, 5, FT_CALL);
 
 	//for (int i = 0; i < sizeof(repositionIntAddr) / sizeof(int); i++)
 	//{

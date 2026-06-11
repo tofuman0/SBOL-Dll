@@ -1165,27 +1165,6 @@ void __declspec(naked) scaleUIElement()
 		ret 0010h;
 	}
 }
-void __fastcall placeString(void* obj, int unused, int x, int y)
-{
-	int adjustX = (int)(((float)x / 640.0f) * resW);
-	int adjustY = (int)(((float)y / 480.0f) * resH);
-
-	placeStringGame(obj, unused, adjustX, adjustY);
-}
-void __fastcall placeStringLeftAlign(void* obj, int unused, int x, int y)
-{
-	int adjustX = x;
-	int adjustY = (int)(((float)y / 480.0f) * resH);
-
-	placeStringGame(obj, unused, adjustX, adjustY);
-}
-void __fastcall placeStringRightAlign(void* obj, int unused, int x, int y)
-{
-	int adjustX = resW - (640 - x);
-	int adjustY = (int)(((float)y / 480.0f) * resH);
-
-	placeStringGame(obj, unused, adjustX, adjustY);
-}
 void __declspec(naked) exitFix()
 {
 	__asm
