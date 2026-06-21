@@ -654,7 +654,7 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElement_Scale_Reposition_BottomRight, (int*)0x004DB9B5 }, // Item active icon in bottom right 
 	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004DBB2B }, // Icon backing
 	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004DBB8C }, // Icon
-	//{ createUIElement, (int*)0x004DBD3D }, // Linked to bottom right buttonsg
+	//{ createUIElement, (int*)0x004DBD3D }, // Linked to bottom right buttons
 	//{ createUIElement, (int*)0x004DBD62 }, // Linked to bottom right buttons
 	//{ createUIElement, (int*)0x004DBE40 }, // ???
 	//{ createUIElement, (int*)0x004DBE8F }, // ???
@@ -671,7 +671,7 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElement_43, (int*)0x004DD473 }, // Course information dialog related
 	{ createUIElement_43, (int*)0x004DD5AA }, // Course information dialog related
 	{ createUIElement_43, (int*)0x004DD61E }, // Course information dialog related
-	//{ createUIElement_43, (int*)0x004DDF41 }, // ???
+	{ createUIElement_43, (int*)0x004DDF41 }, // Course information dialog rival direction
 	{ createUIElement_43, (int*)0x004DE45C }, // Battle related
 	{ createUIElement_43, (int*)0x004DE4A2 }, // Battle related
 	{ createUIElement_43, (int*)0x004DE4EE }, // Battle related
