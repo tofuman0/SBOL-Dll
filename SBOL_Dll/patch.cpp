@@ -335,6 +335,11 @@ void patchClient()
 
 #pragma endregion
 }
+void patchBugs()
+{
+	// Fix pointer for reward items. Game incorrectly pushes Item.dat pointer and not players inventory to sort function
+	*(int*)0x0045E5A7 = PTR_ITEMBOX_STORAGE;
+}
 int notFullScreenMode()
 {
 	return fullScreen ? 0 : 1;
@@ -768,6 +773,9 @@ void __cdecl windowMonitorThread(void* parg)
 			Sleep(10);
 	}
 	OutputDebugStringA("Game exited due to window not found.");
+#ifdef _DEBUG
+	//__debugbreak();
+#endif
 	_Exit(0);
 }
 void readRegistry()

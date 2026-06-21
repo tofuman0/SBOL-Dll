@@ -158,6 +158,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		setResolution();
 		setDrawDistance();
 		patchClient();
+		patchBugs();
 
 		// Used to create enum list for items
 		//PrintItems();

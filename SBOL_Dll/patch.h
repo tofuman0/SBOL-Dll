@@ -28,6 +28,7 @@ extern DXFont* PositionFont;
 extern std::string language;
 
 void patchClient();
+void patchBugs();
 int notFullScreenMode();
 int skipBootWarning();
 void setStrings();

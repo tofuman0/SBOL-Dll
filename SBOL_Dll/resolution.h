@@ -8,7 +8,7 @@ int* resWidth[]{
 	nullptr,
 	(int*)0x004122E6, // Window Width after start
 	(int*)0x0041251B, // Window Width after start
-	(int*)0x004A68C5, // 3d window width in game
+	//(int*)0x004A68C5, // 3d window width in game
 	(int*)0x005C1684, // Window Width on start
 	
 	// Other 3d windows
@@ -70,7 +70,7 @@ int* resHeight[]{
 	nullptr,
 	(int*)0x004122F6, // Window Height after start
 	(int*)0x00412524, // Window Height after start
-	(int*)0x004A68D0, // 3d window height in game
+	//(int*)0x004A68D0, // 3d window height in game
 	(int*)0x005C1688, // Window Height on start
 
 	// Other 3d windows
@@ -299,68 +299,68 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 
 	// Create UI
 	{ createUIElement, nullptr },
-	//{ createUIElement, (int*)0x0042680E }, // ???
-	//{ createUIElement, (int*)0x00426899 }, // ???
-	//{ createUIElement, (int*)0x00434968 }, // ???
-	//{ createUIElement, (int*)0x00434A8E }, // ???
-	//{ createUIElement, (int*)0x00434B5F }, // ???
-	//{ createUIElement, (int*)0x00434CCB }, // ???
-	//{ createUIElement, (int*)0x00434D1B }, // ???
-	//{ createUIElement, (int*)0x00434DBB }, // ???
-	//{ createUIElement, (int*)0x00434EA0 }, // ???
-	//{ createUIElement, (int*)0x00434EEF }, // ???
-	//{ createUIElement, (int*)0x00434F3E }, // ???
-	//{ createUIElement, (int*)0x00435221 }, // ???
-	//{ createUIElement, (int*)0x0043529E }, // ???
-	//{ createUIElement, (int*)0x00435383 }, // ???
-	//{ createUIElement, (int*)0x004353E1 }, // ???
-	//{ createUIElement, (int*)0x00435427 }, // ???
-	//{ createUIElement, (int*)0x00435468 }, // ???
-	//{ createUIElement, (int*)0x004354AD }, // ???
-	//{ createUIElement, (int*)0x00435644 }, // ???
-	//{ createUIElement, (int*)0x00435693 }, // ???
-	//{ createUIElement, (int*)0x004356E2 }, // ???
-	//{ createUIElement, (int*)0x00435731 }, // ???
-	//{ createUIElement, (int*)0x004357AF }, // ???
-	//{ createUIElement, (int*)0x00438C95 }, // ???
-	//{ createUIElement, (int*)0x00438CC1 }, // ???
+	//{ createUIElement_43, (int*)0x0042680E }, // ???
+	//{ createUIElement_43, (int*)0x00426899 }, // ???
+	//{ createUIElement_43, (int*)0x00434968 }, // ???
+	//{ createUIElement_43, (int*)0x00434A8E }, // ???
+	//{ createUIElement_43, (int*)0x00434B5F }, // ???
+	//{ createUIElement_43, (int*)0x00434CCB }, // ???
+	//{ createUIElement_43, (int*)0x00434D1B }, // ???
+	//{ createUIElement_43, (int*)0x00434DBB }, // ???
+	//{ createUIElement_43, (int*)0x00434EA0 }, // ???
+	//{ createUIElement_43, (int*)0x00434EEF }, // ???
+	//{ createUIElement_43, (int*)0x00434F3E }, // ???
+	//{ createUIElement_43, (int*)0x00435221 }, // ???
+	//{ createUIElement_43, (int*)0x0043529E }, // ???
+	//{ createUIElement_43, (int*)0x00435383 }, // ???
+	//{ createUIElement_43, (int*)0x004353E1 }, // ???
+	//{ createUIElement_43, (int*)0x00435427 }, // ???
+	//{ createUIElement_43, (int*)0x00435468 }, // ???
+	//{ createUIElement_43, (int*)0x004354AD }, // ???
+	//{ createUIElement_43, (int*)0x00435644 }, // ???
+	//{ createUIElement_43, (int*)0x00435693 }, // ???
+	//{ createUIElement_43, (int*)0x004356E2 }, // ???
+	//{ createUIElement_43, (int*)0x00435731 }, // ???
+	//{ createUIElement_43, (int*)0x004357AF }, // ???
+	//{ createUIElement_43, (int*)0x00438C95 }, // ???
+	//{ createUIElement_43, (int*)0x00438CC1 }, // ???
 	{ createUIElement_43, (int*)0x0043F75A }, // Loading Screen
-	//{ createUIElement, (int*)0x0044070A }, // ???
-	//{ createUIElement, (int*)0x00440792 }, // ???
-	//{ createUIElement, (int*)0x0044F8BB }, // ???
-	//{ createUIElement, (int*)0x0044FB99 }, // ???
-	//{ createUIElement, (int*)0x0044FC6D }, // ???
-	//{ createUIElement, (int*)0x0044FCE6 }, // ???
-	//{ createUIElement, (int*)0x0044FD4F }, // ???
-	//{ createUIElement, (int*)0x0044FE31 }, // ???
-	//{ createUIElement, (int*)0x00450121 }, // ???
-	//{ createUIElement, (int*)0x004501C7 }, // ???
-	//{ createUIElement, (int*)0x00450574 }, // ???
-	//{ createUIElement, (int*)0x004509BF }, // ???
-	//{ createUIElement, (int*)0x00451547 }, // ???
-	//{ createUIElement, (int*)0x00451683 }, // ???
-	//{ createUIElement, (int*)0x00451791 }, // ???
-	//{ createUIElement, (int*)0x0045189F }, // ???
-	//{ createUIElement, (int*)0x0045195F }, // ???
-	//{ createUIElement, (int*)0x004519EB }, // ???
-	//{ createUIElement, (int*)0x00451A65 }, // ???
-	//{ createUIElement, (int*)0x00451AE0 }, // ???
-	//{ createUIElement, (int*)0x00451B3E }, // ???
-	//{ createUIElement, (int*)0x00451BB8 }, // ???
-	//{ createUIElement, (int*)0x00451C6F }, // ???
-	//{ createUIElement, (int*)0x004521EA }, // ???
-	//{ createUIElement, (int*)0x00452898 }, // ???
-	//{ createUIElement, (int*)0x00452D81 }, // ???
-	//{ createUIElement, (int*)0x004545E2 }, // ???
-	//{ createUIElement, (int*)0x00454626 }, // ???
-	//{ createUIElement, (int*)0x0045A719 }, // ???
-	//{ createUIElement, (int*)0x0045A82D }, // ???
-	//{ createUIElement, (int*)0x0045A9B3 }, // ???
-	//{ createUIElement, (int*)0x0045AA2C }, // ???
-	//{ createUIElement, (int*)0x0045AACF }, // ???
-	//{ createUIElement, (int*)0x0045ABAF }, // ???
-	//{ createUIElement, (int*)0x0045AFC1 }, // ???
-	//{ createUIElement, (int*)0x0045B0B0 }, // ???
+	//{ createUIElement_43, (int*)0x0044070A }, // ???
+	//{ createUIElement_43, (int*)0x00440792 }, // ???
+	//{ createUIElement_43, (int*)0x0044F8BB }, // ???
+	//{ createUIElement_43, (int*)0x0044FB99 }, // ???
+	//{ createUIElement_43, (int*)0x0044FC6D }, // ???
+	//{ createUIElement_43, (int*)0x0044FCE6 }, // ???
+	//{ createUIElement_43, (int*)0x0044FD4F }, // ???
+	//{ createUIElement_43, (int*)0x0044FE31 }, // ???
+	//{ createUIElement_43, (int*)0x00450121 }, // ???
+	//{ createUIElement_43, (int*)0x004501C7 }, // ???
+	//{ createUIElement_43, (int*)0x00450574 }, // ???
+	//{ createUIElement_43, (int*)0x004509BF }, // ???
+	//{ createUIElement_43, (int*)0x00451547 }, // ???
+	//{ createUIElement_43, (int*)0x00451683 }, // ???
+	//{ createUIElement_43, (int*)0x00451791 }, // ???
+	//{ createUIElement_43, (int*)0x0045189F }, // ???
+	//{ createUIElement_43, (int*)0x0045195F }, // ???
+	//{ createUIElement_43, (int*)0x004519EB }, // ???
+	//{ createUIElement_43, (int*)0x00451A65 }, // ???
+	//{ createUIElement_43, (int*)0x00451AE0 }, // ???
+	//{ createUIElement_43, (int*)0x00451B3E }, // ???
+	//{ createUIElement_43, (int*)0x00451BB8 }, // ???
+	//{ createUIElement_43, (int*)0x00451C6F }, // ???
+	//{ createUIElement_43, (int*)0x004521EA }, // ???
+	//{ createUIElement_43, (int*)0x00452898 }, // ???
+	//{ createUIElement_43, (int*)0x00452D81 }, // ???
+	//{ createUIElement_43, (int*)0x004545E2 }, // ???
+	//{ createUIElement_43, (int*)0x00454626 }, // ???
+	//{ createUIElement_43, (int*)0x0045A719 }, // ???
+	//{ createUIElement_43, (int*)0x0045A82D }, // ???
+	//{ createUIElement_43, (int*)0x0045A9B3 }, // ???
+	//{ createUIElement_43, (int*)0x0045AA2C }, // ???
+	//{ createUIElement_43, (int*)0x0045AACF }, // ???
+	//{ createUIElement_43, (int*)0x0045ABAF }, // ???
+	//{ createUIElement_43, (int*)0x0045AFC1 }, // ???
+	//{ createUIElement_43, (int*)0x0045B0B0 }, // ???
 	{ createUIElement, (int*)0x0045B7D7 }, // Itembox dim game window box when using
 	{ createUIElement_43, (int*)0x0045B8E7 }, // Itembox use/trash related
 	{ createUIElement_43, (int*)0x0045BA5E }, // Itembox use/trash related
@@ -479,8 +479,8 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElement_43, (int*)0x0048D9AF }, // Battle Something probably so will leave it enabled
 	{ createUIElement_43, (int*)0x0048DAEA }, // Battle Something probably so will leave it enabled
 	{ createUIElement_43, (int*)0x0048DBB5 }, // Battle Something probably so will leave it enabled
-	{ createUIElement_43, (int*)0x0048DEF3 }, // Itembox when in shop
-	{ createUIElement_43, (int*)0x0048DF7E }, // Itembox when in shop
+	{ createUIElement_43, (int*)0x0048DEF3 }, // Battle Reward Item
+	{ createUIElement_43, (int*)0x0048DF7E }, // Battle Reward Item
 	{ createUIElement_43, (int*)0x0048E31E }, // Battle Result Dialog 
 	//{ createUIElement_43, (int*)0x004972B1 }, // ???
 	//{ createUIElement_43, (int*)0x004984C1 }, // ???
@@ -649,9 +649,9 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElement_Scale_Reposition_BottomRight, (int*)0x004DB5A3 }, // "kmph" next to speed
 	{ createUIElement_Scale_Reposition_BottomRight, (int*)0x004DB78A }, // "assist" above "kmph"
 	{ createUIElement_Scale_Reposition_BottomRight, (int*)0x004DB831 }, // gear indicator
-	//{ createUIElement, (int*)0x004DB93D }, // ???
-	//{ createUIElement, (int*)0x004DB979 }, // ???
-	//{ createUIElement, (int*)0x004DB9B5 }, // ???
+	{ createUIElement_Scale_Reposition_BottomRight, (int*)0x004DB93D }, // Item active icon in bottom right
+	{ createUIElement_Scale_Reposition_BottomRight, (int*)0x004DB979 }, // Item active icon in bottom right 
+	{ createUIElement_Scale_Reposition_BottomRight, (int*)0x004DB9B5 }, // Item active icon in bottom right 
 	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004DBB2B }, // Icon backing
 	{ createUIElement_Scale_Reposition_BottomLeft, (int*)0x004DBB8C }, // Icon
 	//{ createUIElement, (int*)0x004DBD3D }, // Linked to bottom right buttonsg
@@ -737,15 +737,15 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	// Position UI
 	{ nullptr, nullptr },
 	//{ positionUIElement_Reposition_43, (int*)0x004546FA }, // ???
-	//{ positionUIElement_Reposition_43, (int*)0x0045F547 }, // ???
-	//{ positionUIElement_Reposition_43, (int*)0x0045F6C8 }, // ???
+	{ positionUIElement_Reposition_43, (int*)0x0045F547 }, // Reward item back (itembox)
+	{ positionUIElement_Reposition_43, (int*)0x0045F6C8 }, // Garage itembox related
 	//{ positionUIElement_Reposition_43, (int*)0x004755E6 }, // ???
 	//{ positionUIElement_Reposition_43, (int*)0x004756CF }, // ???
 	//{ positionUIElement_Reposition_43, (int*)0x0047575B }, // ???
 	//{ positionUIElement_Reposition_43, (int*)0x00475835 }, // ???
 	//{ positionUIElement_Reposition_43, (int*)0x00492EE9 }, // ???
 	//{ positionUIElement_Reposition_43, (int*)0x004A93FF }, // ???
-	//{ positionUIElement_Reposition_43, (int*)0x004A9B9F }, // ???
+	{ positionUIElement_Reposition_43, (int*)0x004A9B9F }, // ???
 	//{ positionUIElement_Reposition_43, (int*)0x004F4A59 }, // All chat area buttons Handled by MoveUIElement
 	//{ positionUIElement_Reposition_43, (int*)0x004F81DD }, // ???
 	//{ positionUIElement_Reposition_43, (int*)0x004F81F0 }, // ???
@@ -859,15 +859,15 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ setRect2, (int*)0x0051DAC2 },
 
 	// Direct X
-	//{ SetViewport, (int*)0x004A625B }, // ???
-	//{ SetViewport, (int*)0x004A68EA }, // Window
+	{ SetViewport_Scale_Centered, (int*)0x004A625B }, // ???
+	{ SetViewport_Scale_Centered, (int*)0x004A68EA }, // Window
 	{ SetViewport_Scale_Reposition_BottomLeft, (int*)0x004D8501 }, // Navimap
-	//{ SetViewport, (int*)0x004D8E6D }, // Window
-	//{ SetViewport, (int*)0x004E0DB8 }, // ???
-	//{ SetViewport, (int*)0x004E1C08 }, // ???
-	//{ SetViewport, (int*)0x004E1E15 }, // ???
-	//{ SetViewport, (int*)0x004E920F }, // ???
-	//{ SetViewport, (int*)0x004E937A }, // ???
+	{ SetViewport_Scale_Centered, (int*)0x004D8E6D }, // places main window in navimap :S
+	{ SetViewport_Scale_Centered, (int*)0x004E0DB8 }, // ???
+	{ SetViewport_Scale_Centered, (int*)0x004E1C08 }, // ???
+	{ SetViewport_Scale_Centered, (int*)0x004E1E15 }, // ???
+	{ SetViewport_Scale_Centered, (int*)0x004E920F }, // ???
+	{ SetViewport_Scale_Centered, (int*)0x004E937A }, // ???
 	//{ endScene, (int*)0x0941BEAA }, // End scene (Top layer)
 	{ endScene, (int*)0x094C769C }, // End scene (under loading)
 	{ endScene, (int*)0x044C8A10 }, // End scene (inside car)

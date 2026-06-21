@@ -10,5 +10,7 @@
 #define SCREEN_RATIO_4_3			1.333333333333333f
 #define PIXELS_TO_TWIPS				20.0f
 
+#define PTR_ITEMBOX_STORAGE			0x006F5434
+
 using adjustFloatsFunc = void(float*, float*);
 using adjustIntsFunc = void(int*, int*);

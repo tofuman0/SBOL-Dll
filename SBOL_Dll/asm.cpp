@@ -883,6 +883,29 @@ void __cdecl SetViewport_Scale_Reposition_BottomLeft(D3DVIEWPORT8* pViewport)
 	NavimapViewport->MaxZ = pViewport->MaxZ;
 	dx->SetViewport(pViewport);
 }
+void __cdecl SetViewport_Scale_Centered(D3DVIEWPORT8* pViewport)
+{
+	D3DVIEWPORT8* g_Viewport = (D3DVIEWPORT8*)0x006E1D20;
+	if (pViewport->Width == 640 && pViewport->Height == 480)
+	{
+		pViewport->Width = resW;
+		pViewport->Height = resH;
+	}
+	else if (pViewport->Width == resW && pViewport->Height == resH) {} // Fullscreen leave alone
+	else
+	{
+		auto width = pViewport->Width;
+		pViewport->Width = (int)((float)pViewport->Width * 0.75f); // 4:3
+		pViewport->X += (width - pViewport->Width) / 2;
+	}
+	g_Viewport->X = pViewport->X;
+	g_Viewport->Y = pViewport->Y;
+	g_Viewport->Width = pViewport->Width;
+	g_Viewport->Height = pViewport->Height;
+	g_Viewport->MinZ = pViewport->MinZ;
+	g_Viewport->MaxZ = pViewport->MaxZ;
+	dx->SetViewport(pViewport);
+}
 void __fastcall gameCreateRectRgn(void* _this, void* edx, int posx, int posy, int width, int height)
 {
 	HRGN hgrn;
