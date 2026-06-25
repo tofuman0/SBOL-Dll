@@ -111,6 +111,7 @@ void __fastcall addAddressbookEntry(void* object, void* edx);
 void __cdecl SetViewport(D3DVIEWPORT8* pViewport);
 void __cdecl SetViewport_Scale_Reposition_BottomLeft(D3DVIEWPORT8* pViewport);
 void __cdecl SetViewport_Scale_Centered(D3DVIEWPORT8* pViewport);
+void __cdecl SetViewport_Scale_Centered1(D3DVIEWPORT8* pViewport);
 void __fastcall gameCreateRectRgn(void* _this, void* edx, int posx, int posy, int width, int height);
 void __fastcall setRect1(void* _this, void* edx, int param_1, int param_2, int param_3);
 void __fastcall setRect2(void* _this, void* edx, int param_1, int param_2, int param_3);

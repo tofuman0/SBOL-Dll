@@ -219,8 +219,8 @@ ADJUSTFLOATS adjustFloatAddr[]{
 ADJUSTINTS adjustIntAddr[]{
 	{ nullptr, nullptr, nullptr },
 	//{ &adjustintsN, (int*)0x00600900, (int*)0x00600904 }, // Tache needle size
-	{ &adjustints43, (int*)0x004E185B, (int*)0x004E1862 }, // Mirror size
-	{ &adjustints43Center, (int*)0x004E184D, (int*)0x004E1854 }, // Mirror position
+	//{ &adjustints43, (int*)0x004E185B, (int*)0x004E1862 }, // Mirror size - dealt with in viewport function
+	//{ &adjustints43Center, (int*)0x004E184D, (int*)0x004E1854 }, // Mirror position - dealt with in viewport function
 	//{ &adjustbytesN, (int*)0x004D6A1D, (int*)0x004D6A20 }, // Car arrow offset (they are bytes). Not needed if viewport is being resized
 };
 
@@ -864,7 +864,7 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ SetViewport_Scale_Reposition_BottomLeft, (int*)0x004D8501 }, // Navimap
 	{ SetViewport_Scale_Centered, (int*)0x004D8E6D }, // places main window in navimap :S
 	{ SetViewport_Scale_Centered, (int*)0x004E0DB8 }, // ???
-	{ SetViewport_Scale_Centered, (int*)0x004E1C08 }, // ???
+	{ SetViewport_Scale_Centered1, (int*)0x004E1C08 }, // Rearview mirror
 	{ SetViewport_Scale_Centered, (int*)0x004E1E15 }, // ???
 	{ SetViewport_Scale_Centered, (int*)0x004E920F }, // ???
 	{ SetViewport_Scale_Centered, (int*)0x004E937A }, // ???

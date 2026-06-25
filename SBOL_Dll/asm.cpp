@@ -232,7 +232,7 @@ void __fastcall createUIElement_AutoScale_Handle(void* _this, void* edx, float p
 {
 	width = (width / 640.0f) * (float)virtualResW;
 	height = (height / 480.0f) * (float)resH;
-	posx -= ((1.0f / 640.0f) * ((((float)virtualResW - 640.0f) * 36.0f) + (float)virtualResW));
+	posx -= ((1.0f / 640.0f) * ((((float)virtualResW - 640.0f) * 44.0f) + (float)virtualResW));
 	posy -= (2.0f / 480.0f) * (float)resH;
 	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
 }
@@ -240,7 +240,7 @@ void __fastcall createUIElement_AutoScale_TeamName(void* _this, void* edx, float
 {
 	width = (width / 640.0f) * (float)virtualResW;
 	height = (height / 480.0f) * (float)resH;
-	posx -= ((1.0f / 640.0f) * ((((float)virtualResW - 640.0f) * 36.0f) + (float)virtualResW));
+	posx -= ((1.0f / 640.0f) * ((((float)virtualResW - 640.0f) * 44.0f) + (float)virtualResW));
 	posy -= (4.0f / 480.0f) * (float)resH;
 	createUIElementOrig(_this, edx, posx, posy, width, height, param_6, param_7, param_8);
 }
@@ -885,26 +885,40 @@ void __cdecl SetViewport_Scale_Reposition_BottomLeft(D3DVIEWPORT8* pViewport)
 }
 void __cdecl SetViewport_Scale_Centered(D3DVIEWPORT8* pViewport)
 {
+	auto tempviewport = *pViewport;
 	D3DVIEWPORT8* g_Viewport = (D3DVIEWPORT8*)0x006E1D20;
-	if (pViewport->Width == 640 && pViewport->Height == 480)
+	if (tempviewport.Width == 640 && tempviewport.Height == 480)
 	{
-		pViewport->Width = resW;
-		pViewport->Height = resH;
+		tempviewport.Width = resW;
+		tempviewport.Height = resH;
 	}
-	else if (pViewport->Width == resW && pViewport->Height == resH) {} // Fullscreen leave alone
+	else if (tempviewport.Width == resW && tempviewport.Height == resH) {} // Fullscreen leave alone
+	else if (tempviewport.X == 192 && tempviewport.Y == 82 && tempviewport.Width == 256 && tempviewport.Height == 64)
+	{	// Mirror
+		auto width = tempviewport.Width;
+		auto height = tempviewport.Height;
+		tempviewport.Width = (int)(((float)tempviewport.Width / 640.0f) * (float)virtualResW);
+		tempviewport.Height = (int)(((float)tempviewport.Height / 480.0f) * (float)resH);
+		tempviewport.X = (resW - tempviewport.Width) / 2;
+		tempviewport.Y = (int)(((float)tempviewport.Y / 480.0f) * (float)resH);
+	}
 	else
 	{
-		auto width = pViewport->Width;
-		pViewport->Width = (int)((float)pViewport->Width * 0.75f); // 4:3
-		pViewport->X += (width - pViewport->Width) / 2;
+		auto width = tempviewport.Width;
+		tempviewport.Width = (int)((float)tempviewport.Width * 0.75f); // 4:3
+		tempviewport.X += (width - tempviewport.Width) / 2;
 	}
-	g_Viewport->X = pViewport->X;
-	g_Viewport->Y = pViewport->Y;
-	g_Viewport->Width = pViewport->Width;
-	g_Viewport->Height = pViewport->Height;
-	g_Viewport->MinZ = pViewport->MinZ;
-	g_Viewport->MaxZ = pViewport->MaxZ;
-	dx->SetViewport(pViewport);
+	g_Viewport->X = tempviewport.X;
+	g_Viewport->Y = tempviewport.Y;
+	g_Viewport->Width = tempviewport.Width;
+	g_Viewport->Height = tempviewport.Height;
+	g_Viewport->MinZ = tempviewport.MinZ;
+	g_Viewport->MaxZ = tempviewport.MaxZ;
+	dx->SetViewport(&tempviewport);
+}
+void __cdecl SetViewport_Scale_Centered1(D3DVIEWPORT8* pViewport)
+{
+	SetViewport_Scale_Centered(pViewport);
 }
 void __fastcall gameCreateRectRgn(void* _this, void* edx, int posx, int posy, int width, int height)
 {
