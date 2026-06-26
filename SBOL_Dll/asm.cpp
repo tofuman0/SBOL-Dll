@@ -676,32 +676,62 @@ unsigned int __fastcall ButtonInteract(void* _this, void* edx, int MouseX, int M
 	}
 	return (unsigned int)_this & 0xFFFFFF00;
 }
-unsigned int __fastcall ButtonInteract43(void* _this, void* edx, int MouseX, int MouseY, int Width, int Height)
+bool __fastcall ButtonInteract43(void* ButtonPtr, void* edx, int32_t MouseX, int32_t MouseY, int32_t Width, int32_t Height)
 {
-	int relativeMouseX;
-	int relativeMouseY;
-
-	if (Width == -1)
-		Width = *(int*)(*(int*)(*(int*)((int)_this + 0x200C) + 100) + 0x08);
-	if (Height == -1)
-		Height = *(int*)(*(int*)(*(int*)((int)_this + 0x200C) + 100) + 0x0C);
-
 	float scaleX = (float)virtualResW / 640.0f;
 	float scaleY = (float)resH / 480.0f;
-	int scaledWidth = (int)(Width * scaleX);
-	int scaledHeight = (int)(Height * scaleY);
-
-	relativeMouseX = MouseX - *(short*)_this;
-	relativeMouseY = MouseY - *(short*)((int)_this + 2);
-
-	if ((((-1 < relativeMouseX) && (relativeMouseX < scaledWidth)) && (-1 < relativeMouseY)) && (relativeMouseY < scaledHeight))
+	uint8_t* btn = static_cast<uint8_t*>(ButtonPtr);
+	if (Width == -1 || Height == -1)
 	{
-		int unscaledRelativeX = (int)(relativeMouseX / scaleX);
-		int unscaledRelativeY = (int)(relativeMouseY / scaleY);
-
-		return (unsigned int)((*(byte*)((int)_this + (unscaledRelativeX >> 3) + 4 + ((Width + 7) >> 3) * unscaledRelativeY) & (byte)(1 << ((byte)unscaledRelativeX & 7))) != 0);
+		uint8_t* level1 = *reinterpret_cast<uint8_t**>(btn + 0x200C);
+		uint8_t* imageData = *reinterpret_cast<uint8_t**>(level1 + 100);
+		if (Width == -1)
+			Width = *reinterpret_cast<int32_t*>(imageData + 8);   // Width
+		if (Height == -1)
+			Height = *reinterpret_cast<int32_t*>(imageData + 0x0C); // Height
 	}
-	return (unsigned int)_this & 0xFFFFFF00;
+	int16_t btnX = *reinterpret_cast<int16_t*>(btn + 0);
+	int16_t btnY = *reinterpret_cast<int16_t*>(btn + 2);
+	int32_t highResLocalX = MouseX - btnX;
+	int32_t highResLocalY = MouseY - btnY;
+	int32_t relativeMouseX = static_cast<int32_t>((float)highResLocalX / scaleX);
+	int32_t relativeMouseY = static_cast<int32_t>((float)highResLocalY / scaleY);
+	if (relativeMouseX >= 0 && relativeMouseX < Width && relativeMouseY >= 0 && relativeMouseY < Height)
+	{
+		int32_t bytesPerRow = (Width + 7) >> 3;
+		uint8_t* hitMask = btn + 4;
+		int32_t byteOffset = (relativeMouseX >> 3) + (bytesPerRow * relativeMouseY);
+		uint8_t targetByte = hitMask[byteOffset];
+		uint8_t bitMask = 1 << (relativeMouseX & 7);
+		return (targetByte & bitMask) != 0;
+	}
+	return false;
+}
+bool __fastcall ButtonInteract43_Object(void* ButtonPtr, void* edx, int16_t MouseX, int16_t MouseY)
+{
+	float scaleX = (float)virtualResW / 640.0f;
+	float scaleY = (float)resH / 480.0f;
+	uint8_t* btn = static_cast<uint8_t*>(ButtonPtr);
+	int16_t btnX = *reinterpret_cast<int16_t*>(btn + 0x5C);
+	int16_t btnY = *reinterpret_cast<int16_t*>(btn + 0x5E);
+	int16_t highResLocalX = MouseX - btnX;
+	int16_t highResLocalY = MouseY - btnY;
+	int16_t localX = static_cast<int16_t>((float)highResLocalX / scaleX);
+	int16_t localY = static_cast<int16_t>((float)highResLocalY / scaleY);
+	uint8_t* imageInfo = *reinterpret_cast<uint8_t**>(btn + 0x10);
+	uint8_t* imageData = *reinterpret_cast<uint8_t**>(imageInfo + 100);
+	int32_t imgWidth = *reinterpret_cast<int32_t*>(imageData + 8);
+	int32_t imgHeight = *reinterpret_cast<int32_t*>(imageData + 0x0C);
+	if (localX >= 0 && localX < imgWidth && localY >= 0 && localY < imgHeight)
+	{
+		int32_t bytesPerRow = (imgWidth + 7) >> 3;
+		uint8_t* hitMask = btn + 0x60;
+		int32_t byteOffset = (localX >> 3) + (localY * bytesPerRow);
+		uint8_t targetByte = hitMask[byteOffset];
+		uint8_t bitMask = 1 << (localX & 7);
+		return (targetByte & bitMask) != 0;
+	}
+	return false;
 }
 void adjustfloats(float* x, float* y)
 {

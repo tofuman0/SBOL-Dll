@@ -95,7 +95,9 @@ void __fastcall SwfGetMouseState(void* _this, void* edx, int* pOutX, int* pOutY,
 /* Original button interaction calculations */
 unsigned int __fastcall ButtonInteract(void* _this, void* edx, int MouseX, int MouseY, int Width, int Height);
 /* Button interactions scaled the the increased 4:3 resolution */
-unsigned int __fastcall ButtonInteract43(void* _this, void* edx, int MouseX, int MouseY, int Width, int Height);
+bool __fastcall ButtonInteract43(void* ButtonPtr, void* edx, int32_t MouseX, int32_t MouseY, int32_t Width, int32_t Height);
+/* Button interactions scaled to the increased 4:3 resolution on object */
+bool __fastcall ButtonInteract43_Object(void* ButtonPtr, void* edx, int16_t MouseX, int16_t MouseY);
 void adjustfloats(float* x, float* y);
 void adjustfloats43(float* x, float* y);
 void adjustfloatsN(float* x, float* y);

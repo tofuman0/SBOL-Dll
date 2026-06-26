@@ -233,24 +233,24 @@ ADJUSTINTS adjustIntAddr[]{
 REPLACEFUNCTION replaceFunctionAddr[]{
 	// Create UI Element
 	{ createUIElementObject, nullptr },
-	//{ createUIElementObject, (int*)0x004263C5 },
-	//{ createUIElementObject, (int*)0x00431529 },
-	//{ createUIElementObject, (int*)0x00431532 },
-	//{ createUIElementObject, (int*)0x00431540 },
-	//{ createUIElementObject, (int*)0x00434C8F },
-	//{ createUIElementObject, (int*)0x0043501A },
-	//{ createUIElementObject, (int*)0x0043507F },
-	//{ createUIElementObject, (int*)0x004350F1 },
-	//{ createUIElementObject, (int*)0x0043513D },
-	//{ createUIElementObject, (int*)0x00435517 },
-	//{ createUIElementObject, (int*)0x0043556B },
-	//{ createUIElementObject, (int*)0x004355BC },
-	//{ createUIElementObject, (int*)0x0043560C },
-	//{ createUIElementObject, (int*)0x004404A8 },
-	//{ createUIElementObject, (int*)0x0044FEB9 },
-	//{ createUIElementObject, (int*)0x0044FF1D },
-	//{ createUIElementObject, (int*)0x00450342 },
-	//{ createUIElementObject, (int*)0x0045038B },
+	{ createUIElementObject_43, (int*)0x004263C5 }, // Disconnect error string
+	//{ createUIElementObject_43, (int*)0x00431529 },
+	//{ createUIElementObject_43, (int*)0x00431532 },
+	//{ createUIElementObject_43, (int*)0x00431540 },
+	//{ createUIElementObject_43, (int*)0x00434C8F },
+	//{ createUIElementObject_43, (int*)0x0043501A },
+	//{ createUIElementObject_43, (int*)0x0043507F },
+	//{ createUIElementObject_43, (int*)0x004350F1 },
+	//{ createUIElementObject_43, (int*)0x0043513D },
+	//{ createUIElementObject_43, (int*)0x00435517 },
+	//{ createUIElementObject_43, (int*)0x0043556B },
+	//{ createUIElementObject_43, (int*)0x004355BC },
+	//{ createUIElementObject_43, (int*)0x0043560C },
+	//{ createUIElementObject_43, (int*)0x004404A8 },
+	//{ createUIElementObject_43, (int*)0x0044FEB9 },
+	//{ createUIElementObject_43, (int*)0x0044FF1D },
+	//{ createUIElementObject_43, (int*)0x00450342 },
+	//{ createUIElementObject_43, (int*)0x0045038B },
 	{ createUIElementObject_43, (int*)0x0045B705 }, // Itembox related
 	{ createUIElementObject_43, (int*)0x0045B796 }, // Itembox related
 	{ createUIElementObject_43, (int*)0x0045BEAD }, // Itembox text
@@ -259,47 +259,47 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElementObject_43, (int*)0x0045D27F }, // Itembox related most likely
 	{ createUIElementObject_43, (int*)0x0045D672 }, // Itembox text
 	{ createUIElementObject_43, (int*)0x0045D68D }, // Itembox text
-	//{ createUIElementObject, (int*)0x00477C20 },
-	//{ createUIElementObject, (int*)0x00478DE9 },
-	//{ createUIElementObject, (int*)0x00485B1D },
-	//{ createUIElementObject, (int*)0x00497355 },
-	//{ createUIElementObject, (int*)0x0049B7F2 },
-	//{ createUIElementObject, (int*)0x0049B851 },
-	//{ createUIElementObject, (int*)0x0049CCF5 },
-	//{ createUIElementObject, (int*)0x0049CD4F },
-	//{ createUIElementObject, (int*)0x0049D795 },
-	//{ createUIElementObject, (int*)0x0049D7EF },
-	//{ createUIElementObject, (int*)0x0049E93D },
-	//{ createUIElementObject, (int*)0x004A908D },
-	//{ createUIElementObject, (int*)0x004A9433 },
-	//{ createUIElementObject, (int*)0x004AB4C0 },
+	//{ createUIElementObject_43, (int*)0x00477C20 },
+	//{ createUIElementObject_43, (int*)0x00478DE9 },
+	//{ createUIElementObject_43, (int*)0x00485B1D },
+	//{ createUIElementObject_43, (int*)0x00497355 },
+	//{ createUIElementObject_43, (int*)0x0049B7F2 },
+	//{ createUIElementObject_43, (int*)0x0049B851 },
+	//{ createUIElementObject_43, (int*)0x0049CCF5 },
+	//{ createUIElementObject_43, (int*)0x0049CD4F },
+	//{ createUIElementObject_43, (int*)0x0049D795 },
+	//{ createUIElementObject_43, (int*)0x0049D7EF },
+	//{ createUIElementObject_43, (int*)0x0049E93D },
+	//{ createUIElementObject_43, (int*)0x004A908D },
+	//{ createUIElementObject_43, (int*)0x004A9433 },
+	//{ createUIElementObject_43, (int*)0x004AB4C0 },
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004ABF85 }, // Course network string
 	{ createUIElementObject_43, (int*)0x004BC43D }, // Enter garage dialog string
-	//{ createUIElementObject, (int*)0x004BD725 },
+	//{ createUIElementObject_43, (int*)0x004BD725 },
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5CB5 }, // Persons in course
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5D07 }, // Course Name
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5D7E }, // LV CP String
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5DDC }, // Autorun String while in autopilot
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5E2B }, // Autorun String while not in autopilot
-	//{ createUIElementObject, (int*)0x004D5F18 },
-	//{ createUIElementObject, (int*)0x004D8D66 },
+	//{ createUIElementObject_43, (int*)0x004D5F18 },
+	//{ createUIElementObject_43, (int*)0x004D8D66 },
 	{ createUIElementObject_43, (int*)0x004DC729 }, // Wrong way warning text
 	{ createUIElementObject_43, (int*)0x004DE74D }, // Battle String Player Team
 	{ createUIElementObject_43, (int*)0x004DE79B }, // Battle String Player Handle
 	{ createUIElementObject_43, (int*)0x004DE7E9 }, // Battle String Rival Team
 	{ createUIElementObject_43, (int*)0x004DE839 }, // Battle String Rival Handle
-	//{ createUIElementObject, (int*)0x004DE8C1 },
-	//{ createUIElementObject, (int*)0x004DE90E },
+	//{ createUIElementObject_43, (int*)0x004DE8C1 },
+	//{ createUIElementObject_43, (int*)0x004DE90E },
 	{ createUIElementObject_AutoScale_43, (int*)0x004FBB54 }, // Addressbook textbox input
-	//{ createUIElementObject, (int*)0x004FBB92 },
-	//{ createUIElementObject, (int*)0x004FD1F4 },
-	//{ createUIElementObject, (int*)0x004FD33F },
+	//{ createUIElementObject_43, (int*)0x004FBB92 },
+	//{ createUIElementObject_43, (int*)0x004FD1F4 },
+	//{ createUIElementObject_43, (int*)0x004FD33F },
 	{ createUIElementObject_43, (int*)0x004FD9EE }, // Chat log text
-	//{ createUIElementObject, (int*)0x004FDA26 }, // Addressbook text box
+	//{ createUIElementObject_43, (int*)0x004FDA26 }, // Addressbook text box
 
 	// Create UI
 	{ createUIElement, nullptr },
-	//{ createUIElement_43, (int*)0x0042680E }, // ???
+	{ createUIElement_43, (int*)0x0042680E }, // Disconnect error dialog back and button.
 	//{ createUIElement_43, (int*)0x00426899 }, // ???
 	//{ createUIElement_43, (int*)0x00434968 }, // ???
 	//{ createUIElement_43, (int*)0x00434A8E }, // ???
@@ -849,9 +849,10 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ ButtonInteract43, (int*)0x00493086 },
 	{ ButtonInteract43, (int*)0x00493406 },
 	{ ButtonInteract43, (int*)0x0049361B },
-	{ ButtonInteract43, (int*)0x00493b5B },
+	{ ButtonInteract43, (int*)0x00493B5B },
 	{ ButtonInteract43, (int*)0x004940BC },
 	{ ButtonInteract43, (int*)0x00494189 },
+	{ ButtonInteract43_Object, (int*)0x0043AFAA },
 	{ gameCreateRectRgn, (int*)0x004FB302 },
 	//{ setRect1, (int*)0x004FDf2E },
 	//{ setRect1, (int*)0x004FDf45 },		
