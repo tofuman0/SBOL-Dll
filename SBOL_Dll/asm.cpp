@@ -442,10 +442,10 @@ void __fastcall uiInteractBoundary(void* _this, void* edx, int posx, int posy, i
 		XScale *= ((float)_resW / (float)resW);
 		YScale *= ((float)_resH / (float)resH);
 	}
-	width = width * XScale;
-	height = height * YScale;
-	posx = posx * XScale;
-	posy = posy * YScale;
+	width = (int)((float)width * XScale);
+	height = (int)((float)height * YScale);
+	posx = (int)((float)posx * XScale);
+	posy = (int)((float)posy * YScale);
 	HRGN hrgn;
 	*(int*)((int)_this + 0x10) = posx;
 	*(int*)((int)_this + 0x14) = posy;
