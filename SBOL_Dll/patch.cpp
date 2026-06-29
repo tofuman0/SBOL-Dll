@@ -32,6 +32,8 @@ extern int itemUseDialogY;
 extern bool closeCheck;
 extern bool runGameLoop;
 extern HWND* hwnd;
+extern int screenWidth;
+extern int screenHeight;
 
 extern SHAREDSPACE SharedSpace;
 
@@ -99,7 +101,8 @@ void patchClient()
 	*(char**)0x004281FB = defaultServerName;
 
 	// Use registry to check for full screen and skip warning
-	insertFunction(0x00418DF1, notFullScreenMode, 10, FT_CALL);
+	//insertFunction(0x00418DF1, notFullScreenMode, 10, FT_CALL);
+	insertFunction(0x00418DF1, disabledLegacyFullScreen, 10, FT_CALL);
 	insertFunction(0x00426FA5, skipBootWarning, 8, FT_CALL);
 	NOPSpace(0x00426F9B, 5);
 
@@ -343,6 +346,10 @@ void patchBugs()
 int notFullScreenMode()
 {
 	return fullScreen ? 0 : 1;
+}
+int disabledLegacyFullScreen()
+{
+	return 1;
 }
 int skipBootWarning()
 {
@@ -1035,6 +1042,8 @@ void ForceShiftJIS()
 	
 	setFunction(0x0040D1EF, (void*)&PtInRegionHook_Ptr);
 
+	setFunction(0x00412BAA, (void*)&SetWindowPosHook_Ptr);
+
 	*(byte*)0x00408850 = SHIFTJIS_CHARSET;
 	*(byte*)0x0051D4C0 = SHIFTJIS_CHARSET;
 }
@@ -1581,6 +1590,22 @@ BOOL __stdcall PtInRegionHook(HRGN hrgn, int x, int y)
 	auto width = rect.right - rect.left;
 	auto height = rect.bottom - rect.top;
 	return PtInRegion(hrgn, x, y);
+}
+
+BOOL __stdcall SetWindowPosHook(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, UINT uFlags)
+{
+	if (fullScreen)
+	{
+		DWORD style = WS_POPUP | WS_VISIBLE;
+		DWORD exStyle = WS_EX_TOPMOST;
+		SetWindowLongPtr(hWnd, GWL_STYLE, style);
+		SetWindowLongPtr(hWnd, GWL_EXSTYLE, exStyle);
+		auto res = SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, screenWidth, screenHeight, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+		//SetProcessDPIAware();
+		return res;
+	}
+	else
+		return SetWindowPos(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags);
 }
 
 void __fastcall Packet0482(void* _this, void* edx, void* mps)

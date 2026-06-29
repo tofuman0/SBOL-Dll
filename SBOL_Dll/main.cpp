@@ -42,6 +42,8 @@ int itemUseDialogX = 56;
 int itemUseDialogY = 80;
 std::string language = "en";
 ITEMDETAILENTRY* itemDetailsJson = nullptr;
+int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
 SHAREDSPACE SharedSpace;
 
@@ -153,8 +155,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 			op = new OggPlayer(30, shuffleBGM ? true : false);
 			op->SetVolume((int)(*BGMVol + 15));
 		}
+
 		setStrings();
-		fixResolutionChoice();
+		//fixResolutionChoice();
 		setResolution();
 		setDrawDistance();
 		patchClient();

@@ -20,6 +20,9 @@ extern int itemUseDialogX;
 extern int itemUseDialogY;
 extern char logItBuf[0x400];
 
+extern int screenWidth;
+extern int screenHeight;
+
 extern int _EAX, _ECX, _EDX, _EBX, _EDI, _ESI;
 extern float float1, float2, float3, float4, float5;
 extern int int1, int2;
@@ -28,6 +31,8 @@ extern float *_a2;
 extern float *_a3;
 extern char textBuf[0x1000];
 extern unsigned int isClosed;
+
+extern HWND* hwnd;
 
 placeStringFunc placeStringGame = (placeStringFunc)(0x004FD760);
 createUIElementObjectFunc createUIElementObjectOrig = (createUIElementObjectFunc)(0x004FD760);
@@ -285,9 +290,8 @@ void __fastcall interactionUIElement_43(void* _this, void* edx, int posx, int po
 	posy = (int)(((float)posy / 480.0f) * (float)resH);
 	width = (int)(((float)width / 640.0f) * (float)virtualResW);
 	height = (int)(((float)height / 480.0f) * (float)resH);
-
 	posx += (int)(((float)resW - (float)virtualResW) / 2.0f);
-
+	
 	uiInteractBoundary(_this, edx, posx, posy, width, height);
 	createUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
 }
@@ -307,7 +311,7 @@ void __fastcall interactionUIElement_Scale_Reposition(void* _this, void* edx, in
 	height = (int)((float)height * UIscale);
 	posx = (int)((((float)posx / 640.0f) * (float)resW) - xOffset);
 	posy = (int)((((float)posy / 480.0f) * (float)resH) - yOffset);
-
+	
 	uiInteractBoundary(_this, edx, posx, posy, width, height);
 	createUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
 }
@@ -329,34 +333,81 @@ void __fastcall interactionUIElement_Scale_Reposition_BottomRight(void* _this, v
 	height = (int)((float)height * UIscale);
 	posx = resW + (int)xOffset;
 	posy = resH + (int)yOffset;
-
+	
 	uiInteractBoundary(_this, edx, posx, posy, width, height);
 	createUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, (float)width, (float)height, 0, -1, -1);
 }
 void __fastcall moveUIElement(void* _this, void* edx, int posx, int posy)
 {
+	auto _virtualResW = virtualResW;
+	auto _resH = resH;
+	auto _resW = resW;
+	auto XScale = 1.0f;
+	auto YScale = 1.0f;
+	if (fullScreen)
+	{
+		_virtualResW = (int)((float)screenHeight * (640.0f / 480.0f));
+		_resH = screenHeight;
+		_resW = screenWidth;
+		XScale *= ((float)_resW / (float)resW);
+		YScale *= ((float)_resH / (float)resH);
+	}
 	posx = (int)(((float)posx / 640.0f) * (float)resW);
 	posy = (int)(((float)posy / 480.0f) * (float)resH);
+	auto posx2 = (int)(posx * XScale);
+	auto posy2 = (int)(posy * YScale);
 
-	positionInteractionUIOrig(_this, edx, posx, posy);
+	positionInteractionUIOrig(_this, edx, posx2, posy2);
 	positionUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, 1);
 }
 void __fastcall moveUIElement_43(void* _this, void* edx, int posx, int posy)
 {
+	auto _virtualResW = virtualResW;
+	auto _resH = resH;
+	auto _resW = resW;
+	auto XScale = 1.0f;
+	auto YScale = 1.0f;
+	if (fullScreen)
+	{
+		_virtualResW = (int)((float)screenHeight * (640.0f / 480.0f));
+		_resH = screenHeight;
+		_resW = screenWidth;
+		XScale *= ((float)_resW / (float)resW);
+		YScale *= ((float)_resH / (float)resH);
+	}
 	posx = (int)(((float)posx / 640.0f) * (float)virtualResW);
 	posy = (int)(((float)posy / 480.0f) * (float)resH);
 
 	posx += (int)(((float)resW - (float)virtualResW) / 2.0f);
 
-	positionInteractionUIOrig(_this, edx, posx, posy);
+	auto posx2 = (int)(posx * XScale);
+	auto posy2 = (int)(posy * YScale);
+
+	positionInteractionUIOrig(_this, edx, posx2, posy2);
 	positionUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, 1);
 }
 void __fastcall moveUIElement_Position(void* _this, void* edx, int posx, int posy)
 {
+	auto _virtualResW = virtualResW;
+	auto _resH = resH;
+	auto _resW = resW;
+	auto XScale = 1.0f;
+	auto YScale = 1.0f;
+	if (fullScreen)
+	{
+		_virtualResW = (int)((float)screenHeight * (640.0f / 480.0f));
+		_resH = screenHeight;
+		_resW = screenWidth;
+		XScale *= ((float)_resW / (float)resW);
+		YScale *= ((float)_resH / (float)resH);
+	}
 	posx = (int)((float)posx * UIscale);
 	posy = (int)((float)posy * UIscale);
 
-	positionInteractionUIOrig(_this, edx, posx, posy);
+	auto posx2 = (int)(posx * XScale);
+	auto posy2 = (int)(posy * YScale);
+
+	positionInteractionUIOrig(_this, edx, posx2, posy2);
 	positionUIElementOrig((void*)((int)_this + 0x24), edx, (float)posx, (float)posy, 1);
 }
 void __fastcall positionInteractionUI(void* _this, void* edx, int posx, int posy)
@@ -378,6 +429,23 @@ void __fastcall placeUIElement(void* _this, void* edx, char* uiElementLabel, flo
 }
 void __fastcall uiInteractBoundary(void* _this, void* edx, int posx, int posy, int width, int height)
 {
+	auto _virtualResW = virtualResW;
+	auto _resH = resH;
+	auto _resW = resW;
+	auto XScale = 1.0f;
+	auto YScale = 1.0f;
+	if (fullScreen)
+	{
+		_virtualResW = (int)((float)screenHeight * (640.0f / 480.0f));
+		_resH = screenHeight;
+		_resW = screenWidth;
+		XScale *= ((float)_resW / (float)resW);
+		YScale *= ((float)_resH / (float)resH);
+	}
+	width = width * XScale;
+	height = height * YScale;
+	posx = posx * XScale;
+	posy = posy * YScale;
 	HRGN hrgn;
 	*(int*)((int)_this + 0x10) = posx;
 	*(int*)((int)_this + 0x14) = posy;
@@ -645,16 +713,31 @@ void __fastcall SwfDrawPrimitive_Stretch(void* _this, void* edx, LPDIRECT3DDEVIC
 }
 void __fastcall SwfGetMouseState(void* _this, void* edx, int* pOutX, int* pOutY, int* pOutClickState)
 {
+	auto _virtualResW = virtualResW;
+	auto _resH = resH;
+	auto _resW = resW;
+	auto _UIscaleX = UIscale;
+	auto _UIscaleY = UIscale;
+	auto _SWFscale = SWFscale;
+	if (fullScreen)
+	{
+		_UIscaleX = (_UIscaleX / resW) * _resW;
+		_UIscaleY = (_UIscaleY / resH) * _resH;
+		_virtualResW = (int)((float)screenHeight * (640.0f / 480.0f));
+		_resH = screenHeight;
+		_resW = screenWidth;
+		_SWFscale = (float)_resH / 480.0f;
+	}
 	using GetMouseStateFunc = void(__fastcall*)(void*, void*, int*, int*, int*);
 	GetMouseStateFunc GetMouseStateOrig = (GetMouseStateFunc)0x005075D0;
 	GetMouseStateOrig(_this, edx, pOutX, pOutY, pOutClickState);
 
 	if (pOutX != nullptr && pOutY != nullptr)
 	{
-		float leftWall = (float)(resW - virtualResW) / 2.0f;
+		float leftWall = (float)(_resW - _virtualResW) / 2.0f;
 		float shiftedX = (float)(*pOutX) - leftWall;
-		*pOutX = (int)(shiftedX / SWFscale);
-		*pOutY = (int)((float)(*pOutY) / SWFscale);
+		*pOutX = (int)(shiftedX / _SWFscale);
+		*pOutY = (int)((float)(*pOutY) / _SWFscale);
 	}
 }
 unsigned int __fastcall ButtonInteract(void* _this, void* edx, int MouseX, int MouseY, int Width, int Height)
@@ -690,6 +773,11 @@ bool __fastcall ButtonInteract43(void* ButtonPtr, void* edx, int32_t MouseX, int
 		if (Height == -1)
 			Height = *reinterpret_cast<int32_t*>(imageData + 0x0C); // Height
 	}
+	if (fullScreen)
+	{
+		MouseX = (int32_t)(((float)MouseX / (float)screenWidth) * (float)resW);
+		MouseY = (int32_t)(((float)MouseY / (float)screenHeight) * (float)resH);
+	}
 	int16_t btnX = *reinterpret_cast<int16_t*>(btn + 0);
 	int16_t btnY = *reinterpret_cast<int16_t*>(btn + 2);
 	int32_t highResLocalX = MouseX - btnX;
@@ -711,17 +799,29 @@ bool __fastcall ButtonInteract43_Object(void* ButtonPtr, void* edx, int16_t Mous
 {
 	float scaleX = (float)virtualResW / 640.0f;
 	float scaleY = (float)resH / 480.0f;
+
+	// The exact formula that fixed the standard buttons
+	if (fullScreen)
+	{
+		MouseX = (int16_t)(((float)MouseX / (float)screenWidth) * (float)resW);
+		MouseY = (int16_t)(((float)MouseY / (float)screenHeight) * (float)resH);
+	}
+
 	uint8_t* btn = static_cast<uint8_t*>(ButtonPtr);
 	int16_t btnX = *reinterpret_cast<int16_t*>(btn + 0x5C);
 	int16_t btnY = *reinterpret_cast<int16_t*>(btn + 0x5E);
+
 	int16_t highResLocalX = MouseX - btnX;
 	int16_t highResLocalY = MouseY - btnY;
+
 	int16_t localX = static_cast<int16_t>((float)highResLocalX / scaleX);
 	int16_t localY = static_cast<int16_t>((float)highResLocalY / scaleY);
+
 	uint8_t* imageInfo = *reinterpret_cast<uint8_t**>(btn + 0x10);
 	uint8_t* imageData = *reinterpret_cast<uint8_t**>(imageInfo + 100);
 	int32_t imgWidth = *reinterpret_cast<int32_t*>(imageData + 8);
 	int32_t imgHeight = *reinterpret_cast<int32_t*>(imageData + 0x0C);
+
 	if (localX >= 0 && localX < imgWidth && localY >= 0 && localY < imgHeight)
 	{
 		int32_t bytesPerRow = (imgWidth + 7) >> 3;
