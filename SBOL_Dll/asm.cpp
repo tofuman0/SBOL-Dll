@@ -165,6 +165,26 @@ void __fastcall createUIElementObject_Scale_Reposition_BottomLeft(void* _this, v
 
 	createUIElementOrig((void*)((int)_this + 0x78), edx, (float)posx, (float)posy, width, height, 0, -1, -1);
 }
+void __fastcall createUIElementObject_Scale_Reposition_BottomRight(void* _this, void* edx, int posx, int posy)
+{
+	auto yOffset = -((480.0f - posy) * UIscale);
+	auto xOffset = -((640.0f - posx) * UIscale);
+	D3DSURFACE_DESC desc;
+	using GetDescFunc = void(__stdcall*)(void*, int, void*);
+	GetDescFunc GetDesc = *(GetDescFunc*)((**(int**)((int)_this + 0x60)) + 0x38);
+
+	posx = resW + (int)xOffset;
+	posy = resH + (int)yOffset;
+	*(int*)((int)_this + 0x6C) = posx;
+	*(int*)((int)_this + 0x70) = posy;
+
+	GetDesc(*(int**)((int)_this + 0x60), 0, &desc);
+
+	auto width = ((float)desc.Width * UIscale);
+	auto height = ((float)desc.Height * UIscale);
+
+	createUIElementOrig((void*)((int)_this + 0x78), edx, (float)posx, (float)posy, width, height, 0, -1, -1);
+}
 void __fastcall createUIElement(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8)
 {
 	posx = (posx / 640.0f) * (float)resW;

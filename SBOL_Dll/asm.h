@@ -50,6 +50,7 @@ void __fastcall createUIElementObject_AutoScale_43(void* _this, void* edx, int p
 void __fastcall createUIElementObject_Scale(void* _this, void* edx, int posx, int posy);
 void __fastcall createUIElementObject_Scale_Reposition(void* _this, void* edx, int posx, int posy);
 void __fastcall createUIElementObject_Scale_Reposition_BottomLeft(void* _this, void* edx, int posx, int posy);
+void __fastcall createUIElementObject_Scale_Reposition_BottomRight(void* _this, void* edx, int posx, int posy);
 void __fastcall createUIElement(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8);
 void __fastcall createUIElement_43(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8);
 void __fastcall createUIElement_Scale_Reposition(void* _this, void* edx, float posx, float posy, float width, float height, int param_6, int param_7, int param_8);

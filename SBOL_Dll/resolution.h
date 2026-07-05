@@ -2,6 +2,7 @@
 float* drawDistance[]{
 	nullptr,
 	(float*)0x005F405C, // Track draw distance
+	(float*)0x005F3AEC, // Mirror draw distance
 };
 
 int* resWidth[]{
@@ -281,7 +282,7 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5D7E }, // LV CP String
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5DDC }, // Autorun String while in autopilot
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004D5E2B }, // Autorun String while not in autopilot
-	//{ createUIElementObject_43, (int*)0x004D5F18 },
+	{ createUIElementObject_Scale_Reposition_BottomRight, (int*)0x004D5F18 }, // Survival Strings
 	//{ createUIElementObject_43, (int*)0x004D8D66 },
 	{ createUIElementObject_43, (int*)0x004DC729 }, // Wrong way warning text
 	{ createUIElementObject_43, (int*)0x004DE74D }, // Battle String Player Team

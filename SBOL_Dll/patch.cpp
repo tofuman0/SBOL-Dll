@@ -334,8 +334,10 @@ void patchClient()
 	*(uint8_t*)0x0044A708 = 0x8B; // MOV ECX,EDI
 	*(uint8_t*)0x0044A709 = 0xCF; // MOV ECX,EDI
 	insertFunction((int)0x0044A70A, Packet0482, 5, FT_CALL);
-	
 
+	// Fullscreen Stuff
+	setFunction(0x00412BAA, (void*)&SetWindowPosHook_Ptr);
+	
 #pragma endregion
 }
 void patchBugs()
@@ -462,7 +464,7 @@ void setStrings()
 	*(char*)0x004ABF5C = 6;   // Height
 
 	// Time attack - Y Increases by 10 each loop
-	*(int*)0x004D5F11  = 490; // X
+	*(int*)0x004D5F12  = 490; // X
 	*(int*)0x004D5ED0  = 203; // Y
 	*(char*)0x004D5EF1 = 12;  // Width
 	*(char*)0x004D5EF3 = 6;   // Height	
@@ -471,7 +473,7 @@ void setDrawDistance()
 {
 	for (int i = 0; i < sizeof(drawDistance) / sizeof(float); i++)
 	{
-//		if(drawDistance[i] != nullptr) *drawDistance[i] *= drawDistanceMultiplier;
+		if(drawDistance[i] != nullptr) *drawDistance[i] *= drawDistanceMultiplier;
 	}
 }
 void setResolution()
@@ -841,7 +843,7 @@ void readRegistry()
 		if (RegQueryValueExA(hKey, ("DRAWDISTANCE"), NULL, NULL, reinterpret_cast<LPBYTE>(&value), &BufferSize) == ERROR_SUCCESS)
 		{
 			drawDistanceMultiplier = ((float)(*(int*)&value) / 100.0f);
-			if (drawDistanceMultiplier > 2.0f || drawDistanceMultiplier < 0.05f)
+			if (drawDistanceMultiplier > 3.0f || drawDistanceMultiplier < 0.05f)
 				drawDistanceMultiplier = 1.0f;
 		}
 		else
@@ -1041,8 +1043,6 @@ void ForceShiftJIS()
 	setFunction(0x004FC10F, (void*)&CreateRectRgnHook_Ptr);
 	
 	setFunction(0x0040D1EF, (void*)&PtInRegionHook_Ptr);
-
-	setFunction(0x00412BAA, (void*)&SetWindowPosHook_Ptr);
 
 	*(byte*)0x00408850 = SHIFTJIS_CHARSET;
 	*(byte*)0x0051D4C0 = SHIFTJIS_CHARSET;

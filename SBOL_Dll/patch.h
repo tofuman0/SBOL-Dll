@@ -83,7 +83,6 @@ constexpr void* PtInRegionHook_Ptr = (void*)(&PtInRegionHook);
 BOOL __stdcall SetWindowPosHook(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, UINT uFlags);
 constexpr void* SetWindowPosHook_Ptr = (void*)(&SetWindowPosHook);
 
-
 // Packets
 void __fastcall packetHandle04001400(void* _this, void* edx, void* mps);
 void __fastcall Packet0482(void* _this, void* edx, void* mps);
