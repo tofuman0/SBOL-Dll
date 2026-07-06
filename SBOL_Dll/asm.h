@@ -1,15 +1,17 @@
 #pragma once
 #ifndef ASM_HEADER
 #define ASM_HEADER
-#include <Windows.h>
-#include <vector>
-#include <functional>
-#include <string.h>
-#include <sstream>
 #include "dx.h"
-#include <math.h>
 #include "globals.h"
 #include "structures.h"
+#include <algorithm>
+#include <cstdint>
+#include <functional>
+#include <math.h>
+#include <sstream>
+#include <string.h>
+#include <vector>
+#include <Windows.h>
 
 extern LPDIRECT3DDEVICE8 dx;
 
@@ -83,6 +85,7 @@ void __fastcall createTextbox(void* _this, void* edx, float posx, float posy);
 void __fastcall createTextbox_43(void* _this, void* edx, float posx, float posy);
 void __fastcall createTextbox_Scale_Reposition_TopLeft(void* _this, void* edx, float posx, float posy);
 void __fastcall createTextboxCarat(void* _this, void* edx, int caratpos);
+void __fastcall colourUIElement(void* _this, void* edx, unsigned int newcolour, unsigned int colourmask);
 void __fastcall SwfMatrixConstruct(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatrix, float localX, float localY, float layerZ);
 /* Scales SWF file to 4:3 */
 void __fastcall SwfMatrixConstruct_Stretch(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatrix, float width, float height, float scale);
@@ -146,4 +149,7 @@ void setItemUsePosition();
 void drawString();
 void directxScene();
 void directxReturn();
+uint8_t LerpChannel(uint8_t start, uint8_t end, float t);
+uint32_t GetLevelColour(int level, uint8_t alphaFade);
+uint32_t TranslateGameColour(uint32_t incomingColor);
 #endif

@@ -576,6 +576,14 @@ void __fastcall createTextboxCarat(void* _this, void* edx, int caratpos)
 	auto calculatedposx = (characterwidth * (float)stringlength) + (float)posx;
 	createUIElement_AutoScale_43(object, edx, calculatedposx, (float)posy, 1.0, (float)height, 0, -1, -1);
 }
+void __fastcall colourUIElement(void* _this, void* edx, unsigned int newcolour, unsigned int colourmask)
+{
+	using colourUIElementFunc = void(__fastcall*)(void*, void*, unsigned int, unsigned int);
+	colourUIElementFunc colourUIElementOrig = (colourUIElementFunc)0x00404200;
+	if(colourmask == 0)
+		newcolour = TranslateGameColour(newcolour);
+	colourUIElementOrig(_this, edx, newcolour, colourmask);
+}
 void __fastcall SwfMatrixConstruct(SWFUI* _this, void* edx, D3D_MATRIX* d3dMatrix, float localX, float localY, float layerZ)
 {
 	using matrixMultiplyFunc = void(__stdcall*)(D3D_MATRIX*, float, float, float);
@@ -1605,6 +1613,82 @@ void __declspec(naked) directxReturn()
 		call_imm(00404FD0h);
 		ret;
 	}
+}
+uint8_t LerpChannel(uint8_t start, uint8_t end, float t)
+{
+	return static_cast<uint8_t>(start + t * (end - start));
+}
+uint32_t GetLevelColour(int level, uint8_t alphaFade)
+{
+	// Clamp level between 0 and 100
+	level = std::clamp(level, 0, 100);
+
+	// Define our key colors (RGB)
+	struct RGB { uint8_t r, g, b; };
+	const RGB white{ 255, 255, 255 };
+	const RGB blue{ 0,   0,   255 };
+	const RGB green{ 0,   255, 0 };
+	const RGB amber{ 255, 191, 0 };
+	const RGB red{ 255, 0,   0 };
+
+	RGB current{};
+
+	if (level <= 25) {
+		float t = level / 25.0f;
+		current.r = LerpChannel(white.r, blue.r, t);
+		current.g = LerpChannel(white.g, blue.g, t);
+		current.b = LerpChannel(white.b, blue.b, t);
+	}
+	else if (level <= 50) {
+		float t = (level - 25) / 25.0f;
+		current.r = LerpChannel(blue.r, green.r, t);
+		current.g = LerpChannel(blue.g, green.g, t);
+		current.b = LerpChannel(blue.b, green.b, t);
+	}
+	else if (level <= 75) {
+		float t = (level - 50) / 25.0f;
+		current.r = LerpChannel(green.r, amber.r, t);
+		current.g = LerpChannel(green.g, amber.g, t);
+		current.b = LerpChannel(green.b, amber.b, t);
+	}
+	else { // 76 to 100
+		float t = (level - 75) / 25.0f;
+		current.r = LerpChannel(amber.r, red.r, t);
+		current.g = LerpChannel(amber.g, red.g, t);
+		current.b = LerpChannel(amber.b, red.b, t);
+	}
+
+	// Pack into 32-bit integer. 
+	// Format assumes ARGB based on: (iStack_34 << 8) << 8 matching alpha.
+	// Adjust order (current.r, current.g, current.b) if the engine uses RGBA.
+	return (alphaFade << 24) | (current.r << 16) | (current.g << 8) | current.b;
+}
+uint32_t TranslateGameColour(uint32_t incomingColor)
+{
+	uint8_t alphaFade = (incomingColor >> 24) & 0xFF; // Usually iStack_34 distance fade
+	uint8_t upperColor = (incomingColor >> 16) & 0xFF; // This holds the game's 'uVar12' calculation
+	uint8_t lowerColor = incomingColor & 0xFF;         // This holds the game's 'uVar9' calculation
+	int32_t deducedLevel = 0;
+	if (lowerColor != 0)
+		deducedLevel = 35 - ((lowerColor * 34) / 255);
+	else {
+		// Treat upperColor as a percentage factor
+		float percentage = static_cast<float>(upperColor) / 255.0f;
+
+		// The game's math squashes the level values. To counteract level 99 reporting as 83, 
+		// we use a multiplier/tuning factor to stretch the output range back out to 100.
+		int rawDeduced = 35 + static_cast<int>((1.0f - percentage) * (100 - 35));
+
+		// Scale the squashed 35-83 perceived range back up out to 35-100
+		if (rawDeduced > 35) {
+			float scaleFactor = static_cast<float>(rawDeduced - 35) / (83 - 35);
+			deducedLevel = 35 + static_cast<int>(scaleFactor * (100 - 35));
+		}
+		else {
+			deducedLevel = 35;
+		}
+	}
+	return GetLevelColour(deducedLevel, alphaFade);
 }
 void adjustFloats(float* x, float* y)
 {

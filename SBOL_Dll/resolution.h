@@ -859,6 +859,32 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ setRect1, (int*)0x004FDf45 },		
 	//{ setRect2, (int*)0x0051DA8C },
 	//{ setRect2, (int*)0x0051DAC2 },
+	{ colourUIElement, (int*)0x004C3182 }, // Handle string colour above the car
+	//{ colourUIElement, (int*)0x004C31E2 }, // Team name colour above the car
+	//{ colourUIElement, (int*)0x004C323B }, //
+	//{ colourUIElement, (int*)0x004c328e }, //
+	//{ colourUIElement, (int*)0x004c32e1 }, //
+	//{ colourUIElement, (int*)0x004c3421 }, //
+	//{ colourUIElement, (int*)0x004c347a }, //
+	//{ colourUIElement, (int*)0x004c355e }, //
+	//{ colourUIElement, (int*)0x004c3649 }, //
+	//{ colourUIElement, (int*)0x004c3ca1 }, //
+	//{ colourUIElement, (int*)0x004c3d1d }, //
+	//{ colourUIElement, (int*)0x004c3d80 }, //
+	//{ colourUIElement, (int*)0x004c3dfc }, //
+	//{ colourUIElement, (int*)0x004c3e5f }, //
+	//{ colourUIElement, (int*)0x004c3ec2 }, //
+	//{ colourUIElement, (int*)0x004c3ec2 }, //
+	//{ colourUIElement, (int*)0x004c3f42 }, //
+	//{ colourUIElement, (int*)0x004c3fa5 }, //
+	//{ colourUIElement, (int*)0x004c4008 }, //
+	//{ colourUIElement, (int*)0x004c406b }, //
+	//{ colourUIElement, (int*)0x004c40e1 }, //
+	//{ colourUIElement, (int*)0x004c4144 }, //
+	//{ colourUIElement, (int*)0x004c41a7 }, //
+	//{ colourUIElement, (int*)0x004c420a }, //
+	//{ colourUIElement, (int*)0x004c426d }, //
+
 
 	// Direct X
 	{ SetViewport_Scale_Centered, (int*)0x004A625B }, // ???
