@@ -273,7 +273,7 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElementObject_43, (int*)0x0049E93D },
 	//{ createUIElementObject_43, (int*)0x004A908D },
 	//{ createUIElementObject_43, (int*)0x004A9433 },
-	//{ createUIElementObject_43, (int*)0x004AB4C0 },
+	{ createUIElementObject_43, (int*)0x004AB4C0 }, // Reconnecting when swapping servers string
 	{ createUIElementObject_Scale_Reposition_BottomLeft, (int*)0x004ABF85 }, // Course network string
 	{ createUIElementObject_43, (int*)0x004BC43D }, // Enter garage dialog string
 	//{ createUIElementObject_43, (int*)0x004BD725 },
@@ -558,7 +558,7 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ createUIElement_43, (int*)0x004AA687 }, // ???
 	{ createUIElement_43, (int*)0x004AA7CF }, // Battle end + symbols
 	//{ createUIElement_43, (int*)0x004AB082 }, // ???
-	//{ createUIElement_43, (int*)0x004AB450 }, // ???
+	{ createUIElement_43, (int*)0x004AB450 }, // Reconnect strings
 	//{ createUIElement_43, (int*)0x004ADFD8 }, // ???
 	//{ createUIElement_43, (int*)0x004AE08E }, // ???
 	//{ createUIElement_43, (int*)0x004B16D7 }, // ???
@@ -899,6 +899,11 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	//{ endScene, (int*)0x0941BEAA }, // End scene (Top layer)
 	{ endScene, (int*)0x094C769C }, // End scene (under loading)
 	{ endScene, (int*)0x044C8A10 }, // End scene (inside car)
+
+	// Bug fixes
+	{ UpdateCarClassString, (int*)0x004EBF63 },
+	{ UpdateCarClassString, (int*)0x004EC022 },
+	{ UpdateCarClassString, (int*)0x004EC294 },
 };
 int* repositionAddr[]{
 	// Check - Not text box

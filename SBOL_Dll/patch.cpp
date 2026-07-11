@@ -337,6 +337,9 @@ void patchClient()
 
 	// Fullscreen Stuff
 	setFunction(0x00412BAA, (void*)&SetWindowPosHook_Ptr);
+
+	// Summer event garage offset fix
+	*(uint32_t*)0x00456D0F = 0;
 	
 #pragma endregion
 }

@@ -1690,6 +1690,27 @@ uint32_t TranslateGameColour(uint32_t incomingColor)
 	}
 	return GetLevelColour(deducedLevel, alphaFade);
 }
+char* __fastcall UpdateCarClassString(int param_1)
+{
+	switch (*(int*)0x006F64D0) {
+	case 0:
+		*(char*)0x006924A0 = *(char*)(*(int*)param_1 + 0xbc) + 'A';
+		return (char*)0x006924A0;
+	case 1:
+		return (char*)0x006924AC;
+	case 2:
+		return (char*)0x006924BC;
+	case 3:
+		return (char*)0x006924CC;
+	case 4:
+		return (char*)0x006924DC;
+	case 5:
+		return (char*)0x006924EC;
+	default:
+		return (char*)0x006F2464;
+	}
+}
+
 void adjustFloats(float* x, float* y)
 {
 	/*

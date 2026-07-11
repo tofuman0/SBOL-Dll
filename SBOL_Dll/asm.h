@@ -152,4 +152,5 @@ void directxReturn();
 uint8_t LerpChannel(uint8_t start, uint8_t end, float t);
 uint32_t GetLevelColour(int level, uint8_t alphaFade);
 uint32_t TranslateGameColour(uint32_t incomingColor);
+char* __fastcall UpdateCarClassString(int param_1);
 #endif
