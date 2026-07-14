@@ -201,6 +201,7 @@
     <ClInclude Include="DXFont.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="OggPlayer.h" />
+    <ClInclude Include="pachettables.h" />
     <ClInclude Include="patch.h" />
     <ClInclude Include="resolution.h" />
     <ClInclude Include="resource.h" />

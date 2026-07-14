@@ -86,4 +86,7 @@ constexpr void* SetWindowPosHook_Ptr = (void*)(&SetWindowPosHook);
 // Packets
 void __fastcall packetHandle04001400(void* _this, void* edx, void* mps);
 void __fastcall Packet0482(void* _this, void* edx, void* mps);
+void Packet0190Handler();
+void Packet0190(void* mps, void* edx);
+void GetTimeAttackRecordFromPacket(TIMEATTACK& timeattack);
 #endif

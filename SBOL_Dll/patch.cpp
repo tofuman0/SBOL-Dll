@@ -7,6 +7,7 @@
 #include "resolution.h"
 #include "strings.h"
 #include "debugapi.h"
+#include "pachettables.h"
 
 extern char clientVer[4];
 extern char logItBuf[0x400];
@@ -335,6 +336,10 @@ void patchClient()
 	*(uint8_t*)0x0044A709 = 0xCF; // MOV ECX,EDI
 	insertFunction((int)0x0044A70A, Packet0482, 5, FT_CALL);
 
+	// 0x0100 - Packet handling
+	*(uint32_t*)0x0043CB33 = (uint32_t)Packet0100Table;
+	*(uint8_t*)0x0043CB29 = 0x10; // Set the 0100 packet count so 0x190 can be handled. Packets between 0x0184 - 0x018F are handled like 0x0181 packet.B
+
 	// Fullscreen Stuff
 	setFunction(0x00412BAA, (void*)&SetWindowPosHook_Ptr);
 
@@ -585,7 +590,7 @@ void setResolution()
 	// Shops and UI Aspects - Looks bad when UI is stretched so will leave it scretched in shops.
 	*(float*)0x004A4232 = (float)resW / (float)resH; // Garage and shop car FOV
 	//*(float*)0x004E100F = (float)resW / (float)resH;
-	//*(float*)0x00501928 = (float)resW / (float)resH;
+	*(float*)0x00501928 = (float)resW / (float)resH; // New game car selection
 	//*(float*)0x0050195A = (float)resW / (float)resH;
 #pragma endregion
 #pragma region Scaling Patches
@@ -1669,4 +1674,105 @@ void __fastcall packetHandle04001400(void* _this, void* edx, void* mps)
 	else if (pType == 0x1484)
 		PACKET_IN_1484((void*)0x006EE3DC, edx, mps);
 	return;
+}
+
+__declspec(naked) void Packet0190Handler()
+{
+	__asm
+	{
+		mov ecx, dword ptr[esp + 0x000000B8]
+		pushad
+		push edx
+		push ecx
+		call Packet0190
+		add esp, 8
+		popad
+		mov eax, 0x0043D39E
+		jmp eax
+	}
+}
+
+void Packet0190(void* mps, void* edx)
+{
+	uint16_t packettype = *(uint16_t*)((int)mps + 0x06);
+	if (packettype == 0x0190)
+	{
+		using mpsLockFunc = void* (__fastcall*)(void*, void*);
+		using mpsUnlockFunc = void* (__fastcall*)(void*, void*);
+		using readBufferFunc = uint32_t (__fastcall*)(void*, void*, char*, uint32_t, uint32_t, int32_t);
+		mpsLockFunc mpsLock = (mpsLockFunc)0x00591700;
+		mpsLockFunc mpsUnlock = (mpsLockFunc)0x00591750;
+		readBufferFunc readBuffer = (readBufferFunc)0x00592DB0;
+		void* mpsPacket = mpsLock(mps, edx);
+		TIMEATTACK timeattack{};
+		uint32_t res = readBuffer(mpsPacket, edx, reinterpret_cast<char*>(&timeattack), sizeof(TIMEATTACK), 0, 2);
+		mpsUnlock(mps, edx);
+		GetTimeAttackRecordFromPacket(timeattack);
+	}
+}
+
+void GetTimeAttackRecordFromPacket(TIMEATTACK& timeattack)
+{
+	using UnknownFunc = void(__fastcall*)(void*, void*, int);
+	UnknownFunc unknownFunc = (UnknownFunc)0x005030F0;
+	void* dummyEdx = nullptr;
+
+	char* base6F64D4 = (char*)0x006F64D4;
+
+	auto getValidTime = [](int time) { return (time != 0) ? time : -1; };
+
+	for (int i = 0; i < 6; i++)
+	{
+		int offset = i * 0x1B8; // 440 bytes
+
+		// Set LAPTYPE and BESTTYPE dynamically based on record availability
+		char lapTypeVal = 0;
+		if (timeattack.record[i].carclass[0].lap.time > 0 ||
+			timeattack.record[i].carclass[1].lap.time > 0 ||
+			timeattack.record[i].carclass[2].lap.time > 0)
+		{
+			lapTypeVal = 1;
+		}
+
+		base6F64D4[offset] = lapTypeVal;
+		base6F64D4[offset + 1] = 0;
+
+		// Loop through the 3 car classes (0, 1, 2) dynamically
+		for (int c = 0; c < 3; c++)
+		{
+			auto& car = timeattack.record[i].carclass[c];
+			int classOffset = c * 0x28; // 40-byte offset per class in the binary
+
+			// 1. Write Top Speeds (spaced 4 bytes apart)
+			uintptr_t topSpeedAddr = 0x006F6668 + offset + (c * 4);
+			*(int*)topSpeedAddr = car.topspeed;
+
+			// 2. Write Splits & Lap Times (Explicit Pointer Additions)
+			uintptr_t timeBase = 0x006F6578 + offset + classOffset;
+
+			// LAP0 defaults to 0 if a lap time exists, otherwise -1
+			*(int*)(timeBase + 0x00) = (car.lap.time > 0) ? 0 : -1;
+
+			// Direct dereferencing using raw calculated addresses to avoid indexing traps
+			*(int*)(timeBase + 0x04) = getValidTime(car.firstsplit.time);
+			*(int*)(timeBase + 0x08) = getValidTime(car.secondsplit.time);
+			*(int*)(timeBase + 0x0C) = getValidTime(car.thirdsplit.time);
+			*(int*)(timeBase + 0x10) = getValidTime(car.lap.time);
+
+			// 3. Write Sector & Lap Speeds
+			uintptr_t speedBase = 0x006F65F0 + offset + classOffset;
+			*(int*)(speedBase + 0x00) = car.startspeed;
+			*(int*)(speedBase + 0x04) = car.firstsplit.speed;
+			*(int*)(speedBase + 0x08) = car.secondsplit.speed;
+			*(int*)(speedBase + 0x0C) = car.thirdsplit.speed;
+			*(int*)(speedBase + 0x10) = car.lap.speed;
+		}
+
+		// Boundary checks
+		if (base6F64D4[offset] > 1)     base6F64D4[offset] = 1;
+		if (base6F64D4[offset + 1] > 1) base6F64D4[offset + 1] = 1;
+
+		// Call game's internal update function with correct __thiscall registers
+		unknownFunc((void*)0x006F4F38, dummyEdx, i);
+	}
 }

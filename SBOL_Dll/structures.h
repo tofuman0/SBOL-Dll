@@ -2,7 +2,7 @@
 #include "stdint.h"
 #include "globals.h"
 
-#pragma pack(1)
+#pragma pack(push, 1)
 typedef struct stringEntry {
 	int mutli;
 	char* ptr;
@@ -129,4 +129,26 @@ struct TransformedVertex {
 	DWORD color;
 	float u, v; // Texture coordinates (adjust this structure if the game uses a different FVF)
 };
-#pragma pack()
+struct TIMESECTION {
+	uint32_t time;
+	uint32_t speed;
+};
+struct TIMEATTACKRECORD {
+	uint32_t unknown1;
+	uint32_t unknown2;
+	uint32_t topspeed;
+	uint32_t startspeed;
+	uint32_t unknown3;
+	uint32_t unknown4;
+	TIMESECTION firstsplit;
+	TIMESECTION secondsplit;
+	TIMESECTION thirdsplit;
+	TIMESECTION lap;
+};
+struct TIMEATTACKRECORDS {
+	TIMEATTACKRECORD carclass[3];
+};
+struct TIMEATTACK {
+	TIMEATTACKRECORDS record[6];
+};
+#pragma pack(pop)
