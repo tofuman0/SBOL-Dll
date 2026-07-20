@@ -22,6 +22,7 @@
     <ClInclude Include="strings.h" />
     <ClInclude Include="structures.h" />
     <ClInclude Include="pachettables.h" />
+    <ClInclude Include="tables.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SBOL_Dll.rc" />

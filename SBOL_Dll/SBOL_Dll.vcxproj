@@ -207,6 +207,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="strings.h" />
     <ClInclude Include="structures.h" />
+    <ClInclude Include="tables.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SBOL_Dll.rc" />

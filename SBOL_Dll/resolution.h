@@ -904,6 +904,8 @@ REPLACEFUNCTION replaceFunctionAddr[]{
 	{ UpdateCarClassString, (int*)0x004EBF63 },
 	{ UpdateCarClassString, (int*)0x004EC022 },
 	{ UpdateCarClassString, (int*)0x004EC294 },
+
+	// Improvements
 };
 int* repositionAddr[]{
 	// Check - Not text box

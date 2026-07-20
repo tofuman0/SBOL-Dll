@@ -8,6 +8,7 @@
 #include "strings.h"
 #include "debugapi.h"
 #include "pachettables.h"
+#include "tables.h"
 
 extern char clientVer[4];
 extern char logItBuf[0x400];
